@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:tob/core/theme/app_theme.dart';
 
 class AppTextField extends StatefulWidget {
   final TextEditingController? controller;
@@ -60,10 +61,10 @@ class _AppTextFieldState extends State<AppTextField> {
         if (widget.label != null) ...[
           Text(
             widget.label!,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
+            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                ),
           ),
           const SizedBox(height: 8),
         ],
@@ -81,10 +82,15 @@ class _AppTextFieldState extends State<AppTextField> {
           onChanged: widget.onChanged,
           decoration: InputDecoration(
             hintText: widget.hint,
+            hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: AppTheme.secondaryColor.withValues(alpha: 0.5),
+                ),
             filled: true,
             fillColor: const Color(0xffE7EEF9),
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 18,
+            ),
             prefixIcon: widget.prefix,
             suffixIcon: widget.obscureText
                 ? IconButton(
@@ -92,6 +98,7 @@ class _AppTextFieldState extends State<AppTextField> {
                       _obscure
                           ? Icons.visibility_off_outlined
                           : Icons.visibility_outlined,
+                      color: AppTheme.secondaryColor.withValues(alpha: 0.3),
                     ),
                     onPressed: () {
                       setState(() {
@@ -101,8 +108,19 @@ class _AppTextFieldState extends State<AppTextField> {
                   )
                 : widget.suffix,
             border: OutlineInputBorder(
-              borderRadius:
-                  BorderRadius.circular(widget.borderRadius),
+              borderRadius: BorderRadius.circular(widget.borderRadius),
+              borderSide: BorderSide.none,
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(widget.borderRadius),
+              borderSide: BorderSide.none,
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(widget.borderRadius),
+              borderSide: BorderSide.none,
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(widget.borderRadius),
               borderSide: BorderSide.none,
             ),
           ),

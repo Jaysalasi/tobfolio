@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:tob/core/utils/components/constants.dart';
 
 Widget plusButtonMeth({
   required String label,
@@ -36,6 +37,7 @@ Widget homeCardMeth({
   required String icon,
   required String title,
   required ThemeData theme,
+  required BuildContext context,
   String? subtitle,
   MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start,
   CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.start,
@@ -43,19 +45,9 @@ Widget homeCardMeth({
   return Container(
     padding: const EdgeInsets.all(20),
     decoration: BoxDecoration(
-      gradient: LinearGradient(
-        colors: [theme.colorScheme.surface, theme.colorScheme.surface],
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-      ),
+      gradient: appGradient(context),
+      boxShadow: appShadow(context),
       borderRadius: BorderRadius.circular(25),
-      boxShadow: [
-        BoxShadow(
-          color: theme.primaryColor.withValues(alpha: 0.07),
-          blurRadius: 15,
-          offset: const Offset(0, 5),
-        ),
-      ],
     ),
     child: Column(
       mainAxisAlignment: mainAxisAlignment,
@@ -82,3 +74,21 @@ Widget homeCardMeth({
     ),
   );
 }
+
+
+Container shadowContainerMeth({
+    required BuildContext context,
+    required ThemeData theme,
+    required Widget child,
+  }) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+      decoration: BoxDecoration(
+        gradient: appGradient(context),
+        boxShadow: appShadow(context),
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: child,
+    );
+  }

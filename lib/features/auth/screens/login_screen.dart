@@ -107,7 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   label: "Email",
                   keyboardType: TextInputType.emailAddress,
                   controller: _emailController,
-                  hint: "Enter email",
+                  hint: "divine@tobfolio.com",
 
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -121,7 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 30),
                 AppTextField(
                   label: "Password",
                   controller: _passwordController,
@@ -158,7 +158,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
 
-                const SizedBox(height: 30),
+                const SizedBox(height: 50),
 
                 AppButton(
                   title: "Next",

@@ -28,7 +28,7 @@ class AppRouter {
 
   static const String dashboard = '/dashboard';
   static const String home = '/home';
-  static const String search = '/home/search';
+  static const String search = '/search';
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {

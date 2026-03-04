@@ -25,6 +25,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
     _pageController = PageController();
     context.read<DashboardBloc>().add(LoadDashboardData());
   }
+ final _navigatorKeys =
+    List.generate(5, (_) => GlobalKey<NavigatorState>());
 
   @override
   void dispose() {
@@ -80,9 +82,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
     // final width = MediaQuery.of(context).size.width;
     final theme = Theme.of(context);
     // final itemWidth = width / tabs.length;
+   
     return Scaffold(
       backgroundColor: theme.colorScheme.tertiary,
-      body: IndexedStack(index: currentIndex, children: screens),
+      body: IndexedStack(
+  index: currentIndex,
+  children: List.generate(tabs.length, (index) {
+    return Navigator(
+      key: _navigatorKeys[index],
+      onGenerateRoute: (settings) {
+        return MaterialPageRoute(
+          builder: (_) => screens[index],
+        );
+      },
+    );
+  }),
+),
 
       bottomNavigationBar: Padding(
         padding: EdgeInsets.only(bottom: 20, left: 15, right: 15),

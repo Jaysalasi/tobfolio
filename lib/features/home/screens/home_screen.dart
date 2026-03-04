@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:tob/core/utils/components/constants.dart';
 import 'package:tob/core/utils/components/widgets.dart';
 import 'package:tob/core/utils/constants/assets/pngs.dart';
 import 'package:tob/core/utils/constants/assets/svg.dart';
 import 'package:tob/features/auth/bloc/auth_bloc.dart';
 import 'package:tob/features/home/bloc/home_bloc.dart';
+import 'package:tob/features/search/screens/search_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -42,29 +44,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     GestureDetector(
                       child: SvgPicture.asset(SvgAssets.search),
                       onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            title: const Text('Logout'),
-                            content: const Text(
-                              'Are you sure you want to logout?',
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.of(context).pop(),
-                                child: const Text('Cancel'),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                  context.read<AuthBloc>().add(
-                                    LogoutRequested(),
-                                  );
-                                },
-                                child: const Text('Logout'),
-                              ),
-                            ],
-                          ),
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (_) => SearchScreen()),
                         );
                       },
                     ),
@@ -98,7 +79,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
                       },
                     ),
-                   
                   ],
                 ),
               ],
@@ -165,12 +145,14 @@ class _HomeScreenState extends State<HomeScreen> {
                               title: 'Expenses',
                               subtitle: '\$3000',
                               theme: Theme.of(context),
+                              context: context,
                             ),
                             homeCardMeth(
                               icon: SvgAssets.barChart,
                               title: 'NOI (Profit & Loss)',
                               subtitle: '\$2000',
                               theme: Theme.of(context),
+                              context: context,
                             ),
                           ],
                         ),
@@ -185,6 +167,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
                             homeCardMeth(
                               icon: SvgAssets.share,
+                              context: context,
                               title: 'Referral',
                               theme: Theme.of(context),
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -194,6 +177,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               icon: SvgAssets.handymen,
                               title: 'Handyman',
                               theme: Theme.of(context),
+                              context: context,
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                             ),
@@ -201,10 +185,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               icon: SvgAssets.offerUp,
                               title: 'Lease Property',
                               theme: Theme.of(context),
+                              context: context,
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                             ),
                             homeCardMeth(
+                              context: context,
                               icon: SvgAssets.aiLine,
                               title: 'AI',
                               theme: theme,
@@ -220,24 +206,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Container(
                                 padding: const EdgeInsets.all(20),
                                 decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    colors: [
-                                      theme.colorScheme.surface,
-                                      theme.colorScheme.surface,
-                                    ],
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
-                                  ),
+                                  gradient: appGradient(context),
+                                  boxShadow: appShadow(context),
                                   borderRadius: BorderRadius.circular(25),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: theme.primaryColor.withValues(
-                                        alpha: 0.07,
-                                      ),
-                                      blurRadius: 15,
-                                      offset: const Offset(0, 5),
-                                    ),
-                                  ],
                                 ),
                                 child: Row(
                                   mainAxisAlignment:
@@ -296,25 +267,14 @@ class _WelcomeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final space = MediaQuery.of(context).size;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [theme.colorScheme.surface, theme.colorScheme.surface],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+        gradient: appGradient(context),
+        boxShadow: appShadow(context),
         borderRadius: BorderRadius.circular(25),
-        boxShadow: [
-          BoxShadow(
-            color: theme.primaryColor.withValues(alpha: 0.1),
-            blurRadius: 15,
-            offset: const Offset(0, 5),
-          ),
-        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

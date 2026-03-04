@@ -23,5 +23,5 @@ class HomeState extends Equatable {
   List<Object?> get props => [isLoading, errorMessage];
 
   @override
-  String toString() => 'DashboardState(isLoading: $isLoading, errorMessage: $errorMessage)';
+  String toString() => 'HomeState(isLoading: $isLoading, errorMessage: $errorMessage)';
 }

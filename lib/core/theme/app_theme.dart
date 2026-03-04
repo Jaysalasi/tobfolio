@@ -17,6 +17,8 @@ class AppTheme {
   static const Color darkBackgroundColor = Color(0xFF0F172A);
   static const Color darkSurfaceColor = Color(0xFF1E293B);
   static const Color darkCardColor = Color(0xFF334155);
+  static const Color goldColor = Color(0xFFffc107);
+  static const Color neutralColor = Color(0xFFe5e4e7);
 
   static ThemeData lightTheme = ThemeData(
     useMaterial3: true,

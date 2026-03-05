@@ -1,9 +1,14 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tob/core/utils/components/widgets.dart';
 import 'package:tob/core/utils/constants/assets/svg.dart';
 import 'package:tob/features/home/screens/home_screen.dart';
+import 'package:tob/features/my_profile/screens/my_profile_screen.dart';
+import 'package:tob/features/rentals/screens/rentals_screen.dart'; 
+import 'package:tob/features/tenants/screens/tenant_screen.dart';
 import '../bloc/dashboard_bloc.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../auth/bloc/auth_bloc.dart';
@@ -16,7 +21,6 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-
   late PageController _pageController;
 
   @override
@@ -25,15 +29,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
     _pageController = PageController();
     context.read<DashboardBloc>().add(LoadDashboardData());
   }
- final _navigatorKeys =
-    List.generate(5, (_) => GlobalKey<NavigatorState>());
+
+  final _navigatorKeys = List.generate(5, (_) => GlobalKey<NavigatorState>());
 
   @override
   void dispose() {
     _pageController.dispose();
     super.dispose();
   }
-
 
   int currentIndex = 0;
 
@@ -61,43 +64,45 @@ class _DashboardScreenState extends State<DashboardScreen> {
     {
       "icon": SvgAssets.userOutline,
       "active-icon": SvgAssets.user,
-      "label": "Me",
+      "label": "Me",  
     },
   ];
 
   final screens = const [
     HomeScreen(),
-    HomeTab(),
+    RentalsScreen(),
+    TenantScreen(),
     SearchTab(),
-    ProfileTab(),
-    ProfileTab(),
+    MyProfileScreen(),
   ];
   void onTap(int index) {
     setState(() => currentIndex = index);
   }
- 
+
+  Future<bool> _onWillPop() async {
+  final navigator = _navigatorKeys[currentIndex].currentState!;
+
+  if (await navigator.maybePop()) {
+    return false; // handled inside tab
+  }
+
+  return true; // exit app if root
+}
 
   @override
   Widget build(BuildContext context) {
     // final width = MediaQuery.of(context).size.width;
     final theme = Theme.of(context);
     // final itemWidth = width / tabs.length;
-   
-    return Scaffold(
-      backgroundColor: theme.colorScheme.tertiary,
-      body: IndexedStack(
-  index: currentIndex,
-  children: List.generate(tabs.length, (index) {
-    return Navigator(
-      key: _navigatorKeys[index],
-      onGenerateRoute: (settings) {
-        return MaterialPageRoute(
-          builder: (_) => screens[index],
-        );
-      },
-    );
-  }),
-),
+
+    return WillPopScope(
+  onWillPop: _onWillPop,
+  child: Scaffold(
+    backgroundColor: theme.colorScheme.tertiary,
+    body: IndexedStack(
+      index: currentIndex,
+      children: screens,
+    ),
 
       bottomNavigationBar: Padding(
         padding: EdgeInsets.only(bottom: 20, left: 15, right: 15),
@@ -204,7 +209,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ),
       ),
-    );
+    ));
   }
 }
 

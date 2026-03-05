@@ -8,11 +8,14 @@ class AppTheme {
   static const Color primaryColor = Color(0xFF000000);
   static const Color secondaryColor = Color(0xFF1A1a1C);
   static const Color dashboardColor = Color(0xFFF8fbFf);
-  static const Color accentColor = Color(0xFFEC4899);
+  static const Color accentColor = Color(0xFF548dee);
   
   static const Color lightBackgroundColor = Color(0xFFFFFFFF);
   static const Color lightSurfaceColor = Color(0xFFFFFFFF);
   static const Color lightCardColor = Color(0xFFFFFFFF);
+  
+  static const Color grayColor = Color(0xFFd9d9d9);
+
   
   static const Color darkBackgroundColor = Color(0xFF0F172A);
   static const Color darkSurfaceColor = Color(0xFF1E293B);

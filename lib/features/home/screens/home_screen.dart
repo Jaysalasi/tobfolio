@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:tob/core/router/app_router.dart';
 import 'package:tob/core/utils/components/constants.dart';
 import 'package:tob/core/utils/components/widgets.dart';
 import 'package:tob/core/utils/constants/assets/pngs.dart';
@@ -44,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     GestureDetector(
                       child: SvgPicture.asset(SvgAssets.search),
                       onTap: () {
-                        Navigator.of(context).push(
+                        Navigator.of(context, rootNavigator: true).push(
                           MaterialPageRoute(builder: (_) => SearchScreen()),
                         );
                       },
@@ -298,7 +299,10 @@ class _WelcomeCard extends StatelessWidget {
                 ],
               ),
               SizedBox(width: space.width * 0.15),
-              plusButtonMeth(label: 'Add Property', theme: Theme.of(context)),
+              plusButtonMeth(label: 'Add Property', theme: Theme.of(context), onTap: () {
+                print("push");
+                Navigator.pushNamed(context, AppRouter.addProperty);
+              },),
             ],
           ),
           Text(

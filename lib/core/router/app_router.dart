@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tob/features/add_property/bloc/add_property_bloc.dart';
+import 'package:tob/features/add_property/screens/add_property_screen.dart';
 import 'package:tob/features/auth/screens/forgot_password.dart';
 import 'package:tob/features/auth/screens/create_new_password.dart';
 import 'package:tob/features/home/bloc/home_bloc.dart';
@@ -29,6 +31,7 @@ class AppRouter {
   static const String dashboard = '/dashboard';
   static const String home = '/home';
   static const String search = '/search';
+  static const String addProperty = '/dashboard/add-property';
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
@@ -53,6 +56,7 @@ class AppRouter {
             BlocProvider(create: (context) => OnboardingCubit()),
             BlocProvider(create: (context) => ThemeCubit()),
             BlocProvider(create: (context) => DashboardBloc()),
+            BlocProvider(create: (context) => AddPropertyBloc()),
           ],
           child: const SplashScreen(),
         ),
@@ -81,12 +85,19 @@ class AppRouter {
         create: (context) => AuthBloc(authRepository: context.read<AuthRepository>()),
         child: const CreateNewPasswordScreen(),
       ),
+      addProperty: (context) => BlocProvider(
+        create: (context) => AddPropertyBloc(
+          // authRepository: context.read<AuthRepository>()
+          ),
+        child: const AddPropertyScreen(),
+      ),
       dashboard: (context) => MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) => AuthBloc(authRepository: context.read<AuthRepository>())),
           BlocProvider(create: (context) => DashboardBloc()),
           BlocProvider(create: (context) => ThemeCubit()),
           BlocProvider(create: (context) => HomeBloc()),
+          BlocProvider(create: (context) => AddPropertyBloc()),
         ],
         child: const DashboardScreen(),
       ),

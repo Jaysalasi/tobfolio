@@ -7,6 +7,7 @@ Widget plusButtonMeth({
   required ThemeData theme,
   Function()? onTap,
   bool isIcon = true,
+  TextStyle? textStyle,
 }) {
   return GestureDetector(
     onTap: onTap,
@@ -23,7 +24,7 @@ Widget plusButtonMeth({
             Icon(Icons.add, size: 14, color: theme.scaffoldBackgroundColor),
           Text(
             label,
-            style: theme.textTheme.bodySmall?.copyWith(
+            style: textStyle ?? theme.textTheme.bodySmall?.copyWith(
               color: theme.scaffoldBackgroundColor,
             ),
           ),

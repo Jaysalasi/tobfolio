@@ -19,11 +19,19 @@ class AddPropertyBloc extends Bloc<AddPropertyEvent, AddPropertyState> {
       emit(state.copyWith(propertyType: event.type));
     });
 
+    on<UpdateUnitType>((event, emit) {
+      emit(state.copyWith(unitType: event.type));
+    });
+
     on<AddPhoto>((event, emit) {
       final updated = List<PropertyPhoto>.from(state.photos)
         ..add(PropertyPhoto(event.path));
 
       emit(state.copyWith(photos: updated));
+    });
+  
+    on<AddDocument>((event, emit) {
+      emit(state.copyWith(document: event.path));
     });
 
     on<RemovePhoto>((event, emit) {

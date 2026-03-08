@@ -15,9 +15,19 @@ class UpdatePropertyType extends AddPropertyEvent {
   UpdatePropertyType(this.type);
 }
 
+class UpdateUnitType extends AddPropertyEvent {
+  final String type;
+  UpdateUnitType(this.type);
+}
+
 class AddPhoto extends AddPropertyEvent {
   final String path;
   AddPhoto(this.path);
+}
+
+class AddDocument extends AddPropertyEvent {
+  final String path;
+  AddDocument(this.path);
 }
 
 class RemovePhoto extends AddPropertyEvent {

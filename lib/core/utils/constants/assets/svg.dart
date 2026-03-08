@@ -39,6 +39,7 @@ static const String tenantsOutline = "assets/svg/nav/tenants-outline.svg";
 static const String expenses = "assets/svg/nav/expenses.svg";
 static const String expensesOutline = "assets/svg/nav/expenses-outline.svg";
 static const String user = "assets/svg/nav/user.svg";
+static const String upload = "assets/svg/upload.svg";
 static const String userOutline = "assets/svg/nav/user-outline.svg";
  
 
@@ -72,6 +73,7 @@ static const String userOutline = "assets/svg/nav/user-outline.svg";
     tenants,
     tenantsOutline,
     user,
+    upload,
     userOutline,
     mastercard,
     settingsOutline,

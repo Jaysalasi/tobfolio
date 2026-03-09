@@ -9,7 +9,10 @@ class AltTextField extends StatefulWidget {
   final AltFieldType type;
   final List<String>? items;
   final Function(String)? onChanged;
+  final Function()? onTap;
   final int maxLines;
+  final bool enabled;
+  final String? prefix;
 
   const AltTextField({
     super.key,
@@ -18,8 +21,11 @@ class AltTextField extends StatefulWidget {
     this.value,
     this.type = AltFieldType.text,
     this.items,
+    this.enabled = true,
     this.onChanged,
+    this.onTap,
     this.maxLines = 1,
+    this.prefix,
   });
 
   @override
@@ -131,6 +137,7 @@ void dispose() {
         CompositedTransformTarget(
           link: _layerLink,
           child: TextFormField(
+            enabled: widget.enabled,
             initialValue: widget.value,
             readOnly: isDropdown,
             maxLines: widget.type == AltFieldType.multiline
@@ -140,7 +147,7 @@ void dispose() {
             keyboardType: widget.type == AltFieldType.number
                 ? TextInputType.number
                 : TextInputType.text,
-            onTap: isDropdown ? _toggleDropdown : null,
+            onTap: isDropdown ? _toggleDropdown : widget.onTap,
             onChanged: widget.onChanged,
             decoration: InputDecoration(
               hintText: widget.hint,

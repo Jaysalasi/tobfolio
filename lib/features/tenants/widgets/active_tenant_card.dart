@@ -5,14 +5,17 @@ import 'package:tob/features/tenants/bloc/tenant_state.dart';
 
 class ActiveTenantCard extends StatelessWidget {
   final TenantState state;
-  const ActiveTenantCard({super.key, required this.state});
+  final VoidCallback onTap;
+  const ActiveTenantCard({super.key, required this.state, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Builder(
       builder: (context) {
-        return Container(
+        return GestureDetector(
+          onTap: onTap,
+          child: Container(
           margin: const EdgeInsets.only(bottom: 16),
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
@@ -78,8 +81,9 @@ class ActiveTenantCard extends StatelessWidget {
               ),
             ],
           ),
-        );
-      }
+            )    );
+        }
+      
     );
   }
 }

@@ -5,6 +5,7 @@ import 'package:tob/features/add_property/screens/add_property_screen.dart';
 import 'package:tob/features/auth/screens/forgot_password.dart';
 import 'package:tob/features/auth/screens/create_new_password.dart';
 import 'package:tob/features/home/bloc/home_bloc.dart';
+import 'package:tob/features/tenant_profile/bloc/_tenant_profile_bloc.dart';
 import 'package:tob/features/tenants/bloc/tenant_bloc.dart';
 import '../../features/splash/screens/splash_screen.dart';
 import '../../features/onboarding/screens/onboarding_screen.dart';
@@ -100,6 +101,7 @@ class AppRouter {
           BlocProvider(create: (context) => HomeBloc()),
           BlocProvider(create: (context) => AddPropertyBloc()),
           BlocProvider(create: (context) => TenantBloc()),
+          BlocProvider(create: (context) => TenantProfileBloc()),
         ],
         child: const DashboardScreen(),
       ),

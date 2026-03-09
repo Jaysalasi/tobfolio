@@ -14,6 +14,7 @@ static const String bell = "assets/svg/bell.svg";
 static const String handymen = "assets/svg/handyman.svg";
 static const String supportAgent = "assets/svg/support-agent.svg";
 static const String pen = "assets/svg/pen.svg";
+static const String plusFramed = "assets/svg/plus-framed.svg";
 static const String barChart = "assets/svg/bar_chart.svg";
 static const String share = "assets/svg/share.svg";
 static const String aiLine = "assets/svg/si_ai-line.svg";
@@ -54,6 +55,7 @@ static const String userOutline = "assets/svg/nav/user-outline.svg";
     handymen,
     supportAgent,
     pen,
+    plusFramed,
     barChart,
     share,
     aiLine,

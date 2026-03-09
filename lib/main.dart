@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tob/core/utils/constants/assets/svg.dart';
 import 'package:tob/features/add_property/bloc/add_property_bloc.dart';
+import 'package:tob/features/tenant_profile/bloc/_tenant_profile_bloc.dart';
 import 'package:tob/features/tenants/bloc/tenant_bloc.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
@@ -13,6 +14,7 @@ import 'features/auth/bloc/auth_bloc.dart';
 import 'features/onboarding/cubit/onboarding_cubit.dart';
 import 'features/dashboard/bloc/dashboard_bloc.dart';
 import 'features/home/bloc/home_bloc.dart';
+import 'features/expenses/bloc/expenses_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,6 +47,8 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (context) => HomeBloc()),
           BlocProvider(create: (context) => AddPropertyBloc()),
           BlocProvider(create: (context) => TenantBloc()),
+          BlocProvider(create: (context) => TenantProfileBloc()),
+          BlocProvider(create: (context) => ExpensesBloc()),
         ],
         child: BlocBuilder<ThemeCubit, ThemeState>(
           builder: (context, themeState) {

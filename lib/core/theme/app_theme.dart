@@ -9,12 +9,15 @@ class AppTheme {
   static const Color secondaryColor = Color(0xFF1A1a1C);
   static const Color dashboardColor = Color(0xFFF8fbFf);
   static const Color accentColor = Color(0xFF548dee);
+  static const Color green = Color(0xFF0ABA1F);
   
   static const Color lightBackgroundColor = Color(0xFFFFFFFF);
   static const Color lightSurfaceColor = Color(0xFFFFFFFF);
   static const Color lightCardColor = Color(0xFFFFFFFF);
   
   static const Color grayColor = Color(0xFFd9d9d9);
+  static const Color grayAltColor = Color(0xFFcecfd2);
+  static const Color textsecondary = Color(0xFF232427);
 
   
   static const Color darkBackgroundColor = Color(0xFF0F172A);
@@ -33,6 +36,7 @@ class AppTheme {
       secondary: secondaryColor,
       tertiary: dashboardColor,
       surface: lightSurfaceColor,
+      tertiaryContainer: accentColor,
       // background: lightBackgroundColor,
       error: Color(0xFFEF4444),
       onPrimary: Colors.white,
@@ -43,7 +47,7 @@ class AppTheme {
       onError: Colors.white,
     ),
     scaffoldBackgroundColor: lightBackgroundColor,
-    textTheme: const TextTheme(
+    textTheme:   TextTheme(
       displayLarge: TextStyle(
         fontSize: 57,
         fontWeight: FontWeight.w400,
@@ -93,31 +97,37 @@ class AppTheme {
         fontSize: 16,
         fontWeight: FontWeight.w400,
         fontFamily: secondaryFontFamily,
+        color: textsecondary,
       ),
       bodyMedium: TextStyle(
         fontSize: 14,
         fontWeight: FontWeight.w400,
         fontFamily: secondaryFontFamily,
+        color: textsecondary,
       ),
       bodySmall: TextStyle(
         fontSize: 12,
         fontWeight: FontWeight.w400,
         fontFamily: secondaryFontFamily,
+        color: textsecondary,
       ),
       labelLarge: TextStyle(
         fontSize: 14,
         fontWeight: FontWeight.w500,
         fontFamily: secondaryFontFamily,
+        color: textsecondary,
       ),
       labelMedium: TextStyle(
         fontSize: 12,
         fontWeight: FontWeight.w500,
         fontFamily: secondaryFontFamily,
+        color: textsecondary,
       ),
       labelSmall: TextStyle(
         fontSize: 11,
         fontWeight: FontWeight.w500,
         fontFamily: secondaryFontFamily,
+        color: textsecondary,
       ),
     ),
     appBarTheme: const AppBarTheme(
@@ -200,6 +210,7 @@ class AppTheme {
       secondary: secondaryColor,
       tertiary: dashboardColor,
       surface: darkSurfaceColor,
+      tertiaryContainer: accentColor,
       // background: darkBackgroundColor,
       error: Color(0xFFEF4444),
       onPrimary: Colors.white,

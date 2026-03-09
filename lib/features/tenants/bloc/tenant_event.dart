@@ -7,4 +7,10 @@ class UpdateRentFrequency extends TenantEvent {
   UpdateRentFrequency(this.type);
 }
 
+
 class UpdateRentRenewalDate extends TenantEvent {}
+
+class UpdateRentFee extends TenantEvent {
+  final String rentFee;
+  UpdateRentFee(this.rentFee);
+}

@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tob/core/utils/components/widgets.dart';
 import 'package:tob/core/utils/constants/assets/svg.dart';
+import 'package:tob/features/expenses/screen/expenses_screen.dart';
 import 'package:tob/features/home/screens/home_screen.dart';
 import 'package:tob/features/my_profile/screens/my_profile_screen.dart';
 import 'package:tob/features/rentals/screens/rentals_screen.dart'; 
@@ -72,7 +73,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     HomeScreen(),
     RentalsScreen(),
     TenantScreen(),
-    SearchTab(),
+    ExpensesScreen(),
     MyProfileScreen(),
   ];
   void onTap(int index) {

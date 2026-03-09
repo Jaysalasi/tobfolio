@@ -93,3 +93,25 @@ Container shadowContainerMeth({
       child: child,
     );
   }
+
+  InputDecoration altInputDecoration({
+  String? hint,
+  Widget? prefix,
+  Widget? suffix,
+}) {
+  return InputDecoration(
+    hintText: hint,
+    prefixIcon: prefix,
+    suffixIcon: suffix,
+    filled: true,
+    fillColor: const Color(0xffF3F4F6),
+    contentPadding: const EdgeInsets.symmetric(
+      horizontal: 16,
+      vertical: 16,
+    ),
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(20),
+      borderSide: BorderSide.none,
+    ),
+  );
+}

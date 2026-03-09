@@ -15,4 +15,6 @@ class AppImages {
   static final phone = "assets/png/phone.png";
   static final whatsapp = "assets/png/whatsapp.png";
   static final mail = "assets/png/mail.png";
+
+  static final logoFramed = "assets/png/framed-logo.png";
 }

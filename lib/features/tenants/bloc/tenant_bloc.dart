@@ -9,5 +9,8 @@ class TenantBloc extends Bloc<TenantEvent, TenantState> {
     on<UpdateRentFrequency>((event, emit) {
       emit(state.copyWith(rentFrequency: event.type));
     });
+    on<UpdateRentFee>((event, emit) {
+      emit(state.copyWith(rentFee: event.rentFee));
+    });
   }
 }

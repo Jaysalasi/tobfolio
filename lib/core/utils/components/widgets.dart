@@ -8,11 +8,12 @@ Widget plusButtonMeth({
   Function()? onTap,
   bool isIcon = true,
   TextStyle? textStyle,
+  EdgeInsets? padding,
 }) {
   return GestureDetector(
     onTap: onTap,
     child: Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      padding: padding ?? EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
         color: theme.primaryColor,
         borderRadius: BorderRadius.circular(9.5),
@@ -24,9 +25,11 @@ Widget plusButtonMeth({
             Icon(Icons.add, size: 14, color: theme.scaffoldBackgroundColor),
           Text(
             label,
-            style: textStyle ?? theme.textTheme.bodySmall?.copyWith(
-              color: theme.scaffoldBackgroundColor,
-            ),
+            style:
+                textStyle ??
+                theme.textTheme.bodySmall?.copyWith(
+                  color: theme.scaffoldBackgroundColor,
+                ),
           ),
         ],
       ),
@@ -40,61 +43,64 @@ Widget homeCardMeth({
   required ThemeData theme,
   required BuildContext context,
   String? subtitle,
+  VoidCallback? onTap,
   MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start,
   CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.start,
 }) {
-  return Container(
-    padding: const EdgeInsets.all(20),
-    decoration: BoxDecoration(
-      gradient: appGradient(context),
-      boxShadow: appShadow(context),
-      borderRadius: BorderRadius.circular(25),
-    ),
-    child: Column(
-      mainAxisAlignment: mainAxisAlignment,
-      crossAxisAlignment: crossAxisAlignment,
-      children: [
-        SvgPicture.asset(icon),
-        SizedBox(height: 5),
-        Text(
-          title,
-          style: theme.textTheme.bodyMedium?.copyWith(
-            // fontWeight: FontWeight.bold,
-          ),
-        ),
-        // SizedBox(height: 10),
-        if (subtitle != null)
+  return GestureDetector(
+    onTap: onTap,
+    child: Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: appGradient(context),
+        boxShadow: appShadow(context),
+        borderRadius: BorderRadius.circular(25),
+      ),
+      child: Column(
+        mainAxisAlignment: mainAxisAlignment,
+        crossAxisAlignment: crossAxisAlignment,
+        children: [
+          SvgPicture.asset(icon),
+          SizedBox(height: 5),
           Text(
-            subtitle,
-            style: theme.textTheme.bodyLarge?.copyWith(
-              fontWeight: FontWeight.bold,
-              fontStyle: FontStyle.italic,
+            title,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              // fontWeight: FontWeight.bold,
             ),
           ),
-      ],
+          // SizedBox(height: 10),
+          if (subtitle != null)
+            Text(
+              subtitle,
+              style: theme.textTheme.bodyLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+                fontStyle: FontStyle.italic,
+              ),
+            ),
+        ],
+      ),
     ),
   );
 }
 
-
 Container shadowContainerMeth({
-    required BuildContext context,
-    required ThemeData theme,
-    required Widget child,
-  }) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-      decoration: BoxDecoration(
-        gradient: appGradient(context),
-        boxShadow: appShadow(context),
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: child,
-    );
-  }
+  required BuildContext context,
+  required ThemeData theme,
+  required Widget child,
+}) {
+  return Container(
+    margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+    decoration: BoxDecoration(
+      gradient: appGradient(context),
+      boxShadow: appShadow(context),
+      borderRadius: BorderRadius.circular(15),
+    ),
+    child: child,
+  );
+}
 
-  InputDecoration altInputDecoration({
+InputDecoration altInputDecoration({
   String? hint,
   Widget? prefix,
   Widget? suffix,
@@ -105,10 +111,7 @@ Container shadowContainerMeth({
     suffixIcon: suffix,
     filled: true,
     fillColor: const Color(0xffF3F4F6),
-    contentPadding: const EdgeInsets.symmetric(
-      horizontal: 16,
-      vertical: 16,
-    ),
+    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(20),
       borderSide: BorderSide.none,

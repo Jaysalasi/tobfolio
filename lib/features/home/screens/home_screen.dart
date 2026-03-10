@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:tob/core/router/app_router.dart';
+import 'package:tob/core/theme/app_theme.dart';
 import 'package:tob/core/utils/components/constants.dart';
 import 'package:tob/core/utils/components/widgets.dart';
 import 'package:tob/core/utils/constants/assets/pngs.dart';
 import 'package:tob/core/utils/constants/assets/svg.dart';
+import 'package:tob/features/ai/screens/ai_screen.dart';
 import 'package:tob/features/auth/bloc/auth_bloc.dart';
 import 'package:tob/features/home/bloc/home_bloc.dart';
+import 'package:tob/features/home/screens/widgets/welcome_card_widget.dart';
 import 'package:tob/features/search/screens/search_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -18,6 +21,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  int _currentPage = 0;
+  final PageController _pageController = PageController();
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -129,9 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(height: 10),
-                        _WelcomeCard(
-                          user: context.watch<AuthBloc>().state.user,
-                        ),
+                        WelcomeCard(user: context.watch<AuthBloc>().state.user),
                         SizedBox(height: 20),
                         GridView.count(
                           shrinkWrap: true,
@@ -194,7 +198,16 @@ class _HomeScreenState extends State<HomeScreen> {
                               context: context,
                               icon: SvgAssets.aiLine,
                               title: 'AI',
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const AIScreen(),
+                                  ),
+                                );
+                              },
                               theme: theme,
+                              
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                             ),
@@ -206,44 +219,51 @@ class _HomeScreenState extends State<HomeScreen> {
                             Expanded(
                               child: Container(
                                 padding: const EdgeInsets.all(20),
+                                constraints: BoxConstraints(
+                                  maxHeight: space.height * 0.16,
+                                ),
                                 decoration: BoxDecoration(
                                   gradient: appGradient(context),
                                   boxShadow: appShadow(context),
                                   borderRadius: BorderRadius.circular(25),
                                 ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                child: Column(
                                   children: [
-                                    SizedBox(
-                                      width: space.width * 0.6,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                    Expanded(
+                                      child: PageView(
+                                        controller: _pageController,
+                                        onPageChanged: (index) {
+                                          setState(() {
+                                            _currentPage = index;
+                                          });
+                                        },
                                         children: [
-                                          Text(
-                                            'Exclusive offer',
-                                            style: theme.textTheme.bodyMedium
-                                                ?.copyWith(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                          ),
-                                          Text(
-                                            'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.',
-                                            style: theme.textTheme.bodyMedium
-                                                ?.copyWith(
-                                                  fontWeight: FontWeight.w400,
-                                                ),
-                                          ),
+                                          homeOffersTickMeth(space, theme),
+                                          homeOffersTickMeth(space, theme),
                                         ],
                                       ),
                                     ),
-                                    Expanded(
-                                      child: plusButtonMeth(
-                                        label: "Claim",
-                                        theme: theme,
-                                        isIcon: false,
-                                      ),
+                                    Row(
+                                      spacing: 5,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [1, 2].asMap().entries.map((
+                                        entry,
+                                      ) {
+                                        return Container(
+                                          width: 10,
+                                          height: 10,
+
+                                          decoration: BoxDecoration(
+                                            color: _currentPage == entry.key
+                                                ? AppTheme.accentColor
+                                                : AppTheme.grayColor,
+                                            borderRadius: BorderRadius.circular(
+                                              50,
+                                            ),
+                                          ),
+                                        );
+                                      }).toList(),
                                     ),
                                   ],
                                 ),
@@ -259,65 +279,35 @@ class _HomeScreenState extends State<HomeScreen> {
       },
     );
   }
-}
 
-class _WelcomeCard extends StatelessWidget {
-  final dynamic user;
-
-  const _WelcomeCard({required this.user});
-
-  @override
-  Widget build(BuildContext context) {
-    final space = MediaQuery.of(context).size;
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        gradient: appGradient(context),
-        boxShadow: appShadow(context),
-        borderRadius: BorderRadius.circular(25),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  Row homeOffersTickMeth(Size space, ThemeData theme) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        SizedBox(
+          width: space.width * 0.6,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  Text(
-                    'Total Income (USD)',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SvgPicture.asset(
-                    SvgAssets.dropdownArrow,
-                    width: 20,
-                    height: 20,
-                  ),
-                ],
+              Text(
+                'Exclusive offer',
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              SizedBox(width: space.width * 0.15),
-              plusButtonMeth(label: 'Add Property', theme: Theme.of(context), onTap: () {
-                print("push");
-                Navigator.pushNamed(context, AppRouter.addProperty);
-              },),
+              Text(
+                'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.',
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
             ],
           ),
-          Text(
-            '\$ 20,000',
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              fontWeight: FontWeight.w900,
-              fontStyle: FontStyle.italic,
-            ),
-          ),
-
-          SizedBox(height: 4),
-
-          const SizedBox(height: 20),
-        ],
-      ),
+        ),
+        Expanded(
+          child: plusButtonMeth(label: "Claim", theme: theme, isIcon: false),
+        ),
+      ],
     );
   }
 }

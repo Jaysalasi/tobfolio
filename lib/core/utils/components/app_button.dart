@@ -5,6 +5,7 @@ class AppButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final bool isLoading;
   final bool isActive;
+  final double? fontSize;
   final double height;
   final double borderRadius;
   final Color? backgroundColor;
@@ -20,6 +21,7 @@ class AppButton extends StatelessWidget {
     this.isActive = true,
     this.height = 55,
     this.borderRadius = 16,
+    this.fontSize,
     this.backgroundColor,
     this.disabledColor,
     this.textColor,
@@ -66,7 +68,7 @@ class AppButton extends StatelessWidget {
                     title,
                     style: TextStyle(
                       color: textColor ?? Colors.white,
-                      fontSize: 16,
+                      fontSize: fontSize ?? 16,
                       fontWeight: FontWeight.w600,
                     ),
                   ),

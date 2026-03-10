@@ -41,7 +41,15 @@ static const String expenses = "assets/svg/nav/expenses.svg";
 static const String expensesOutline = "assets/svg/nav/expenses-outline.svg";
 static const String user = "assets/svg/nav/user.svg";
 static const String upload = "assets/svg/upload.svg";
+static const String expand = "assets/svg/expand.svg";
 static const String userOutline = "assets/svg/nav/user-outline.svg";
+
+static const String twitterX = "assets/svg/twitter.svg";
+static const String tiktok = "assets/svg/tiktok.svg";
+static const String insta = "assets/svg/insta.svg";
+static const String thread = "assets/svg/thread.svg";
+
+
  
 
   static final List<String> allSvgs = [
@@ -81,6 +89,11 @@ static const String userOutline = "assets/svg/nav/user-outline.svg";
     settingsOutline,
     copy,
     edit,
+    twitterX,
+    tiktok,
+    insta,
+    thread,
+    expand,
   ];
 
    static Future<void> preCacheSVGs() async {

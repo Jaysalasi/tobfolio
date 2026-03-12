@@ -168,7 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           crossAxisCount: 2,
                           mainAxisSpacing: 16,
                           crossAxisSpacing: 20,
-                          childAspectRatio: 1.7,
+                          childAspectRatio: 1.5,
                           children: [
                             homeCardMeth(
                               icon: SvgAssets.share,

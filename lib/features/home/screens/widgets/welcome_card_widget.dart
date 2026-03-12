@@ -41,11 +41,15 @@ class WelcomeCard extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(width: space.width * 0.15),
-              plusButtonMeth(label: 'Add Property', theme: Theme.of(context), onTap: () {
-                print("push");
-                Navigator.pushNamed(context, AppRouter.addProperty);
-              },),
+              SizedBox(width: space.width * 0.1),
+              plusButtonMeth(
+                label: 'Add Property',
+                theme: Theme.of(context),
+                onTap: () {
+                  print("push");
+                  Navigator.pushNamed(context, AppRouter.addProperty);
+                },
+              ),
             ],
           ),
           Text(

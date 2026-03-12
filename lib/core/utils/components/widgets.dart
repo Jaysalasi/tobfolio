@@ -61,7 +61,7 @@ Widget homeCardMeth({
         crossAxisAlignment: crossAxisAlignment,
         children: [
           SvgPicture.asset(icon),
-          SizedBox(height: 5),
+          // SizedBox(height: 1),
           Text(
             title,
             style: theme.textTheme.bodyMedium?.copyWith(

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tob/features/add_property/bloc/add_property_bloc.dart';
 import 'package:tob/features/add_property/screens/add_property_screen.dart';
+import 'package:tob/features/all_properties/bloc/all_properties_bloc.dart';
+import 'package:tob/features/all_properties/screen/all_properties_screen.dart';
 import 'package:tob/features/auth/screens/forgot_password.dart';
 import 'package:tob/features/auth/screens/create_new_password.dart';
 import 'package:tob/features/home/bloc/home_bloc.dart';
@@ -34,6 +36,7 @@ class AppRouter {
   static const String home = '/home';
   static const String search = '/search';
   static const String addProperty = '/dashboard/add-property';
+  static const String allProperties = '/dashboard/all-property';
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
@@ -92,6 +95,12 @@ class AppRouter {
           // authRepository: context.read<AuthRepository>()
           ),
         child: const AddPropertyScreen(),
+      ),
+      allProperties: (context) => BlocProvider(
+        create: (context) => AllPropertyBloc(
+          // authRepository: context.read<AuthRepository>()
+          ),
+        child: const PropertyListScreen(),
       ),
       dashboard: (context) => MultiBlocProvider(
         providers: [

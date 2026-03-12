@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tob/core/router/app_router.dart';
 import 'package:tob/core/theme/app_theme.dart';
 import 'package:tob/core/utils/components/constants.dart';
 
@@ -30,7 +31,7 @@ class RentalsScreen extends StatelessWidget {
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
                 shrinkWrap: true,
-                childAspectRatio: 1.1,
+                childAspectRatio: 0.96,
                 physics: const NeverScrollableScrollPhysics(),
                 children: [
                   OccupancyCard(theme: theme),
@@ -53,10 +54,15 @@ class RentalsScreen extends StatelessWidget {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  Text(
-                    "View All",
-                    style: theme.textTheme.bodyLarge?.copyWith(
-                      color: AppTheme.accentColor,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, AppRouter.allProperties);
+                    },
+                    child: Text(
+                      "View All",
+                      style: theme.textTheme.bodyLarge?.copyWith(
+                        color: AppTheme.accentColor,
+                      ),
                     ),
                   ),
                 ],

@@ -104,7 +104,7 @@ class PhotoGrid extends StatelessWidget {
                 children: [
                   if (state.photos.isEmpty)
                     Row(
-                      spacing: size.width * 0.027,
+                      spacing: size.width * 0.013,
                       children: [1, 2, 3]
                           .map(
                             (e) => Container(

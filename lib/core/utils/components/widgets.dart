@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:tob/core/utils/components/constants.dart';
+import 'package:tob/core/utils/constants/assets/svg.dart';
 
 Widget plusButtonMeth({
   required String label,
   required ThemeData theme,
   Function()? onTap,
   bool isIcon = true,
+  String icon = SvgAssets.plus,
   TextStyle? textStyle,
   EdgeInsets? padding,
+  double borderRadius = 9.5
 }) {
   return GestureDetector(
     onTap: onTap,
@@ -16,19 +19,21 @@ Widget plusButtonMeth({
       padding: padding ?? EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
         color: theme.primaryColor,
-        borderRadius: BorderRadius.circular(9.5),
+        borderRadius: BorderRadius.circular(borderRadius),
       ),
       child: Row(
+        spacing: 5,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           if (isIcon)
-            Icon(Icons.add, size: 14, color: theme.scaffoldBackgroundColor),
+            SvgPicture.asset(icon),
           Text(
             label,
             style:
                 textStyle ??
-                theme.textTheme.bodySmall?.copyWith(
+                theme.textTheme.bodyMedium?.copyWith(
                   color: theme.scaffoldBackgroundColor,
+                  fontWeight: FontWeight.w500,
                 ),
           ),
         ],

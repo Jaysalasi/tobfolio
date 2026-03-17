@@ -134,12 +134,17 @@ class _TenantProfileView extends StatelessWidget {
                     value: tenant.entryDate,
                     showDivider: false,
                   ),
+                  InfoTile(
+                    title: "Late fee",
+                    value: "\$20,000",
+                    showDivider: false,
+                  ),
                 ]),
 
                 const SizedBox(height: 20),
 
                 Text(
-                  "Tenants Document",
+                  "Tenants Report",
                   style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                 ),
 

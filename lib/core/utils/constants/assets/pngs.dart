@@ -17,4 +17,11 @@ class AppImages {
   static final mail = "assets/png/mail.png";
 
   static final logoFramed = "assets/png/framed-logo.png";
+  
+  static final glassGiftBox = "assets/png/glass-gift-box.png";
+
+  static final planning = "assets/png/planning.png";
+  static final glassHome = "assets/png/glass-home.png";
+  static final payment = "assets/png/payment.png";
+
 }

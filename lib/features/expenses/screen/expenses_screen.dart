@@ -17,6 +17,7 @@ class ExpensesScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: theme.colorScheme.tertiary,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: theme.colorScheme.tertiary,
         title: Text("Expenses", style: theme.textTheme.titleLarge),
       ),
@@ -78,9 +79,9 @@ class ExpensesScreen extends StatelessWidget {
                 amount: "\$3",
               ),
 
-              const ExpenseCategoryTile(title: "PM Fee", amount: "\$3"),
+              const ExpenseCategoryTile(title: "Cleaning & Renovation", amount: "\$3"),
 
-              const ExpenseCategoryTile(title: "Insurance", amount: "\$3"),
+              const ExpenseCategoryTile(title: "Staff Salary", amount: "\$3"),
 
               Row(
                 children: [

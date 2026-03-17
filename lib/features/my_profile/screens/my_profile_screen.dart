@@ -22,6 +22,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
     final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: theme.colorScheme.tertiary,
         title: Text("Hi, Divine", style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w500)),
       ),
@@ -100,6 +101,17 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                       },
                     ),
 
+                    SettingsTile(
+                      title: "Download Account Statement",
+                      showArrow: false,
+                      onTap: () {
+                        // Navigator.of(context).push(
+                        //   MaterialPageRoute(
+                        //     builder: (context) => const PolicyScreen(),
+                        //   ),
+                        // );
+                      },
+                    ),
                     SettingsTile(
                       title: "Privacy Policy",
                       showArrow: true,

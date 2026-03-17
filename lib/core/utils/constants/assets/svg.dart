@@ -7,6 +7,9 @@ static final String apple = "assets/svg/solid_apple.svg";
 static final String twitter = "assets/svg/x-twitter.svg";
 static final String google = "assets/svg/devicon_google.svg";
 
+static final String backwardThree = "assets/svg/backward-3.svg";
+static final String forwardThree = "assets/svg/forward-3.svg";
+
 static const String offerUp = "assets/svg/offerup.svg";
 static const String backOutline = "assets/svg/back-outline.svg";
 static const String dropdownArrow = "assets/svg/dropdown.svg";
@@ -43,11 +46,16 @@ static const String user = "assets/svg/nav/user.svg";
 static const String upload = "assets/svg/upload.svg";
 static const String expand = "assets/svg/expand.svg";
 static const String userOutline = "assets/svg/nav/user-outline.svg";
+static const String plus = "assets/svg/plus.svg";
+static const String pokemon = "assets/svg/pokemon.svg";
+static const String circle = "assets/svg/circle.svg";
+static const String checked = "assets/svg/checked.svg";
 
 static const String twitterX = "assets/svg/twitter.svg";
 static const String tiktok = "assets/svg/tiktok.svg";
 static const String insta = "assets/svg/insta.svg";
 static const String thread = "assets/svg/thread.svg";
+static const String filter = "assets/svg/filter.svg";
 
 
  
@@ -94,6 +102,13 @@ static const String thread = "assets/svg/thread.svg";
     insta,
     thread,
     expand,
+    plus,
+    pokemon,
+    circle,
+    checked,
+    filter,
+    backwardThree,
+    forwardThree,
   ];
 
    static Future<void> preCacheSVGs() async {

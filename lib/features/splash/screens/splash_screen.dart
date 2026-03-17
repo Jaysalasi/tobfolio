@@ -57,7 +57,7 @@ class _SplashScreenState extends State<SplashScreen>
       if (mounted) {
         final isFirstTime = await onboardingCubit.checkFirstTime();
 
-        if (isFirstTime) {
+        if (!isFirstTime) {
           Navigator.of(context).pushReplacementNamed('/onboarding');
         } else {
           final authState = authBloc.state;

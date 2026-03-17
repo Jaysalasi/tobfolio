@@ -126,6 +126,7 @@ void dispose() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        if(widget.label != "")
         Text(
           widget.label,
           style: theme.textTheme.titleMedium?.copyWith(

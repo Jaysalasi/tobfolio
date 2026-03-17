@@ -11,6 +11,7 @@ class RentalsScreen extends StatelessWidget {
     final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: theme.colorScheme.tertiary,
         title: Text("Rentals", style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w500)),
       ),

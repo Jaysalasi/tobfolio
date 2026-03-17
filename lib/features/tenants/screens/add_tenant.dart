@@ -233,7 +233,12 @@ class _AddTenantScreenState extends State<AddTenantScreen> {
             type: AltFieldType.dropdown,
             items: ["House 1", "House 2", "House 3"],
           ),
-          AltTextField(label: "Address", hint: "123 Main St, City, State"),
+          AltTextField(
+            label: "Select Unit",
+            hint: "1",
+            type: AltFieldType.dropdown,
+            items: ["House 1", "House 2", "House 3"],
+          ),
         ],
       ),
     );

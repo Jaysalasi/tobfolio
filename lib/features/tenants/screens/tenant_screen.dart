@@ -27,6 +27,7 @@ class _TenantScreenState extends State<TenantScreen> {
     final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: theme.colorScheme.tertiary,
         title: Text(
           "Tenants",

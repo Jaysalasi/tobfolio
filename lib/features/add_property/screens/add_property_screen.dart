@@ -135,7 +135,7 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
               context.read<AddPropertyBloc>().add(UpdateAddress(v)),
         ),
 
-        Text("Add Photo", style: theme.textTheme.titleMedium),
+        Text("Add Photo", style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
 
         const SizedBox(height: 10),
 
@@ -146,9 +146,55 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
         AppButton(
           title: "Continue",
           onPressed: () {
-            _pageController.nextPage(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
+
+
+            showModalBottomSheet(
+              context: context,
+              builder: (context) { return Container(
+                            height: 390,
+                            width: MediaQuery.of(context).size.width,
+                            padding: const EdgeInsets.all(20),
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(24),
+                              ),
+                            ),
+                            child:  Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox( height: 40),
+                                  Divider(height: 40,color:Colors.grey[300],),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                      _pageController.nextPage(
+                                        duration: const Duration(milliseconds: 300),
+                                        curve: Curves.easeInOut,
+                                      );
+                                      // Handle tap
+                                    },
+                                    child: Text("Manage Single Unit Apartment", style: theme.textTheme.titleLarge),
+                                  ),
+                                  Divider(height: 40,color: Colors.grey[300],),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                      _pageController.nextPage(
+                                        duration: const Duration(milliseconds: 300),
+                                        curve: Curves.easeInOut,
+                                      );
+                                      // Handle tap
+                                    },
+                                    child: Text("Manage Entire Building", style: theme.textTheme.titleLarge),
+                                  ),
+                                  Divider(height: 40,color:Colors.grey[300],),
+                                ],
+                              ),
+                            ),
+                          );}
             );
           },
         ),

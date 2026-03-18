@@ -182,7 +182,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => const ReferralScreen(),
+                                    builder: (context) =>
+                                        const ReferralScreen(),
                                   ),
                                 );
                               },
@@ -194,8 +195,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               title: 'Handyman',
                               theme: Theme.of(context),
                               context: context,
-                              onTap: () {
-                              },
+                              onTap: () {},
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                             ),
@@ -208,7 +208,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => const LeasePropertyScreen(),
+                                    builder: (context) =>
+                                        const LeasePropertyScreen(),
                                   ),
                                 );
                               },
@@ -228,7 +229,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 );
                               },
                               theme: theme,
-                              
+
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                             ),

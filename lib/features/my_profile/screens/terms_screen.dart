@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:tob/core/utils/components/app_button.dart';
+import 'package:tob/core/utils/constants/assets/svg.dart';
 
 class TermsScreen extends StatefulWidget {
   const TermsScreen({super.key});
@@ -15,7 +17,13 @@ class _TermsScreenState extends State<TermsScreen> {
     return Scaffold(
       backgroundColor: theme.colorScheme.tertiary,
       appBar: AppBar(
-      backgroundColor: theme.colorScheme.tertiary,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: SvgPicture.asset(SvgAssets.backOutline),
+        ),
+        backgroundColor: theme.colorScheme.tertiary,
         title: const Text("Terms and Conditions"),
       ),
       body: Padding(

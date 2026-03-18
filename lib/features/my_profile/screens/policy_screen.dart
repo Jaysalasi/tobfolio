@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:tob/core/utils/constants/assets/svg.dart';
 
 class PolicyScreen extends StatelessWidget {
   const PolicyScreen({super.key});
@@ -9,6 +11,12 @@ class PolicyScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: theme.colorScheme.tertiary,
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: SvgPicture.asset(SvgAssets.backOutline),
+        ),
         backgroundColor: theme.colorScheme.tertiary,
         title: const Text("Privacy Policy"),
       ),

@@ -294,6 +294,11 @@ class _AddTenantScreenState extends State<AddTenantScreen> {
             hint: "Enter rent fee",
             type: AltFieldType.number,
           ),
+          AltTextField(
+            label: "Late Rent Fee",
+            hint: "Enter rent fee",
+            type: AltFieldType.number,
+          ),
 
           Row(
           children: [

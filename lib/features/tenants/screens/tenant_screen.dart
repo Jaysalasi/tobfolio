@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tob/core/theme/app_theme.dart';
+import 'package:tob/core/utils/components/app_button.dart';
 import 'package:tob/core/utils/components/constants.dart';
 import 'package:tob/core/utils/components/widgets.dart';
 import 'package:tob/features/add_property/utils/alt_text_field.dart';
@@ -212,7 +213,7 @@ class _TenantScreenState extends State<TenantScreen> {
                           content: BlocBuilder<TenantBloc, TenantState>(
                             builder: (context, state) {
                               return SizedBox(
-                                height: 400,
+                                height: 450,
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -303,6 +304,9 @@ class _TenantScreenState extends State<TenantScreen> {
                                         );
                                       },
                                     ),
+                                    AppButton(title: "Renew", onPressed: () {
+                                      Navigator.pop(context);
+                                    }),
                                   ],
                                 ),
                               );

@@ -25,6 +25,8 @@ class AddPropertyScreen extends StatefulWidget {
 class _AddPropertyScreenState extends State<AddPropertyScreen> {
   final PageController _pageController = PageController();
 
+  String selectedUnit = "";
+
   String? documentPath;
 
   void pickDocument() {
@@ -89,7 +91,10 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                   physics: const NeverScrollableScrollPhysics(),
                   children: [
                     addPropertyStepOneMeth(context, state, theme),
-                    addPropertyStepTwoMeth(context, state, theme, pickDocument),
+                    if (selectedUnit == "Single Unit Apartment")
+                      addPropertyStepTwoMeth(context, state, theme, pickDocument),
+                    if (selectedUnit == "Entire Building")
+                      addPropertyStepTwoMethForBuilding(context, state, theme, pickDocument),
                   ],
                 );
               },
@@ -135,7 +140,12 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
               context.read<AddPropertyBloc>().add(UpdateAddress(v)),
         ),
 
-        Text("Add Photo", style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
+        Text(
+          "Add Photo",
+          style: theme.textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
 
         const SizedBox(height: 10),
 
@@ -146,55 +156,67 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
         AppButton(
           title: "Continue",
           onPressed: () {
-
-
             showModalBottomSheet(
               context: context,
-              builder: (context) { return Container(
-                            height: 390,
-                            width: MediaQuery.of(context).size.width,
-                            padding: const EdgeInsets.all(20),
-                            decoration: const BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.vertical(
-                                top: Radius.circular(24),
-                              ),
-                            ),
-                            child:  Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox( height: 40),
-                                  Divider(height: 40,color:Colors.grey[300],),
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.pop(context);
-                                      _pageController.nextPage(
-                                        duration: const Duration(milliseconds: 300),
-                                        curve: Curves.easeInOut,
-                                      );
-                                      // Handle tap
-                                    },
-                                    child: Text("Manage Single Unit Apartment", style: theme.textTheme.titleLarge),
-                                  ),
-                                  Divider(height: 40,color: Colors.grey[300],),
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.pop(context);
-                                      _pageController.nextPage(
-                                        duration: const Duration(milliseconds: 300),
-                                        curve: Curves.easeInOut,
-                                      );
-                                      // Handle tap
-                                    },
-                                    child: Text("Manage Entire Building", style: theme.textTheme.titleLarge),
-                                  ),
-                                  Divider(height: 40,color:Colors.grey[300],),
-                                ],
-                              ),
-                            ),
-                          );}
+              builder: (context) {
+                return Container(
+                  height: 390,
+                  width: MediaQuery.of(context).size.width,
+                  padding: const EdgeInsets.all(20),
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(24),
+                    ),
+                  ),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 40),
+                        Divider(height: 40, color: Colors.grey[300]),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              selectedUnit = "Single Unit Apartment";
+                            });
+                            Navigator.pop(context);
+                            _pageController.nextPage(
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.easeInOut,
+                            );
+                            // Handle tap
+                          },
+                          child: Text(
+                            "Manage Single Unit Apartment",
+                            style: theme.textTheme.titleLarge,
+                          ),
+                        ),
+                        Divider(height: 40, color: Colors.grey[300]),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              selectedUnit = "Entire Building";
+                            });
+                            Navigator.pop(context);
+                            _pageController.nextPage(
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.easeInOut,
+                            );
+                            // Handle tap
+                          },
+                          child: Text(
+                            "Manage Entire Building",
+                            style: theme.textTheme.titleLarge,
+                          ),
+                        ),
+                        Divider(height: 40, color: Colors.grey[300]),
+                      ],
+                    ),
+                  ),
+                );
+              },
             );
           },
         ),
@@ -301,6 +323,155 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
         ),
         const SizedBox(height: 10),
         const Spacer(),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: GestureDetector(
+                onTap: () {
+                  // TODO: Add another unit
+                },
+                child: Row(
+                  children: [
+                    Icon(Icons.add),
+                    Text("Add Another Unit"),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+        AppButton(
+          title: "Save",
+          onPressed: () {
+            _pageController.nextPage(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+            );
+          },
+        ),
+      ],
+    );
+  }
+  Widget addPropertyStepTwoMethForBuilding(
+    BuildContext context,
+    AddPropertyState state,
+    ThemeData theme,
+    Function() onTap,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 10),
+
+        AltTextField(
+          label: "Property Name",
+          hint: state.unitType != '' ? state.unitType : "Enter property name",
+          value: state.unitType,
+          type: AltFieldType.text,
+          // items: ["Flat", "Room", "Villa", "Office", "Plot"],
+          onChanged: (v) =>
+              context.read<AddPropertyBloc>().add(UpdateUnitType(v)),
+        ),
+
+        // const SizedBox(height: 20),
+        AltTextField(
+          label: "Total Units",
+          hint: "E.g 10",
+          onChanged: (v) => context.read<AddPropertyBloc>().add(UpdateName(v)),
+        ),
+
+        AltTextField(
+          label: "Description (Optional)",
+          hint: "E.g Modern apartment with city view",
+          maxLines: 5,
+          type: AltFieldType.multiline,
+          onChanged: (v) => context.read<AddPropertyBloc>().add(UpdateName(v)),
+        ),
+
+        Text(
+          "Upload Documents",
+          style: theme.textTheme.titleLarge?.copyWith(fontSize: 18),
+        ),
+        SizedBox(height: 10),
+        Row(
+          children: [
+            Expanded(
+              child: DottedBorder(
+                options: RoundedRectDottedBorderOptions(
+                  radius: Radius.circular(6),
+                  dashPattern: [2, 2],
+                  strokeWidth: 2,
+                  color: AppTheme.primaryColor,
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Color(0xFFf1f6fe),
+                    borderRadius: BorderRadius.circular(6),
+                    image: documentPath != null
+                        ? DecorationImage(
+                            image: FileImage(File(documentPath!)),
+                            fit: BoxFit.cover,
+                          )
+                        : null,
+                  ),
+                  height: 116,
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(SvgAssets.upload),
+                        const SizedBox(height: 10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            plusButtonMeth(
+                              label: "Upload",
+                              theme: theme,
+                              onTap: onTap,
+                              isIcon: false,
+                              textStyle: theme.textTheme.bodyMedium?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: AppTheme.lightSurfaceColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          'Format: jpeg, doc & Max file size: 25 MB',
+                          style: theme.textTheme.bodyMedium,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 10),
+        const Spacer(),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: GestureDetector(
+                onTap: () {
+                
+                },
+                child: Row(
+                  children: [
+                    
+                    Text("Save & Add Another"),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
         AppButton(
           title: "Save",
           onPressed: () {

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tob/core/theme/app_theme.dart';
 import 'package:tob/core/utils/components/app_button.dart';
 import 'package:tob/core/utils/components/constants.dart';
 import 'package:tob/core/utils/components/widgets.dart';
+import 'package:tob/core/utils/constants/assets/svg.dart';
 import 'package:tob/features/add_property/utils/alt_text_field.dart';
 import 'package:tob/features/tenant_profile/screens/tenant_profile_screen.dart';
 import 'package:tob/features/tenants/bloc/tenant_bloc.dart';
@@ -188,8 +190,32 @@ class _TenantScreenState extends State<TenantScreen> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                           title: Text('Are you sure?'),
-                          content: const Text(
-                            'This will permanently evict your tenant. This action cannot be undone.',
+                          content: SizedBox(
+                            height: 130,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'This will permanently evict your tenant. This action cannot be undone.',
+                                ),
+                                Row(
+                                  spacing: 5,
+                                  children: [
+                                    SvgPicture.asset(SvgAssets.evict),
+                                    Text(
+                                      'Yes, I want to evict this tenant',
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 10),
+                                AppButton(
+                                  title: 'Evict',
+                                  onPressed: () {
+                                    // TODO: Implement eviction logic
+                                  },
+                                ),
+                              ],
+                            ),
                           ),
                           
                         ),

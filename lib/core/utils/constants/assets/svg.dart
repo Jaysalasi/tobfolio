@@ -57,6 +57,9 @@ static const String insta = "assets/svg/insta.svg";
 static const String thread = "assets/svg/thread.svg";
 static const String filter = "assets/svg/filter.svg";
 
+static const String evict = "assets/svg/evict.svg";
+
+
 
  
 
@@ -107,6 +110,7 @@ static const String filter = "assets/svg/filter.svg";
     circle,
     checked,
     filter,
+    evict,
     backwardThree,
     forwardThree,
   ];

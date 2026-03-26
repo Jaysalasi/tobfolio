@@ -366,8 +366,8 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
         const SizedBox(height: 10),
 
         AltTextField(
-          label: "Property Name",
-          hint: state.unitType != '' ? state.unitType : "Enter property name",
+          label: "Unit Name",
+          hint: state.unitType != '' ? state.unitType : "Enter unit name",
           value: state.unitType,
           type: AltFieldType.text,
           // items: ["Flat", "Room", "Villa", "Office", "Plot"],

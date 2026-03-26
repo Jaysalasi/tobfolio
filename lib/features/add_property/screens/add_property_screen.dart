@@ -366,10 +366,10 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
         const SizedBox(height: 10),
 
         AltTextField(
-          label: "Unit Name",
-          hint: state.unitType != '' ? state.unitType : "Enter unit name",
+          label: "Unit Type",
+          hint: state.unitType != '' ? state.unitType : "Enter unit type",
           value: state.unitType,
-          type: AltFieldType.text,
+          type: AltFieldType.dropdown,
           // items: ["Flat", "Room", "Villa", "Office", "Plot"],
           onChanged: (v) =>
               context.read<AddPropertyBloc>().add(UpdateUnitType(v)),
@@ -378,7 +378,7 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
         // const SizedBox(height: 20),
         AltTextField(
           label: "Total Units",
-          hint: "E.g 10",
+          hint: "E.g 100 rooms",
           onChanged: (v) => context.read<AddPropertyBloc>().add(UpdateName(v)),
         ),
 

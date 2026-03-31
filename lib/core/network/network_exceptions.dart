@@ -35,7 +35,7 @@ class NetworkExceptions {
   static String _handleHttpError(int statusCode, String message) {
     switch (statusCode) {
       case 400:
-        return 'Bad request. $message';
+        return message;
       case 401:
         return 'Unauthorized. $message';
       case 403:

@@ -1,33 +1,30 @@
 import 'package:tob/features/auth/models/user.dart';
 
 class AuthResponse {
-  final String status;
+  final String referralCode;
   final String message;
-  final AuthData data;
-  final String timestamp;
 
   const AuthResponse({
-    required this.status,
+    required this.referralCode,
     required this.message,
-    required this.data,
-    required this.timestamp,
+   
   });
 
   factory AuthResponse.fromJson(Map<String, dynamic> json) {
     return AuthResponse(
-      status: json['status'] as String,
+      
       message: json['message'] as String,
-      data: AuthData.fromJson(json['data'] as Map<String, dynamic>),
-      timestamp: json['timestamp'] as String,
+      referralCode: json['referralCode'] as String,
+     
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'status': status,
+      
       'message': message,
-      'data': data.toJson(),
-      'timestamp': timestamp,
+      'referralCode': referralCode,
+     
     };
   }
 
@@ -35,22 +32,18 @@ class AuthResponse {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     return other is AuthResponse &&
-        other.status == status &&
-        other.message == message &&
-        other.data == data &&
-        other.timestamp == timestamp;
+        other.referralCode == referralCode &&
+        other.message == message;
   }
 
   @override
   int get hashCode {
-    return status.hashCode ^
-        message.hashCode ^
-        data.hashCode ^
-        timestamp.hashCode;
+    return  referralCode.hashCode ^
+        message.hashCode;
   }
 
   @override
-  String toString() => 'AuthResponse(status: $status, message: $message)';
+  String toString() => 'AuthResponse(referralCode: $referralCode, message: $message)';
 }
 
 class AuthData {
@@ -97,5 +90,5 @@ class AuthData {
   }
 
   @override
-  String toString() => 'AuthData(tokenType: $tokenType, user: ${user.fname})';
+  String toString() => 'AuthData(tokenType: $tokenType, user: ${user.name})';
 }

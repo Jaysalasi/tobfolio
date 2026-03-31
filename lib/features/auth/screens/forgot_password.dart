@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tob/core/utils/components/app_button.dart';
 import 'package:tob/core/utils/components/app_text_field.dart';
-import '../bloc/auth_bloc.dart';
+import 'package:tob/core/utils/toasts.dart';
+import '../bloc/register_bloc.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -17,7 +17,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
+  // final _confirmPasswordController = TextEditingController();
   bool _isLoading = false;
   bool rememberMe = false;
 
@@ -26,33 +26,21 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
-    _confirmPasswordController.dispose();
+    // _confirmPasswordController.dispose();
     super.dispose();
   }
 
-  void _register() {
+  void register() {
     if (_formKey.currentState!.validate()) {
       FocusScope.of(context).unfocus();
-      context.read<AuthBloc>().add(
-        RegisterRequested(
+      context.read<RegisterBloc>().add(
+        RegisterSubmitted(
           name: _nameController.text.trim(),
           email: _emailController.text.trim(),
           password: _passwordController.text,
-          passwordConfirmation: _confirmPasswordController.text,
         ),
       );
     }
-  }
-
-  void _showError(String message) {
-    Fluttertoast.showToast(
-      msg: message,
-      toastLength: Toast.LENGTH_LONG,
-      gravity: ToastGravity.BOTTOM,
-      backgroundColor: Colors.red,
-      textColor: Colors.white,
-      fontSize: 16.0,
-    );
   }
 
   @override
@@ -64,18 +52,19 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       //   backgroundColor: Colors.transparent,
       //   elevation: 0,
       // ),
-      body: BlocListener<AuthBloc, AuthState>(
+      body: BlocListener<RegisterBloc, RegisterState>(
         listener: (context, state) {
-          if (state.status == AuthStatus.loading) {
+          if (state.status == RegisterStatus.loading) {
             setState(() => _isLoading = true);
           } else {
             setState(() => _isLoading = false);
 
-            if (state.status == AuthStatus.error &&
+            if (state.status == RegisterStatus.failure &&
                 state.errorMessage != null) {
-              _showError(state.errorMessage!);
-            } else if (state.status == AuthStatus.authenticated) {
-              Navigator.of(context).pushReplacementNamed('/dashboard');
+              showError(state.errorMessage!);
+            } else if (state.status == RegisterStatus.success) {
+              showSuccess('Registration successful!');
+              Navigator.of(context).pushReplacementNamed('/login');
             }
           }
         },

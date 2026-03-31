@@ -12,6 +12,8 @@ import 'core/network/api_service.dart';
 import 'core/storage/secure_storage_service.dart';
 import 'features/auth/repositories/auth_repository.dart';
 import 'features/auth/bloc/auth_bloc.dart';
+import 'features/auth/bloc/login_bloc.dart';
+import 'features/auth/bloc/register_bloc.dart';
 import 'features/onboarding/cubit/onboarding_cubit.dart';
 import 'features/dashboard/bloc/dashboard_bloc.dart';
 import 'features/home/bloc/home_bloc.dart';
@@ -42,6 +44,11 @@ class MyApp extends StatelessWidget {
       child: MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) => AuthBloc(authRepository: context.read<AuthRepository>())),
+          BlocProvider(create: (context) => LoginBloc(
+            authRepository: context.read<AuthRepository>(),
+            authBloc: context.read<AuthBloc>(),
+          )),
+          BlocProvider(create: (context) => RegisterBloc(authRepository: context.read<AuthRepository>())),
           BlocProvider(create: (context) => OnboardingCubit()),
           BlocProvider(create: (context) => ThemeCubit()),
           BlocProvider(create: (context) => DashboardBloc()),

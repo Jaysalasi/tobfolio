@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:tob/core/router/app_router.dart';
 import 'package:tob/core/theme/app_theme.dart';
 import 'package:tob/core/utils/components/constants.dart';
 import 'package:tob/core/utils/components/widgets.dart';
@@ -27,6 +26,13 @@ class _HomeScreenState extends State<HomeScreen> {
   final PageController _pageController = PageController();
 
   @override
+  void initState() {
+    super.initState();
+    // Load home data when the screen is first displayed
+    context.read<HomeBloc>().add(LoadHomeData());
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final space = MediaQuery.of(context).size;
@@ -44,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     Image.asset(AppImages.roblox, width: 50, height: 50),
                     SizedBox(width: 10),
-                    Text('Hi Divine'),
+                    Text('Hi ${state.user?.name ?? 'Guest'}'),
                   ],
                 ),
                 Row(
@@ -195,7 +201,14 @@ class _HomeScreenState extends State<HomeScreen> {
                               title: 'Handyman',
                               theme: Theme.of(context),
                               context: context,
-                              onTap: () {},
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const SearchScreen(),
+                                  ),
+                                );
+                              },
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                             ),

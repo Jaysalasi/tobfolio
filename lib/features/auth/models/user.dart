@@ -1,7 +1,6 @@
 class User {
-  final int id;
-  final String fname;
-  final String lname;
+  final String id;
+  final String name;
   final String email;
   final String? phone;
   final String? avatar;
@@ -19,8 +18,7 @@ class User {
 
   const User({
     required this.id,
-    required this.fname,
-    required this.lname,
+    required this.name,
     required this.email,
     this.phone,
     this.avatar,
@@ -39,31 +37,33 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      id: json['id'] as int,
-      fname: json['fname'] as String,
-      lname: json['lname'] as String,
+      id: json['id'].toString(),
+      name: json['name'] as String,
       email: json['email'] as String,
       phone: json['phone'] as String?,
       avatar: json['avatar'] as String?,
       dob: json['dob'] as String?,
-      role: json['role'] as String,
-      status: json['status'] as String,
+      role: json['role'] as String? ?? 'user',
+      status: json['status'] as String? ?? 'active',
       referralCode: json['referral_code'] as String?,
       referredBy: json['referred_by'] as String?,
       lastLoginAt: json['last_login_at'] as String?,
-      failedLoginAttempts: json['failed_login_attempts'] as int,
-      createdAt: DateTime.parse(json['created_at'] as String),
-      updatedAt: DateTime.parse(json['updated_at'] as String),
-      isEmailVerified: json['is_email_verified'] as bool,
-      isPhoneVerified: json['is_phone_verified'] as bool,
+      failedLoginAttempts: json['failed_login_attempts'] as int? ?? 0,
+      createdAt: json['created_at'] != null 
+          ? DateTime.parse(json['created_at'] as String)
+          : DateTime.now(),
+      updatedAt: json['updated_at'] != null
+          ? DateTime.parse(json['updated_at'] as String)
+          : DateTime.now(),
+      isEmailVerified: json['is_email_verified'] as bool? ?? false,
+      isPhoneVerified: json['is_phone_verified'] as bool? ?? false,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'fname': fname,
-      'lname': lname,
+      'name': name,
       'email': email,
       'phone': phone,
       'avatar': avatar,

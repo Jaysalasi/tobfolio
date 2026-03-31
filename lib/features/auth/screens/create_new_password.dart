@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tob/core/utils/components/app_button.dart';
-import 'package:tob/core/utils/components/app_text_field.dart'; 
-import '../bloc/auth_bloc.dart';
+import 'package:tob/core/utils/components/app_text_field.dart';
+import 'package:tob/core/utils/toasts.dart';
+import '../bloc/login_bloc.dart';
 
 class CreateNewPasswordScreen extends StatefulWidget {
   const CreateNewPasswordScreen({super.key});
@@ -30,25 +30,13 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
   void _login() {
     if (_formKey.currentState!.validate()) {
       FocusScope.of(context).unfocus();
-      context.read<AuthBloc>().add(
-        LoginRequested(
+      context.read<LoginBloc>().add(
+        LoginSubmitted(
           email: _emailController.text.trim(),
           password: _passwordController.text,
-          asRider: true,
         ),
       );
     }
-  }
-
-  void _showError(String message) {
-    Fluttertoast.showToast(
-      msg: message,
-      toastLength: Toast.LENGTH_LONG,
-      gravity: ToastGravity.TOP,
-      backgroundColor: Colors.red,
-      textColor: Colors.white,
-      fontSize: 14.0,
-    );
   }
 
   @override
@@ -60,17 +48,18 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
       //   backgroundColor: Colors.transparent,
       //   elevation: 0,
       // ),
-      body: BlocListener<AuthBloc, AuthState>(
+      body: BlocListener<LoginBloc, LoginState>(
         listener: (context, state) {
-          if (state.status == AuthStatus.loading) {
+          if (state.status == LoginStatus.loading) {
             setState(() => _isLoading = true);
           } else {
             setState(() => _isLoading = false);
 
-            if (state.status == AuthStatus.error &&
+            if (state.status == LoginStatus.failure &&
                 state.errorMessage != null) {
-              _showError(state.errorMessage!);
-            } else if (state.status == AuthStatus.authenticated) {
+              showError(state.errorMessage!);
+            } else if (state.status == LoginStatus.success) {
+              showSuccess('Login successful!');
               Navigator.of(context).pushReplacementNamed('/dashboard');
             }
           }

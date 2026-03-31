@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:tob/core/theme/app_theme.dart';
 import 'package:tob/core/utils/components/app_button.dart';
 import 'package:tob/core/utils/constants/assets/svg.dart';
+import 'package:tob/features/auth/bloc/auth_bloc.dart';
 import 'package:tob/features/my_profile/screens/contact_us_screen.dart';
 import 'package:tob/features/my_profile/screens/currency_screen.dart';
 import 'package:tob/features/my_profile/screens/policy_screen.dart';
@@ -18,13 +20,18 @@ class MyProfileScreen extends StatefulWidget {
 
 class _MyProfileScreenState extends State<MyProfileScreen> {
   @override
-   Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: theme.colorScheme.tertiary,
-        title: Text("Hi, Divine", style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w500)),
+        title: Text(
+          "Hi, Divine",
+          style: theme.textTheme.headlineSmall?.copyWith(
+            fontWeight: FontWeight.w500,
+          ),
+        ),
       ),
       backgroundColor: theme.colorScheme.tertiary,
       body: SafeArea(
@@ -32,8 +39,6 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             children: [
- 
- 
               /// Avatar
               Stack(
                 alignment: Alignment.bottomRight,
@@ -45,9 +50,10 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                     ),
                   ),
 
-                   GestureDetector(
+                  GestureDetector(
                     onTap: () {},
-                    child: SvgPicture.asset(SvgAssets.edit))
+                    child: SvgPicture.asset(SvgAssets.edit),
+                  ),
                 ],
               ),
 
@@ -56,7 +62,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
               /// Settings List
               Expanded(
                 child: ListView(
-                  children:  [
+                  children: [
                     SettingsTile(
                       title: "Full Name",
                       trailingText: "John Doe",
@@ -134,34 +140,62 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                           ),
                         );
                       },
-                      
                     ),
 
                     SizedBox(height: 20),
 
-                    SignOutButton(onTap: () {
-                      showDialog(context: context, builder: (context) {
-                        return AlertDialog(
-                          content:  Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                           Center(child:  Text('Are you sure you want to sign out?', textAlign: TextAlign.center, style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),)),
-                              Text('For your security, when you sign out your passcode and touch id settings will reset.', textAlign: TextAlign.center),
-                            SizedBox(height: 15,),
-                            AppButton(borderRadius: 8, height: 40, fontSize: 12, title: "Sign Out", onPressed: () => Navigator.of(context).pop()),
-                            TextButton(
-                              onPressed: () => Navigator.of(context).pop(),
-                              child: const Text('Cancel'),
-                            ),
-                            ],
-                          ),
-                        
+                    SignOutButton(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Center(
+                                    child: Text(
+                                      'Are you sure you want to sign out?',
+                                      textAlign: TextAlign.center,
+                                      style: theme.textTheme.titleLarge
+                                          ?.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                    ),
+                                  ),
+                                  Text(
+                                    'For your security, when you sign out your passcode and touch id settings will reset.',
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  SizedBox(height: 15),
+                                  AppButton(
+                                    borderRadius: 8,
+                                    height: 40,
+                                    fontSize: 12,
+                                    title: "Sign Out",
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      context.read<AuthBloc>().add(
+                                        LogoutRequested(),
+                                      );
+                                       Navigator.of(context).pushReplacementNamed('/login');
+                                    },
+                                  ),
+                                  TextButton(
+                                    onPressed: () =>
+                                        Navigator.of(context).pop(),
+                                    child: const Text('Cancel'),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
                         );
-                      });
-                    }),
+                      },
+                    ),
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ),
@@ -200,28 +234,17 @@ class SettingsTile extends StatelessWidget {
         ),
         child: Row(
           children: [
-      
-            Text(
-              title,
-              style:  TextStyle(fontSize: 16),
-            ),
-      
+            Text(title, style: TextStyle(fontSize: 16)),
+
             const Spacer(),
-      
-            if(trailingText != null)
+
+            if (trailingText != null)
               Text(
                 trailingText!,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w500,
-                ),
+                style: const TextStyle(fontWeight: FontWeight.w500),
               ),
-      
-            if(showArrow)
-              const Icon(
-                Icons.chevron_right,
-                color: Colors.grey,
-              )
-      
+
+            if (showArrow) const Icon(Icons.chevron_right, color: Colors.grey),
           ],
         ),
       ),
@@ -235,26 +258,22 @@ class SignOutButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return GestureDetector(
       onTap: onTap,
       child: Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppTheme.grayAltColor),
-        color: Colors.white,
-      ),
-      alignment: Alignment.center,
-      child: Text(
-        "Sign Out",
-        style: TextStyle(
-          color: Colors.red,
-          fontWeight: FontWeight.w500,
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: AppTheme.grayAltColor),
+          color: Colors.white,
+        ),
+        alignment: Alignment.center,
+        child: Text(
+          "Sign Out",
+          style: TextStyle(color: Colors.red, fontWeight: FontWeight.w500),
         ),
       ),
-    ));
-    
+    );
   }
 }

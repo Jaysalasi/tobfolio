@@ -2,13 +2,13 @@ class RegisterRequest {
   final String name;
   final String email;
   final String password;
-  final String passwordConfirmation;
+  // final String passwordConfirmation;
 
   const RegisterRequest({
     required this.name,
     required this.email,
     required this.password,
-    required this.passwordConfirmation,
+    // required this.passwordConfirmation,
   });
 
   factory RegisterRequest.fromJson(Map<String, dynamic> json) {
@@ -16,7 +16,7 @@ class RegisterRequest {
       name: json['name'] as String,
       email: json['email'] as String,
       password: json['password'] as String,
-      passwordConfirmation: json['password_confirmation'] as String,
+      // passwordConfirmation: json['password_confirmation'] as String,
     );
   }
 
@@ -25,7 +25,7 @@ class RegisterRequest {
       'name': name,
       'email': email,
       'password': password,
-      'password_confirmation': passwordConfirmation,
+      // 'password_confirmation': passwordConfirmation,
     };
   }
 
@@ -35,16 +35,18 @@ class RegisterRequest {
     return other is RegisterRequest &&
         other.name == name &&
         other.email == email &&
-        other.password == password &&
-        other.passwordConfirmation == passwordConfirmation;
+        other.password == password;
+        //  &&
+        // other.passwordConfirmation == passwordConfirmation;
   }
 
   @override
   int get hashCode {
     return name.hashCode ^
         email.hashCode ^
-        password.hashCode ^
-        passwordConfirmation.hashCode;
+        password.hashCode;
+    // // ^
+    // // passwordConfirmation.hashCode;
   }
 
   @override

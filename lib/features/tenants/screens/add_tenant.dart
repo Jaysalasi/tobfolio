@@ -14,6 +14,7 @@ import 'package:tob/features/add_property/utils/alt_text_field.dart';
 import 'package:tob/features/add_property/utils/phone_text_field.dart';
 import 'package:tob/features/tenants/bloc/tenant_bloc.dart';
 import 'package:tob/features/tenants/bloc/tenant_state.dart';
+import 'package:tob/features/tenants/screens/successful.dart';
 
 class AddTenantScreen extends StatefulWidget {
   const AddTenantScreen({super.key});
@@ -160,6 +161,33 @@ class _AddTenantScreenState extends State<AddTenantScreen> {
                         child: AppButton(
                           title: "Save",
                           onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => GestureDetector(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    CircularProgressIndicator(),
+                                  ],
+                                ),
+                              ),
+                            );
+                            Future.delayed(const Duration(seconds: 1), () {
+                              // Navigate to successful screen
+                              if (context.mounted) {
+                                Navigator.pop(context);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    settings: RouteSettings(name: 'successful'),
+                                    builder: (context) => const Successful(),
+                                  ),
+                                );
+                              }
+                            });
                           },
                         ),
                       ),

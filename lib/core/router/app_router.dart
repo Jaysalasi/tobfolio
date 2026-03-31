@@ -4,6 +4,8 @@ import 'package:tob/features/add_property/bloc/add_property_bloc.dart';
 import 'package:tob/features/add_property/screens/add_property_screen.dart';
 import 'package:tob/features/all_properties/bloc/all_properties_bloc.dart';
 import 'package:tob/features/all_properties/screen/all_properties_screen.dart';
+import 'package:tob/features/auth/bloc/login_bloc.dart';
+import 'package:tob/features/auth/bloc/register_bloc.dart';
 import 'package:tob/features/auth/screens/forgot_password.dart';
 import 'package:tob/features/auth/screens/create_new_password.dart';
 import 'package:tob/features/home/bloc/home_bloc.dart';
@@ -58,6 +60,10 @@ class AppRouter {
         child: MultiBlocProvider(
           providers: [
             BlocProvider(create: (context) => AuthBloc(authRepository: context.read<AuthRepository>())),
+            BlocProvider(create: (context) => LoginBloc(
+              authRepository: context.read<AuthRepository>(),
+              authBloc: context.read<AuthBloc>(),
+            )),
             BlocProvider(create: (context) => OnboardingCubit()),
             BlocProvider(create: (context) => ThemeCubit()),
             BlocProvider(create: (context) => DashboardBloc()),
@@ -75,19 +81,25 @@ class AppRouter {
         child: const LoginScreen(),
       ),
       login: (context) => BlocProvider(
-        create: (context) => AuthBloc(authRepository: context.read<AuthRepository>()),
+        create: (context) => LoginBloc(
+          authRepository: context.read<AuthRepository>(),
+          authBloc: context.read<AuthBloc>(),
+        ),
         child: const LoginScreen(),
       ),
       register: (context) => BlocProvider(
-        create: (context) => AuthBloc(authRepository: context.read<AuthRepository>()),
+        create: (context) => RegisterBloc(authRepository: context.read<AuthRepository>()),
         child: const RegisterScreen(),
       ),
       forgotPassword: (context) => BlocProvider(
-        create: (context) => AuthBloc(authRepository: context.read<AuthRepository>()),
+        create: (context) => RegisterBloc(authRepository: context.read<AuthRepository>()),
         child: const ForgotPasswordScreen(),
       ),
       createNewPassword: (context) => BlocProvider(
-        create: (context) => AuthBloc(authRepository: context.read<AuthRepository>()),
+        create: (context) => LoginBloc(
+          authRepository: context.read<AuthRepository>(),
+          authBloc: context.read<AuthBloc>(),
+        ),
         child: const CreateNewPasswordScreen(),
       ),
       addProperty: (context) => BlocProvider(

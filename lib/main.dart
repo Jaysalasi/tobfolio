@@ -3,6 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tob/core/utils/constants/assets/svg.dart';
 import 'package:tob/features/add_property/bloc/add_property_bloc.dart';
 import 'package:tob/features/all_properties/bloc/all_properties_bloc.dart';
+import 'package:tob/features/handyman/bloc/handyman_bloc.dart';
+import 'package:tob/features/handyman/repositories/handyman_repository.dart';
+import 'package:tob/features/artisan_profile/bloc/artisan_profile_bloc.dart';
 import 'package:tob/features/tenant_profile/bloc/_tenant_profile_bloc.dart';
 import 'package:tob/features/tenants/bloc/tenant_bloc.dart';
 import 'core/router/app_router.dart';
@@ -40,6 +43,11 @@ class MyApp extends StatelessWidget {
             storageService: context.read<SecureStorageService>(),
           ),
         ),
+        RepositoryProvider(
+          create: (context) => HandymanRepository(
+            apiService: context.read<ApiService>(),
+          ),
+        ),  
       ],
       child: MultiBlocProvider(
         providers: [
@@ -58,6 +66,8 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (context) => TenantProfileBloc()),
           BlocProvider(create: (context) => ExpensesBloc()),
           BlocProvider(create: (context) => AllPropertyBloc()),
+          BlocProvider(create: (context) => HandymanBloc(handymanRepository: context.read<HandymanRepository>())),
+          BlocProvider(create: (context) => ArtisanProfileBloc(handymanRepository: context.read<HandymanRepository>())),
 
         ],
         child: BlocBuilder<ThemeCubit, ThemeState>(

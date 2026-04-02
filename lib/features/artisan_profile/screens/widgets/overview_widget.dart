@@ -3,8 +3,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tob/core/utils/components/widgets.dart';
 import 'package:tob/core/utils/constants/assets/pngs.dart';
 import 'package:tob/core/utils/constants/assets/svg.dart';
+import 'package:tob/features/handyman/models/handyman.dart';
 
-Expanded overviewMeth(BuildContext context, ThemeData theme, List guys, List images) {
+Expanded overviewMeth(BuildContext context, ThemeData theme, Handyman detail, List images) {
     return Expanded(
           child: SingleChildScrollView(
             child: Column(
@@ -17,17 +18,17 @@ Expanded overviewMeth(BuildContext context, ThemeData theme, List guys, List ima
                     children: [
                       Row(
                         children: [
-                          CircleAvatar(
-                            radius: 25,
-                            backgroundImage: AssetImage(guys[0]['image']),
-                          ),
+                          // CircleAvatar(
+                          //   radius: 25,
+                          //   backgroundImage: AssetImage(guys[0]['image']),
+                          // ),
                           SizedBox(width: 10),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               SizedBox(height: 10),
                               Text(
-                                guys[0]['name'],
+                                detail.fullName,
                                 style: theme.textTheme.headlineSmall!
                                     .copyWith(
                                       fontWeight: FontWeight.w700,
@@ -35,7 +36,7 @@ Expanded overviewMeth(BuildContext context, ThemeData theme, List guys, List ima
                                     ),
                               ),
                               Text(
-                                guys[0]['category'],
+                                detail.expertise,
                                 style: theme.textTheme.bodyLarge!.copyWith(
                                   fontWeight: FontWeight.w500,
                                   fontSize: 12,
@@ -46,7 +47,7 @@ Expanded overviewMeth(BuildContext context, ThemeData theme, List guys, List ima
                                 children: [
                                   SvgPicture.asset(SvgAssets.location),
                                   Text(
-                                    guys[0]['location'],
+                                    detail.location,
                                     style: theme.textTheme.bodyLarge!
                                         .copyWith(
                                           fontWeight: FontWeight.w500,
@@ -68,7 +69,7 @@ Expanded overviewMeth(BuildContext context, ThemeData theme, List guys, List ima
                       ),
                       SizedBox(height: 10),
                       Text(
-                        guys[0]['description'],
+                        detail.description,
                         style: theme.textTheme.bodyMedium!.copyWith(
                           fontWeight: FontWeight.w500,
                         ),
@@ -83,6 +84,7 @@ Expanded overviewMeth(BuildContext context, ThemeData theme, List guys, List ima
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: List.generate(images.length, (index) {
+                      print("images ----- ${images[index]}");
                       return Container(
                         width: 126,
                         height: 113,

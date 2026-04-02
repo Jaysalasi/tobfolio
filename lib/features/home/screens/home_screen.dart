@@ -8,6 +8,7 @@ import 'package:tob/core/utils/constants/assets/pngs.dart';
 import 'package:tob/core/utils/constants/assets/svg.dart';
 import 'package:tob/features/ai/screens/ai_screen.dart';
 import 'package:tob/features/auth/bloc/auth_bloc.dart';
+import 'package:tob/features/handyman/screens/handyman_screen.dart';
 import 'package:tob/features/home/bloc/home_bloc.dart';
 import 'package:tob/features/home/screens/widgets/welcome_card_widget.dart';
 import 'package:tob/features/lease_property/screen/lease_property_screen.dart';
@@ -205,7 +206,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => const SearchScreen(),
+                                    builder: (context) => const HandymanScreen(),
                                   ),
                                 );
                               },

@@ -332,7 +332,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                 onTap: () {
                                   // Navigator.pushNamed(context, AppRouter.artisanProfile);
                                   Navigator.of(context).push(
-                                    MaterialPageRoute(builder: (_) => ArtisanProfileScreen()),
+                                    MaterialPageRoute(builder: (_) => ArtisanProfileScreen(id: "69c56962f4120ef067c31486")),
                                   );
                                 },
                               ),

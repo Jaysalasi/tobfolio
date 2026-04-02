@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tob/core/utils/constants/assets/pngs.dart';
 import 'package:tob/core/utils/constants/assets/svg.dart';
 import 'package:tob/features/artisan_profile/screens/widgets/overview_widget.dart';
 import 'package:tob/features/artisan_profile/screens/widgets/reviews_widget.dart';
+import '../bloc/artisan_profile_bloc.dart';
 
 class ArtisanProfileScreen extends StatefulWidget {
-  const ArtisanProfileScreen({super.key});
+  final String id;
+
+  const ArtisanProfileScreen({super.key, required this.id});
 
   @override
   State<ArtisanProfileScreen> createState() => _ArtisanProfileScreenState();
@@ -16,58 +20,12 @@ class _ArtisanProfileScreenState extends State<ArtisanProfileScreen> {
   final List<String> categories = ['Overview', 'Reviews'];
   int selectedIndex = 0;
 
-  final List guys = [
-    {
-      'name': 'Tucker Nixon',
-      'image': AppImages.house,
-      'rating': 4.5,
-      'category': 'Electrician',
-      'likes': 100,
-      'price': 100,
-      'location': 'Lagos',
-      'description':
-          'John Doe is a skilled electrician with over 10 years of experience. He is a member of the Association of Electricians and is certified by the Electrical Safety Authority.',
-    },
-  ];
-
-  List images = [
-   AppImages.work1,
-   AppImages.worker,
-   AppImages.worker1,
-   AppImages.works,
-  ];
-List reviews = [
-  {
-    'name': 'Jane Doe',
-    'review': 'John Doe is a skilled electrician with over 10 years of experience. He is a member of the Association of Electricians and is certified by the Electrical Safety Authority.',
-    'rating': 4.5,
-    'image': AppImages.house,
-  },
-  {
-    'name': 'John Doe',
-    'review': 'John Doe is a skilled electrician with over 10 years of experience. He is a member of the Association of Electricians and is certified by the Electrical Safety Authority.',
-    'rating': 4.5,
-    'image': AppImages.house,
-  },
-  {
-    'name': 'Danny Doe',
-    'review': 'John Doe is a skilled electrician with over 10 years of experience. He is a member of the Association of Electricians and is certified by the Electrical Safety Authority.',
-    'rating': 4.5,
-    'image': AppImages.house,
-  },
-  {
-    'name': 'John Doe',
-    'review': 'John Doe is a skilled electrician with over 10 years of experience. He is a member of the Association of Electricians and is certified by the Electrical Safety Authority.',
-    'rating': 4.5,
-    'image': AppImages.house,
-  },
-  {
-    'name': 'Danny Doe',
-    'review': 'John Doe is a skilled electrician with over 10 years of experience. He is a member of the Association of Electricians and is certified by the Electrical Safety Authority.',
-    'rating': 4.5,
-    'image': AppImages.house,
-  },
-];
+  @override
+  void initState() {
+    super.initState();
+    // Fetch handyman profile data when screen loads
+    context.read<ArtisanProfileBloc>().add(GetArtisanProfile(widget.id));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,12 +38,14 @@ List reviews = [
           icon: SvgPicture.asset(SvgAssets.backOutline),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text(selectedIndex == 0? 'Artisan Profile': 'Reviews'),
+        title: Text(selectedIndex == 0 ? 'Artisan Profile' : 'Reviews'),
         actions: [
-          selectedIndex == 0?  IconButton(
-            icon: SvgPicture.asset(SvgAssets.shareSend),
-            onPressed: () {},
-          ): const SizedBox(),
+          selectedIndex == 0
+              ? IconButton(
+                  icon: SvgPicture.asset(SvgAssets.shareSend),
+                  onPressed: () {},
+                )
+              : const SizedBox(),
         ],
       ),
       body: Column(
@@ -135,13 +95,62 @@ List reviews = [
             ),
           ),
           SizedBox(height: 10),
-          if (selectedIndex == 0)
-            overviewMeth(context, theme, guys, images),
-          if (selectedIndex == 1)
-            reviewsMeth(context, theme, reviews, guys),
+          Expanded(
+            child: BlocBuilder<ArtisanProfileBloc, ArtisanProfileState>(
+              builder: (context, state) {
+                if (state.status == ArtisanProfileStatus.loading) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                if (state.status == ArtisanProfileStatus.error) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Error loading profile',
+                          style: theme.textTheme.headlineSmall,
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          state.errorMessage ?? 'Unknown error',
+                          style: theme.textTheme.bodyMedium,
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 20),
+                        ElevatedButton(
+                          onPressed: () {
+                            context.read<ArtisanProfileBloc>().add(
+                              GetArtisanProfile(widget.id),
+                            );
+                          },
+                          child: const Text('Retry'),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+
+                if (state.handyman == null) {
+                  return const Center(child: Text('No profile data available'));
+                }
+
+                final handyman = state.handyman!;
+                final List<String> images = handyman.images.isNotEmpty
+                    ? handyman.images
+                    : [];
+                print("mages    0------ ${handyman.images}");
+                if (selectedIndex == 0) {
+                  return overviewMeth(context, theme, handyman, images);
+                }
+
+                // For reviews tab, use actual reviews from API response
+                return reviewsMeth(context, theme, state.reviews, [handyman]);
+              },
+            ),
+          ),
         ],
       ),
     );
   }
-
 }

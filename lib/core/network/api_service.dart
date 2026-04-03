@@ -4,37 +4,47 @@ import '../utils/logger.dart';
 
 class ApiService {
   late final Dio _dio;
-  
+
   ApiService() {
-    _dio = Dio(BaseOptions(
-      baseUrl: ApiConfig.baseUrl,
-      connectTimeout: ApiConfig.connectTimeout,
-      receiveTimeout: ApiConfig.receiveTimeout,
-      sendTimeout: ApiConfig.sendTimeout,
-      headers: ApiConfig.headers,
-    ));
-    
+    _dio = Dio(
+      BaseOptions(
+        baseUrl: ApiConfig.baseUrl,
+        connectTimeout: ApiConfig.connectTimeout,
+        receiveTimeout: ApiConfig.receiveTimeout,
+        sendTimeout: ApiConfig.sendTimeout,
+        headers: ApiConfig.headers,
+      ),
+    );
+
     _setupInterceptors();
   }
-  
+
   void _setupInterceptors() {
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) {
           print('REQUEST[${options.method}] => PATH: ${options.path}');
+          print('Headers: ${options.headers}');
+          final authHeader = options.headers['Authorization'];
+          print('Authorization header: ${authHeader != null ? 'present' : 'missing'}');
           handler.next(options);
         },
         onResponse: (response, handler) {
-          print('RESPONSE[${response.statusCode}] => PATH: ${response.requestOptions.path}');
+          print(
+            'RESPONSE[${response.statusCode}] => PATH: ${response.requestOptions.path}',
+          );
           handler.next(response);
         },
         onError: (error, handler) {
-          print('ERROR[${error.response?.statusCode}] => PATH: ${error.requestOptions.path}');
+          print(
+            'ERROR[${error.response?.statusCode}] => PATH: ${error.requestOptions.path}',
+          );
+          print('Error headers: ${error.requestOptions.headers}');
           handler.next(error);
         },
       ),
     );
-    
+
     _dio.interceptors.add(
       LogInterceptor(
         request: true,
@@ -47,17 +57,19 @@ class ApiService {
       ),
     );
   }
-  
+
   void setAuthToken(String token) {
     networkLogger.d('Setting auth token');
+    print('Setting auth token: ${token.substring(0, 20)}...');
     _dio.options.headers['Authorization'] = 'Bearer $token';
+    print('Authorization header set: ${_dio.options.headers['Authorization']}');
   }
-  
+
   void clearAuthToken() {
     networkLogger.d('Clearing auth token');
     _dio.options.headers.remove('Authorization');
   }
-  
+
   Future<Response> get(
     String path, {
     Map<String, dynamic>? queryParameters,
@@ -77,7 +89,7 @@ class ApiService {
       rethrow;
     }
   }
-  
+
   Future<Response> post(
     String path, {
     dynamic data,
@@ -99,7 +111,7 @@ class ApiService {
       rethrow;
     }
   }
-  
+
   Future<Response> put(
     String path, {
     dynamic data,
@@ -121,7 +133,7 @@ class ApiService {
       rethrow;
     }
   }
-  
+
   Future<Response> delete(
     String path, {
     dynamic data,
@@ -143,7 +155,7 @@ class ApiService {
       rethrow;
     }
   }
-  
+
   Future<Response> postFormData(
     String path, {
     FormData? data,
@@ -158,14 +170,16 @@ class ApiService {
         queryParameters: queryParameters,
         options: options ?? Options(headers: ApiConfig.formDataHeaders),
       );
-      networkLogger.i('POST FormData request successful: ${response.statusCode}');
+      networkLogger.i(
+        'POST FormData request successful: ${response.statusCode}',
+      );
       return response;
     } catch (e) {
       networkLogger.e('POST FormData request failed: $path', error: e);
       rethrow;
     }
   }
-  
+
   Future<Response> putFormData(
     String path, {
     FormData? data,
@@ -180,13 +194,15 @@ class ApiService {
         queryParameters: queryParameters,
         options: options ?? Options(headers: ApiConfig.formDataHeaders),
       );
-      networkLogger.i('PUT FormData request successful: ${response.statusCode}');
+      networkLogger.i(
+        'PUT FormData request successful: ${response.statusCode}',
+      );
       return response;
     } catch (e) {
       networkLogger.e('PUT FormData request failed: $path', error: e);
       rethrow;
     }
   }
-  
+
   Dio get dio => _dio;
 }

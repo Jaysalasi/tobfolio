@@ -31,6 +31,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         final userData = await _authRepository.getStoredUser();
         print('User data from AuthBloc: $userData');
         if (userData != null) {
+          // Restore token to API service
+          await _authRepository.restoreToken();
+          
           print('Emitting authenticated state with user: ${userData.name}');
           emit(state.copyWith(
             status: AuthStatus.authenticated,
@@ -47,7 +50,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     } catch (e) {
       print('Error in AuthStarted: $e');
       emit(state.copyWith(
-        status: AuthStatus.unauthenticated,
+        status: AuthStatus.error,
         errorMessage: e.toString(),
       ));
     }

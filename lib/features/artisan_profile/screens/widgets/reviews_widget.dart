@@ -3,12 +3,16 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tob/core/theme/app_theme.dart';
 import 'package:tob/core/utils/components/widgets.dart';
 import 'package:tob/core/utils/constants/assets/svg.dart';
+import 'package:tob/core/utils/constants/assets/pngs.dart';
+import '../../models/review.dart';
+import '../../../handyman/models/handyman.dart';
+import 'write_review_dialog.dart';
 
 Expanded reviewsMeth(
   BuildContext context,
   ThemeData theme,
-  List reviews,
-  List guys,
+  List<Review> reviews,
+  Handyman handyman,
 ) {
   return Expanded(
     child: SingleChildScrollView(
@@ -23,72 +27,84 @@ Expanded reviewsMeth(
                 const SizedBox(height: 25),
                 buildDistribution(),
                 const SizedBox(height: 25),
-                buildReviewHeader(),
+                buildReviewHeader(reviews, context, handyman.id),
                 SizedBox(height: 10),
               ],
             ),
           ),
           Column(
-            children: List.generate(reviews.length, (index) {
-              return shadowContainerMeth(
-                context: context,
-                theme: theme,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(height: 10),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SizedBox(height: 10),
+              if (reviews.isEmpty)
+                Center(
+                  child: Text(
+                    'No reviews yet',
+                    style: theme.textTheme.bodyMedium,
+                  ),
+                )
+              else
+                ...List.generate(reviews.length, (index) {
+                  final review = reviews[index];
+                  return shadowContainerMeth(
+                    context: context,
+                    theme: theme,
+                    child: Column(
                       children: [
-                        CircleAvatar(
-                          radius: 25,
-                          backgroundImage: AssetImage(reviews[index]['image']),
-                        ),
-                        SizedBox(width: 10),
-                        Column(
+                        Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.65,
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    reviews[index]['name'],
-                                    style: theme.textTheme.headlineSmall!
-                                        .copyWith(
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 16,
-                                        ),
+                            CircleAvatar(
+                              radius: 25,
+                              backgroundImage: AssetImage(
+                                AppImages.house,
+                              ), // Use default image since no user image in API
+                            ),
+                            SizedBox(width: 10),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.65,
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        review.reviewer.name,
+                                        style: theme.textTheme.headlineSmall!
+                                            .copyWith(
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: 16,
+                                            ),
+                                      ),
+                                      StarRow(rating: review.rating),
+                                    ],
                                   ),
-                                 
-                                  StarRow(rating: 3),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.65,
-                              child: Text(
-                                reviews[index]['review'],
-                                style: theme.textTheme.bodyLarge!.copyWith(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 12,
                                 ),
-                              ),
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.65,
+                                  child: Text(
+                                    review.comment,
+                                    style: theme.textTheme.bodyLarge!.copyWith(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: 5),
+                              ],
                             ),
-                            SizedBox(height: 5),
                           ],
                         ),
+                        SizedBox(height: 10),
                       ],
                     ),
-
-                    SizedBox(height: 10),
-                  ],
-                ),
-              );
-            }),
+                  );
+                }),
+            ],
           ),
         ],
       ),
@@ -149,17 +165,33 @@ Widget buildDistribution() {
   );
 }
 
-Widget buildReviewHeader() {
+Widget buildReviewHeader(
+  List<Review> reviews,
+  BuildContext context,
+  String handymanId,
+) {
   return Row(
-    children: const [
-      Text("15 Reviews", style: TextStyle(fontSize: 16)),
-      Spacer(),
-      Text(
-        "WRITE A REVIEW",
-        style: TextStyle(color: Colors.blue, fontWeight: FontWeight.w500),
+    children: [
+      Text("${reviews.length} Reviews", style: TextStyle(fontSize: 16)),
+      const Spacer(),
+      GestureDetector(
+        onTap: () {
+          showDialog(
+            context: context,
+            builder: (context) => WriteReviewDialog(handymanId: handymanId),
+          );
+        },
+        child: const Row(
+          children: [
+            Text(
+              "WRITE A REVIEW",
+              style: TextStyle(color: Colors.blue, fontWeight: FontWeight.w500),
+            ),
+            SizedBox(width: 6),
+            Icon(Icons.edit_outlined, color: Colors.blue, size: 18),
+          ],
+        ),
       ),
-      SizedBox(width: 6),
-      Icon(Icons.edit_outlined, color: Colors.blue, size: 18),
     ],
   );
 }

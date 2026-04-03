@@ -72,4 +72,40 @@ class HandymanRepository {
       throw Exception('Unexpected error: $e');
     }
   }
+
+  Future<Map<String, dynamic>> createReview(String handymanId, Map<String, dynamic> reviewData) async {
+    try {
+      print('Creating review for handyman: $handymanId');
+      print('Review data: $reviewData');
+      final response = await _apiService.post('/handymen/$handymanId/reviews', data: reviewData);
+
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        return response.data;
+      } else {
+        throw DioException(
+          requestOptions: response.requestOptions,
+          response: response,
+          message: 'Failed to create review: ${response.statusCode}',
+        );
+      }
+    } on DioException catch (e) {
+      print('Dio error in createReview: ${e.message}');
+      print('Response data: ${e.response?.data}');
+      
+      // Check if it's an auth error and handle automatically
+      if (e.response?.data != null && 
+          e.response!.data.toString().toLowerCase().contains('authorization')) {
+        print('Auth error detected - should trigger logout');
+        // This will be handled by the BLoC consumer
+      }
+      
+      throw DioException(
+        requestOptions: e.requestOptions,
+        message: 'Network error: ${e.message}',
+      );
+    } catch (e) {
+      print('Unexpected error in createReview: $e');
+      throw Exception('Unexpected error: $e');
+    }
+  }
 }

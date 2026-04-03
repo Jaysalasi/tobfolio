@@ -15,6 +15,7 @@ class SecureStorageService {
   static const String _tokenKey = 'auth_token';
   static const String _refreshTokenKey = 'refresh_token';
   static const String _userKey = 'user_data';
+  static const String _tokenTimeKey = 'token_time';
 
   Future<void> saveToken(String token) async {
     try {
@@ -80,6 +81,26 @@ class SecureStorageService {
       return null;
     } catch (e) {
       appLogger.e('Failed to retrieve user data', error: e);
+      return null;
+    }
+  }
+
+  Future<void> saveTokenTime(String time) async {
+    try {
+      await _storage.write(key: _tokenTimeKey, value: time);
+      appLogger.d('Token time saved');
+    } catch (e) {
+      appLogger.e('Failed to save token time', error: e);
+    }
+  }
+
+  Future<String?> getTokenTime() async {
+    try {
+      final tokenTime = await _storage.read(key: _tokenTimeKey);
+      appLogger.d('Token time retrieved: ${tokenTime != null ? 'found' : 'not found'}');
+      return tokenTime;
+    } catch (e) {
+      appLogger.e('Failed to retrieve token time', error: e);
       return null;
     }
   }

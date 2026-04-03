@@ -67,7 +67,10 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (context) => ExpensesBloc()),
           BlocProvider(create: (context) => AllPropertyBloc()),
           BlocProvider(create: (context) => HandymanBloc(handymanRepository: context.read<HandymanRepository>())),
-          BlocProvider(create: (context) => ArtisanProfileBloc(handymanRepository: context.read<HandymanRepository>())),
+          BlocProvider(create: (context) => ArtisanProfileBloc(
+            handymanRepository: context.read<HandymanRepository>(),
+            authRepository: context.read<AuthRepository>(),
+          )),
 
         ],
         child: BlocBuilder<ThemeCubit, ThemeState>(

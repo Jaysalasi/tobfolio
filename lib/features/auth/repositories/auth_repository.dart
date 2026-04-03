@@ -30,6 +30,7 @@ class AuthRepository {
       // Save token and user data
       await _storageService.saveToken(loginResponse.token);
       await _storageService.saveUser(loginResponse.user.toJson());
+      await saveTokenWithTime(loginResponse.token);
       
       // Set auth token for API service
       _apiService.setAuthToken(loginResponse.token);
@@ -184,6 +185,61 @@ class AuthRepository {
       authLogger.e('Error getting stored user: $e');
       print('Error getting stored user: $e');
       return null;
+    }
+  }
+
+  Future<void> restoreToken() async {
+    try {
+      final token = await _storageService.getToken();
+      print('Token from storage: ${token != null ? 'found' : 'not found'}');
+      if (token != null) {
+        print('Setting token: ${token.substring(0, 20)}...');
+        _apiService.setAuthToken(token);
+        authLogger.d('Token restored to API service');
+        print('Token successfully restored to API service');
+      } else {
+        print('No token found in storage');
+      }
+    } catch (e) {
+      authLogger.e('Error restoring token: $e');
+      print('Error restoring token: $e');
+    }
+  }
+
+  Future<bool> isTokenValid() async {
+    try {
+      final token = await _storageService.getToken();
+      if (token == null) return false;
+      
+      // Check if token is older than 24 hours
+      final tokenTime = await _storageService.getTokenTime();
+      if (tokenTime == null) return true; // No timestamp stored, assume valid
+      
+      final now = DateTime.now();
+      final tokenAge = now.difference(DateTime.parse(tokenTime));
+      return tokenAge.inHours < 24;
+    } catch (e) {
+      authLogger.e('Error checking token validity: $e');
+      return false;
+    }
+  }
+
+  Future<void> saveTokenWithTime(String token) async {
+    try {
+      await _storageService.saveToken(token);
+      await _storageService.saveTokenTime(DateTime.now().toIso8601String());
+      authLogger.d('Token and time saved');
+    } catch (e) {
+      authLogger.e('Error saving token with time: $e');
+    }
+  }
+
+  Future<void> handleAuthError(String errorMessage) async {
+    if (errorMessage.toLowerCase().contains('token') || 
+        errorMessage.toLowerCase().contains('authorization') ||
+        errorMessage.toLowerCase().contains('unauthorized')) {
+      authLogger.w('Auth error detected, logging out user');
+      await logout();
     }
   }
 }

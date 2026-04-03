@@ -17,3 +17,18 @@ class GetArtisanProfile extends ArtisanProfileEvent {
 }
 
 class RefreshArtisanProfile extends ArtisanProfileEvent {}
+
+class CreateReview extends ArtisanProfileEvent {
+  final String handymanId;
+  final int rating;
+  final String comment;
+
+  const CreateReview({
+    required this.handymanId,
+    required this.rating,
+    required this.comment,
+  });
+
+  @override
+  List<Object?> get props => [handymanId, rating, comment];
+}

@@ -1,11 +1,11 @@
 part of 'artisan_profile_bloc.dart';
 
-enum ArtisanProfileStatus { initial, loading, success, error }
+enum ArtisanProfileStatus { initial, loading, success, error, creatingReview, reviewCreated }
 
 class ArtisanProfileState extends Equatable {
   final ArtisanProfileStatus status;
   final Handyman? handyman;
-  final List<dynamic> reviews;
+  final List<Review> reviews;
   final String? errorMessage;
 
   const ArtisanProfileState({
@@ -18,7 +18,7 @@ class ArtisanProfileState extends Equatable {
   ArtisanProfileState copyWith({
     ArtisanProfileStatus? status,
     Handyman? handyman,
-    List<dynamic>? reviews,
+    List<Review>? reviews,
     String? errorMessage,
     bool clearError = false,
   }) {

@@ -30,10 +30,10 @@ class SecureStorageService {
   Future<String?> getToken() async {
     try {
       final token = await _storage.read(key: _tokenKey);
-      appLogger.d('Token retrieved: ${token != null ? 'found' : 'not found'}');
+      // appLogger.d('Token retrieved: ${token != null ? 'found' : 'not found'}');
       return token;
     } catch (e) {
-      appLogger.e('Failed to retrieve token', error: e);
+      // appLogger.e('Failed to retrieve token', error: e);
       return null;
     }
   }
@@ -41,9 +41,9 @@ class SecureStorageService {
   Future<void> saveRefreshToken(String refreshToken) async {
     try {
       await _storage.write(key: _refreshTokenKey, value: refreshToken);
-      appLogger.d('Refresh token saved successfully');
+      // appLogger.d('Refresh token saved successfully');
     } catch (e) {
-      appLogger.e('Failed to save refresh token', error: e);
+      // appLogger.e('Failed to save refresh token', error: e);
       rethrow;
     }
   }

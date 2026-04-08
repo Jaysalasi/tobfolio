@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tob/features/add_property/bloc/add_property_bloc.dart';
+import 'package:tob/features/add_property/repositories/property_repository.dart';
 import 'package:tob/features/add_property/screens/add_property_screen.dart';
 import 'package:tob/features/all_properties/bloc/all_properties_bloc.dart';
 import 'package:tob/features/all_properties/screen/all_properties_screen.dart';
@@ -67,7 +68,7 @@ class AppRouter {
             BlocProvider(create: (context) => OnboardingCubit()),
             BlocProvider(create: (context) => ThemeCubit()),
             BlocProvider(create: (context) => DashboardBloc()),
-            BlocProvider(create: (context) => AddPropertyBloc()),
+            BlocProvider(create: (context) => AddPropertyBloc(propertyRepository: context.read<PropertyRepository>(),)),
           ],
           child: const SplashScreen(),
         ),
@@ -104,6 +105,7 @@ class AppRouter {
       ),
       addProperty: (context) => BlocProvider(
         create: (context) => AddPropertyBloc(
+          propertyRepository: context.read<PropertyRepository>(),
           // authRepository: context.read<AuthRepository>()
           ),
         child: const AddPropertyScreen(),
@@ -120,7 +122,7 @@ class AppRouter {
           BlocProvider(create: (context) => DashboardBloc()),
           BlocProvider(create: (context) => ThemeCubit()),
           BlocProvider(create: (context) => HomeBloc()),
-          BlocProvider(create: (context) => AddPropertyBloc()),
+          BlocProvider(create: (context) => AddPropertyBloc(propertyRepository: context.read<PropertyRepository>(),)),
           BlocProvider(create: (context) => TenantBloc()),
           BlocProvider(create: (context) => TenantProfileBloc()),
         ],

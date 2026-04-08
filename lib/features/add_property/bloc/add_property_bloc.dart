@@ -3,12 +3,25 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tob/features/add_property/bloc/add_property_event.dart';
 import 'package:tob/features/add_property/bloc/add_property_state.dart';
 import 'package:tob/features/add_property/utils/add_property_utils.dart';
+import 'package:tob/features/add_property/repositories/property_repository.dart';
 
 class AddPropertyBloc extends Bloc<AddPropertyEvent, AddPropertyState> {
-  AddPropertyBloc() : super(AddPropertyState()) {
+  final PropertyRepository _propertyRepository;
+
+  AddPropertyBloc({required PropertyRepository propertyRepository})
+      : _propertyRepository = propertyRepository,
+        super(AddPropertyState()) {
 
     on<UpdateName>((event, emit) {
       emit(state.copyWith(name: event.name));
+    });
+
+    on<UpdateUnitNumber>((event, emit) {
+      emit(state.copyWith(unitNumber: event.unitNumber));
+    });
+
+    on<UpdateDescription>((event, emit) {
+      emit(state.copyWith(description: event.description));
     });
 
     on<UpdateAddress>((event, emit) {
@@ -41,5 +54,35 @@ class AddPropertyBloc extends Bloc<AddPropertyEvent, AddPropertyState> {
       emit(state.copyWith(photos: updated));
     });
 
+    on<CreateProperty>(_onCreateProperty);
+  }
+
+  Future<void> _onCreateProperty(
+    CreateProperty event,
+    Emitter<AddPropertyState> emit,
+  ) async {
+    emit(state.copyWith(
+      status: AddPropertyStatus.loading,
+      clearError: true,
+    ));
+
+    try {
+      await _propertyRepository.createProperty(
+        name: event.name,
+        type: event.type,
+        address: event.address,
+        units: event.units,
+        propertyImages: event.propertyImages,
+      );
+
+      emit(state.copyWith(
+        status: AddPropertyStatus.success,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        status: AddPropertyStatus.error,
+        errorMessage: e.toString(),
+      ));
+    }
   }
 }

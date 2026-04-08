@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tob/core/utils/constants/assets/svg.dart';
-import 'package:tob/core/utils/constants/assets/pngs.dart';
+// import 'package:tob/core/utils/constants/assets/pngs.dart';
 import 'package:tob/features/artisan_profile/bloc/artisan_profile_bloc.dart';
 import 'package:tob/features/artisan_profile/screens/widgets/overview_widget.dart';
 import 'package:tob/features/artisan_profile/screens/widgets/reviews_widget.dart';
-import 'package:tob/features/auth/repositories/auth_repository.dart';
+// import 'package:tob/features/auth/repositories/auth_repository.dart';
 
 class ArtisanProfileScreen extends StatefulWidget {
   final String id;
@@ -25,19 +25,19 @@ class _ArtisanProfileScreenState extends State<ArtisanProfileScreen> {
   void initState() {
     super.initState();
     // Ensure token is restored before making API calls
-    _restoreToken();
+    // _restoreToken();
     // Fetch handyman profile data when screen loads
     context.read<ArtisanProfileBloc>().add(GetArtisanProfile(widget.id));
   }
 
-  Future<void> _restoreToken() async {
-    try {
-      final authRepository = context.read<AuthRepository>();
-      await authRepository.restoreToken();
-    } catch (e) {
-      print('Error restoring token in artisan profile screen: $e');
-    }
-  }
+  // Future<void> _restoreToken() async {
+  //   try {
+  //     // final authRepository = context.read<AuthRepository>();
+  //     // await authRepository.restoreToken();
+  //   } catch (e) {
+  //     print('Error restoring token in artisan profile screen: $e');
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

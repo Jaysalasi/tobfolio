@@ -26,14 +26,13 @@ class AuthRepository {
     
     if (response.statusCode == 200 || response.statusCode == 201) {
       final loginResponse = LoginResponse.fromJson(response.data);
-      print('Login response: ${loginResponse.toJson()}');
       // Save token and user data
       await _storageService.saveToken(loginResponse.token);
       await _storageService.saveUser(loginResponse.user.toJson());
       await saveTokenWithTime(loginResponse.token);
       
       // Set auth token for API service
-      _apiService.setAuthToken(loginResponse.token);
+      // _apiService.setAuthToken(loginResponse.token);
       
       authLogger.i('Login successful for user: ${loginResponse.user.name}');
       return loginResponse;
@@ -95,7 +94,7 @@ class AuthRepository {
       // Continue with logout even if API call fails
     } finally {
       await _storageService.clearAll();
-      _apiService.clearAuthToken();
+      // _apiService.clearAuthToken();
       authLogger.d('Local storage cleared on logout');
     }
   }
@@ -173,38 +172,34 @@ class AuthRepository {
   Future<User?> getStoredUser() async {
     try {
       final userData = await _storageService.getUser();
-      print('Retrieved user data from storage: $userData');
       if (userData == null) {
-        print('User data is null');
         return null;
       }
       final user = User.fromJson(userData);
-      print('Parsed user: ${user.name}');
       return user;
     } catch (e) {
       authLogger.e('Error getting stored user: $e');
-      print('Error getting stored user: $e');
       return null;
     }
   }
 
-  Future<void> restoreToken() async {
-    try {
-      final token = await _storageService.getToken();
-      print('Token from storage: ${token != null ? 'found' : 'not found'}');
-      if (token != null) {
-        print('Setting token: ${token.substring(0, 20)}...');
-        _apiService.setAuthToken(token);
-        authLogger.d('Token restored to API service');
-        print('Token successfully restored to API service');
-      } else {
-        print('No token found in storage');
-      }
-    } catch (e) {
-      authLogger.e('Error restoring token: $e');
-      print('Error restoring token: $e');
-    }
-  }
+  // Future<void> restoreToken() async {
+  //   try {
+  //     final token = await _storageService.getToken();
+  //     print('Token from storage: ${token != null ? 'found' : 'not found'}');
+  //     if (token != null) {
+  //       print('Setting token: ${token.substring(0, 20)}...');
+  //       // _apiService.setAuthToken(token);
+  //       authLogger.d('Token restored to API service');
+  //       print('Token successfully restored to API service');
+  //     } else {
+  //       print('No token found in storage');
+  //     }
+  //   } catch (e) {
+  //     authLogger.e('Error restoring token: $e');
+  //     print('Error restoring token: $e');
+  //   }
+  // }
 
   Future<bool> isTokenValid() async {
     try {
@@ -234,12 +229,13 @@ class AuthRepository {
     }
   }
 
-  Future<void> handleAuthError(String errorMessage) async {
-    if (errorMessage.toLowerCase().contains('token') || 
-        errorMessage.toLowerCase().contains('authorization') ||
-        errorMessage.toLowerCase().contains('unauthorized')) {
-      authLogger.w('Auth error detected, logging out user');
-      await logout();
-    }
-  }
+  // Future<void> handleAuthError(String errorMessage) async {
+  //   if (errorMessage.toLowerCase().contains('token') || 
+  //       errorMessage.toLowerCase().contains('authorization') ||
+  //       errorMessage.toLowerCase().contains('Token is not valid') ||
+  //       errorMessage.toLowerCase().contains('unauthorized')) {
+  //     authLogger.w('Auth error detected, logging out user');
+  //     await logout();
+  //   }
+  // }
 }

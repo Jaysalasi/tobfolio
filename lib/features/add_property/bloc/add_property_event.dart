@@ -5,6 +5,16 @@ class UpdateName extends AddPropertyEvent {
   UpdateName(this.name);
 }
 
+class UpdateUnitNumber extends AddPropertyEvent {
+  final int unitNumber;
+  UpdateUnitNumber(this.unitNumber);
+}
+
+class UpdateDescription extends AddPropertyEvent {
+  final String description;
+  UpdateDescription(this.description);
+}
+
 class UpdateAddress extends AddPropertyEvent {
   final String address;
   UpdateAddress(this.address);
@@ -33,4 +43,20 @@ class AddDocument extends AddPropertyEvent {
 class RemovePhoto extends AddPropertyEvent {
   final int index;
   RemovePhoto(this.index);
+}
+
+class CreateProperty extends AddPropertyEvent {
+  final String name;
+  final String type;
+  final String address;
+  final int units;
+  final List<String> propertyImages;
+
+  CreateProperty({
+    required this.name,
+    required this.type,
+    required this.address,
+    required this.units,
+    required this.propertyImages,
+  });
 }

@@ -12,7 +12,8 @@ import 'package:tob/core/utils/constants/assets/svg.dart';
 import 'package:tob/features/add_property/bloc/add_property_bloc.dart';
 import 'package:tob/features/add_property/bloc/add_property_event.dart';
 import 'package:tob/features/add_property/bloc/add_property_state.dart';
-import 'package:tob/features/add_property/utils/add_property_utils.dart';
+import 'package:tob/features/add_property/repositories/property_repository.dart';
+import 'package:tob/features/add_property/utils/add_property_utils.dart'; 
 import 'package:tob/features/add_property/utils/alt_text_field.dart';
 
 class AddPropertyScreen extends StatefulWidget {
@@ -55,7 +56,9 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return BlocProvider(
-      create: (_) => AddPropertyBloc(),
+      create: (_) => AddPropertyBloc(
+        propertyRepository: context.read<PropertyRepository>(),
+      ),
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -249,7 +252,7 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
         AltTextField(
           label: "Unit Number",
           hint: "E.g 101",
-          onChanged: (v) => context.read<AddPropertyBloc>().add(UpdateName(v)),
+          onChanged: (v) => context.read<AddPropertyBloc>().add(UpdateUnitNumber(int.tryParse(v) ?? 0)),
         ),
 
         AltTextField(
@@ -257,7 +260,7 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
           hint: "E.g Modern apartment with city view",
           maxLines: 5,
           type: AltFieldType.multiline,
-          onChanged: (v) => context.read<AddPropertyBloc>().add(UpdateName(v)),
+          onChanged: (v) => context.read<AddPropertyBloc>().add(UpdateDescription(v)),
         ),
 
         Text(
@@ -342,12 +345,45 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
             ),
           ],
         ),
-        AppButton(
-          title: "Save",
-          onPressed: () {
-            _pageController.nextPage(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
+        BlocConsumer<AddPropertyBloc, AddPropertyState>(
+          listener: (context, state) {
+            if (state.status == AddPropertyStatus.success) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Property created successfully!'),
+                  backgroundColor: Colors.green,
+                ),
+              );
+              // Navigate back or to next screen
+              Navigator.of(context).pop();
+            } else if (state.status == AddPropertyStatus.error) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.errorMessage ?? 'Failed to create property'),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            }
+          },
+          builder: (context, state) {
+            return AppButton(
+              title: state.status == AddPropertyStatus.loading 
+                  ? "Creating..." 
+                  : "Save",
+              onPressed: state.status == AddPropertyStatus.loading 
+                  ? null 
+                  : () {
+                      // Create property with current state data
+                      final propertyImages = state.photos.map((photo) => photo.path).toList();
+                      
+                      context.read<AddPropertyBloc>().add(CreateProperty(
+                        name: state.name,
+                        type: state.propertyType,
+                        address: state.address,
+                        units: 1, // Single unit apartment
+                        propertyImages: propertyImages,
+                      ));
+                    },
             );
           },
         ),

@@ -32,7 +32,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         print('User data from AuthBloc: $userData');
         if (userData != null) {
           // Restore token to API service
-          await _authRepository.restoreToken();
+          // await _authRepository.restoreToken();
           
           print('Emitting authenticated state with user: ${userData.name}');
           emit(state.copyWith(

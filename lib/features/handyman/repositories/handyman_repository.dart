@@ -35,8 +35,8 @@ class HandymanRepository {
         return data.map((json) => Handyman.fromJson(json)).toList();
       } else {
         throw DioException(
-          requestOptions: response.requestOptions,
-          response: response,
+          requestOptions: RequestOptions(path: '/handymen'),
+          // response: response,
           message: 'Failed to load handymen: ${response.statusCode}',
         );
       }
@@ -58,8 +58,8 @@ class HandymanRepository {
         return response.data;
       } else {
         throw DioException(
-          requestOptions: response.requestOptions,
-          response: response,
+          requestOptions: RequestOptions(path: '/handymen/$id'),
+          // response: response,
           message: 'Failed to load handyman: ${response.statusCode}',
         );
       }
@@ -83,8 +83,8 @@ class HandymanRepository {
         return response.data;
       } else {
         throw DioException(
-          requestOptions: response.requestOptions,
-          response: response,
+          requestOptions: RequestOptions(path: '/handymen/$handymanId/reviews'),
+          // response: response,
           message: 'Failed to create review: ${response.statusCode}',
         );
       }

@@ -7,6 +7,7 @@ import 'package:tob/core/utils/constants/assets/svg.dart';
 import 'package:tob/features/all_properties/bloc/all_properties_bloc.dart';
 import 'package:tob/features/all_properties/bloc/all_properties_event.dart';
 import 'package:tob/features/all_properties/bloc/all_properties_state.dart';
+import 'package:tob/features/all_properties/repositories/all_properties_repository.dart';
 import 'package:tob/features/all_properties/screen/widgets/all_property_card.dart';
 
 class PropertyListScreen extends StatelessWidget {
@@ -15,7 +16,9 @@ class PropertyListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => AllPropertyBloc()..add(LoadProperties()),
+      create: (_) => AllPropertyBloc(
+        repository: context.read<AllPropertiesRepository>(),
+      )..add(LoadProperties()),
       child: const _PropertyListView(),
     );
   }
@@ -73,7 +76,7 @@ class _PropertyListView extends StatelessWidget {
             );
           }
 
-          return const SizedBox();
+          return const SizedBox(child: Text("data"),);
         },
       ),
     );

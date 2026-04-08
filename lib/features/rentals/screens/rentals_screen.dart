@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tob/core/router/app_router.dart';
 import 'package:tob/core/theme/app_theme.dart';
 import 'package:tob/core/utils/components/constants.dart';
+import 'package:tob/features/all_properties/bloc/all_properties_bloc.dart';
+import 'package:tob/features/all_properties/bloc/all_properties_event.dart';
+import 'package:tob/features/all_properties/bloc/all_properties_state.dart';
+import 'package:tob/features/all_properties/repositories/all_properties_repository.dart';
 
 class RentalsScreen extends StatelessWidget {
   const RentalsScreen({super.key});
@@ -13,7 +18,12 @@ class RentalsScreen extends StatelessWidget {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: theme.colorScheme.tertiary,
-        title: Text("Rentals", style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w500)),
+        title: Text(
+          "Rentals",
+          style: theme.textTheme.headlineSmall?.copyWith(
+            fontWeight: FontWeight.w500,
+          ),
+        ),
       ),
       backgroundColor: theme.colorScheme.tertiary,
       body: SafeArea(
@@ -71,15 +81,38 @@ class RentalsScreen extends StatelessWidget {
 
               const SizedBox(height: 16),
 
-              /// Properties List
               Expanded(
-                child: ListView(
-                  children: [
-                    PropertyTile(theme: theme),
-                    PropertyTile(theme: theme),
-                    PropertyTile(theme: theme),
-                    PropertyTile(theme: theme),
-                  ],
+                child: BlocProvider(
+                  create: (context) => AllPropertyBloc(
+                    repository: context.read<AllPropertiesRepository>(),
+                  )..add(LoadProperties()),
+                  child: BlocBuilder<AllPropertyBloc, AllPropertyState>(
+                    builder: (context, state) {
+                      if (state is PropertyLoading) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+
+                      if (state is PropertyLoaded) {
+                        if (state.properties.isEmpty) {
+                          return const Center(child: Text("No properties"));
+                        }
+
+                        return ListView.builder(
+                          padding: const EdgeInsets.all(0),
+                          itemCount: state.properties.length,
+                          itemBuilder: (context, index) {
+                            return PropertyTile(
+                              theme: theme,
+                              propertyName: state.properties[index].name,
+                              unit: state.properties[index].units,
+                            );
+                          },
+                        );
+                      }
+
+                      return const SizedBox(child: Text("data"));
+                    },
+                  ),
                 ),
               ),
             ],
@@ -127,8 +160,10 @@ class StatCard extends StatelessWidget {
                   child: Text(
                     value,
                     style: theme.textTheme.bodyLarge?.copyWith(
-                      fontStyle: FontStyle.italic,color: AppTheme.accentColor,
-                      fontSize: 25,fontWeight: FontWeight.bold
+                      fontStyle: FontStyle.italic,
+                      color: AppTheme.accentColor,
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
@@ -159,7 +194,7 @@ class OccupancyCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-           Text("Occupancy \nRate", style: theme.textTheme.bodyLarge),
+          Text("Occupancy \nRate", style: theme.textTheme.bodyLarge),
           SizedBox(height: 10),
           Center(
             child: Stack(
@@ -201,7 +236,14 @@ class OccupancyCard extends StatelessWidget {
 
 class PropertyTile extends StatelessWidget {
   final ThemeData theme;
-  const PropertyTile({super.key, required this.theme});
+  final String propertyName;
+  final int unit;
+  const PropertyTile({
+    super.key,
+    required this.theme,
+    required this.propertyName,
+    required this.unit,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -215,11 +257,9 @@ class PropertyTile extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Expanded(
-            child: Text("Property Name", style: theme.textTheme.bodyLarge),
-          ),
+          Expanded(child: Text(propertyName, style: theme.textTheme.bodyLarge)),
           Text(
-            "7 Unit",
+            "$unit Unit(s)",
             style: theme.textTheme.bodyLarge?.copyWith(
               fontWeight: FontWeight.w500,
             ),

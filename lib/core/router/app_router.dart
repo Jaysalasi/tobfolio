@@ -4,6 +4,7 @@ import 'package:tob/features/add_property/bloc/add_property_bloc.dart';
 import 'package:tob/features/add_property/repositories/property_repository.dart';
 import 'package:tob/features/add_property/screens/add_property_screen.dart';
 import 'package:tob/features/all_properties/bloc/all_properties_bloc.dart';
+import 'package:tob/features/all_properties/repositories/all_properties_repository.dart';
 import 'package:tob/features/all_properties/screen/all_properties_screen.dart';
 import 'package:tob/features/auth/bloc/login_bloc.dart';
 import 'package:tob/features/auth/bloc/register_bloc.dart';
@@ -112,8 +113,8 @@ class AppRouter {
       ),
       allProperties: (context) => BlocProvider(
         create: (context) => AllPropertyBloc(
-          // authRepository: context.read<AuthRepository>()
-          ),
+          repository: context.read<AllPropertiesRepository>(),
+        ),
         child: const PropertyListScreen(),
       ),
       dashboard: (context) => MultiBlocProvider(

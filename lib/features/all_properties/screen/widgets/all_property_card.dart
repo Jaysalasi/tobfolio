@@ -41,13 +41,13 @@ class _PropertyCardState extends State<PropertyCard> {
                 height: 90,
                 child: PageView.builder(
                   controller: controller,
-                  itemCount: property.images.length,
+                  itemCount: property.propertyImages.length,
                   onPageChanged: (i) {
                     setState(() => currentIndex = i);
                   },
                   itemBuilder: (_, i) {
                     // return Image.asset(property.images[i], fit: BoxFit.contain);
-                    return Image.asset(AppImages.house, fit: BoxFit.cover);
+                    return Image.network(property.propertyImages[i], fit: BoxFit.cover);
                   },
                 ),
               ),
@@ -56,7 +56,7 @@ class _PropertyCardState extends State<PropertyCard> {
 
               Row(
                 children: List.generate(
-                  property.images.length,
+                  property.propertyImages.length,
                   (i) => Container(
                     margin: const EdgeInsets.symmetric(horizontal: 3),
                     width: 9,
@@ -121,14 +121,14 @@ class _PropertyCardState extends State<PropertyCard> {
                 // const SizedBox(height: 6),
                 const Divider(height: 10, color: AppTheme.grayColor,),
 
-                _row("Total Income", "N${property.income.toStringAsFixed(0)}"),
+                // _row("Total Income", "N${property.income.toStringAsFixed(0)}"),
 
                 const SizedBox(height: 6),
 
-                _row(
-                  "Total Expenses",
-                  "N${property.expenses.toStringAsFixed(0)}",
-                ),
+                // _row(
+                //   "Total Expenses",
+                //   "N${property.expenses.toStringAsFixed(0)}",
+                // ),
               ],
             ),
           ),

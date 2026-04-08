@@ -4,6 +4,7 @@ import 'package:tob/core/utils/constants/assets/svg.dart';
 import 'package:tob/features/add_property/bloc/add_property_bloc.dart';
 import 'package:tob/features/add_property/repositories/property_repository.dart';
 import 'package:tob/features/all_properties/bloc/all_properties_bloc.dart';
+import 'package:tob/features/all_properties/repositories/all_properties_repository.dart';
 import 'package:tob/features/handyman/bloc/handyman_bloc.dart';
 import 'package:tob/features/handyman/repositories/handyman_repository.dart';
 import 'package:tob/features/artisan_profile/bloc/artisan_profile_bloc.dart';
@@ -64,6 +65,9 @@ class MyApp extends StatelessWidget {
             context.read<MediaUploadService>(),
           ),
         ),
+        RepositoryProvider(
+          create: (context) => AllPropertiesRepository(context.read<ApiService>()),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -81,7 +85,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (context) => TenantBloc()),
           BlocProvider(create: (context) => TenantProfileBloc()),
           BlocProvider(create: (context) => ExpensesBloc()),
-          BlocProvider(create: (context) => AllPropertyBloc()),
+          BlocProvider(create: (context) => AllPropertyBloc(repository: context.read<AllPropertiesRepository>(),)),
           BlocProvider(create: (context) => HandymanBloc(handymanRepository: context.read<HandymanRepository>())),
           BlocProvider(create: (context) => ArtisanProfileBloc(
             handymanRepository: context.read<HandymanRepository>(),

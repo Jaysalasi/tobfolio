@@ -46,7 +46,6 @@ class WelcomeCard extends StatelessWidget {
                 label: 'Add Property',
                 theme: Theme.of(context),
                 onTap: () {
-                  print("push");
                   Navigator.pushNamed(context, AppRouter.addProperty);
                 },
               ),

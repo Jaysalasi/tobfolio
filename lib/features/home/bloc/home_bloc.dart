@@ -24,7 +24,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       
       // Get stored user data
       final user = await getStoredUser();
-      print("got user ${user?.name}");
       // Emit state with user data
       emit(state.copyWith(isLoading: false, user: user));
     } catch (e) {
@@ -38,17 +37,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   Future<User?> getStoredUser() async {
     try {
       final userData = await _storageService.getUser();
-      print('Retrieved user data from storage bloc home : $userData');
       if (userData == null) {
-        print('User data is null');
         return null;
       }
       final user = User.fromJson(userData);
-      print('Parsed user: ${user.name}');
       return user;
     } catch (e) {
       authLogger.e('Error getting stored user: $e');
-      print('Error getting stored user: $e');
       return null;
     }
   }

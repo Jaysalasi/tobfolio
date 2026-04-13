@@ -25,30 +25,24 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     
     try {
       final isAuthenticated = await _authRepository.isAuthenticated();
-      print('Is authenticated: $isAuthenticated');
       if (isAuthenticated) {
         // Get stored user data if available
         final userData = await _authRepository.getStoredUser();
-        print('User data from AuthBloc: $userData');
         if (userData != null) {
           // Restore token to API service
           // await _authRepository.restoreToken();
           
-          print('Emitting authenticated state with user: ${userData.name}');
           emit(state.copyWith(
             status: AuthStatus.authenticated,
             user: userData,
           ));
         } else {
-          print('User data is null, emitting unauthenticated');
           emit(state.copyWith(status: AuthStatus.unauthenticated));
         }
       } else {
-        print('Not authenticated, emitting unauthenticated');
         emit(state.copyWith(status: AuthStatus.unauthenticated));
       }
     } catch (e) {
-      print('Error in AuthStarted: $e');
       emit(state.copyWith(
         status: AuthStatus.error,
         errorMessage: e.toString(),

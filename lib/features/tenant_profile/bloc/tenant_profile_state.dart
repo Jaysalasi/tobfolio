@@ -29,3 +29,12 @@ class TenantProfileError extends TenantProfileState {
   @override
   List<Object?> get props => [message];
 }
+
+class TenantProfileSuccess extends TenantProfileState {
+  final String message;
+
+  const TenantProfileSuccess(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}

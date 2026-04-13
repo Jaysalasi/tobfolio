@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:tob/core/theme/app_theme.dart';
-import 'package:tob/core/utils/components/constants.dart';
-import 'package:tob/core/utils/constants/assets/pngs.dart';
+import 'package:tob/core/utils/components/constants.dart'; 
 import 'package:tob/core/utils/constants/assets/svg.dart';
 import 'package:tob/features/all_properties/model/all_property_model.dart';
 

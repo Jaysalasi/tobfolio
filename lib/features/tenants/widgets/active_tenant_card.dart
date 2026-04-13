@@ -1,12 +1,84 @@
 import 'package:flutter/material.dart';
 import 'package:tob/core/theme/app_theme.dart';
-import 'package:tob/core/utils/components/constants.dart';
-import 'package:tob/features/tenants/bloc/tenant_state.dart';
+import 'package:tob/core/utils/components/constants.dart'; 
 
 class ActiveTenantCard extends StatelessWidget {
-  final TenantState state;
+  final Map<String, dynamic> tenant;
   final VoidCallback onTap;
-  const ActiveTenantCard({super.key, required this.state, required this.onTap});
+  const ActiveTenantCard({super.key, required this.tenant, required this.onTap});
+
+  double _calculateProgress() {
+    try {
+      final now = DateTime.now();
+      final rentEndStr = tenant['rentEnd']?.toString();
+      
+      if (rentEndStr == null) {
+        return 0.0;
+      }
+      
+      final rentEnd = DateTime.tryParse(rentEndStr);
+      
+      if (rentEnd == null) {
+        return 0.0;
+      }
+      
+      // Calculate days left
+      final daysLeft = rentEnd.difference(now).inDays;
+      
+      if (daysLeft <= 0) {
+        return 1.0; // 100% complete (expired)
+      }
+      
+      // Create percentage based on user requirements
+      double percentage;
+      if (daysLeft > 100) {
+        // If days left > 100, use daysLeft/1000
+        percentage = daysLeft / 1000;
+      } else {
+        // If days left <= 100, use daysLeft/100
+        percentage = daysLeft / 100;
+      }
+      
+      // Clamp between 0.0 and 1.0
+      if (percentage < 0.0) return 0.0;
+      if (percentage > 1.0) return 1.0;
+      
+      print("days left: $daysLeft, percentage: $percentage");
+      return percentage;
+    } catch (e) {
+      return 0.0;
+    }
+  }
+
+  String _calculateDaysLeft() {
+    try {
+      final now = DateTime.now();
+      final rentEndStr = tenant['rentEnd']?.toString();
+      final rentStartStr = tenant['rentStart']?.toString();
+      
+      if (rentEndStr == null || rentStartStr == null) {
+        return 'Unknown';
+      }
+      
+      final rentEnd = DateTime.tryParse(rentEndStr);
+      final rentStart = DateTime.tryParse(rentStartStr);
+      
+      if (rentEnd == null || rentStart == null) {
+        return 'Unknown';
+      }
+      
+      // Calculate remaining days
+      final remainingDays = rentEnd.difference(now).inDays;
+      
+      if (remainingDays <= 0) {
+        return 'Expired';
+      }
+      
+      return '$remainingDays days left';
+    } catch (e) {
+      return 'Unknown';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +111,7 @@ class ActiveTenantCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Bella J",
+                      tenant['name'] ?? '',
                       style: theme.textTheme.headlineSmall?.copyWith(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
@@ -51,7 +123,7 @@ class ActiveTenantCard extends StatelessWidget {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: LinearProgressIndicator(
-                        value: .65,
+                        value: _calculateProgress(),
                         backgroundColor: AppTheme.grayColor,
                         color: Colors.black,
                         minHeight: 2,
@@ -67,12 +139,12 @@ class ActiveTenantCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    "Room D5",
+                    tenant['unitNumber'] ?? '',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                   ),
                   SizedBox(height: 4),
                   Text(
-                    "128 days left",
+                    _calculateDaysLeft(),
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: AppTheme.secondaryColor,
                     ),

@@ -151,7 +151,6 @@ class _ArtisanProfileScreenState extends State<ArtisanProfileScreen> {
                 final List<String> images = handyman.images.isNotEmpty
                     ? handyman.images
                     : [];
-                print("mages    0------ ${handyman.images}");
                 if (selectedIndex == 0) {
                   return overviewMeth(context, theme, handyman, images);
                 }

@@ -12,12 +12,7 @@ class AllPropertiesRepository {
       final response = await _apiService.get('/properties');
       
       if (response.statusCode == 200) {
-        final responseData = response.data;
-        
-        print("enter 1 $responseData");
-        
-        print("enter 2");
-        print("enter 3");
+      
         final List<dynamic> data = response.data;
         return data.map((json) => PropertyModel.fromJson(json)).toList();
           // return propertiesData.cast<Map<String, dynamic>>();

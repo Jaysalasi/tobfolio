@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:tob/features/auth/bloc/forgot_password_state.dart';
 import '../../../core/utils/logger.dart';
 import '../models/user.dart';
 import '../models/login_request.dart';
@@ -36,6 +37,33 @@ class AuthRepository {
       
       authLogger.i('Login successful for user: ${loginResponse.user.name}');
       return loginResponse;
+    } else {
+      final errorMessage = NetworkExceptions.getErrorMessage(response.data);
+      authLogger.e('Login failed: $errorMessage');
+      throw errorMessage;
+    }
+  } catch (e) {
+    if (e is DioException) {
+      final errorMessage = NetworkExceptions.handleDioError(e);
+      authLogger.e('Login Dio error: $errorMessage');
+      throw errorMessage;
+    }
+    final errorMessage = NetworkExceptions.getErrorMessage(e);
+    authLogger.e('Login error: $errorMessage');
+    throw errorMessage;
+  }
+}
+
+  Future<ForgotPasswordResponse> forgotPassword(ForgotPasswordRequest request) async {
+  authLogger.d('Login attempt for email: ${request.email}');
+  try {
+    final response = await _apiService.post('/auth/forgot-password', data: request.toJson());
+    
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final resResponse = ForgotPasswordResponse.fromJson(response.data);
+
+      authLogger.i('Forgot password successful for user: ');
+      return resResponse;
     } else {
       final errorMessage = NetworkExceptions.getErrorMessage(response.data);
       authLogger.e('Login failed: $errorMessage');

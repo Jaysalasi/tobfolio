@@ -5,11 +5,13 @@ import 'package:tob/features/add_property/bloc/add_property_bloc.dart';
 import 'package:tob/features/add_property/repositories/property_repository.dart';
 import 'package:tob/features/all_properties/bloc/all_properties_bloc.dart';
 import 'package:tob/features/all_properties/repositories/all_properties_repository.dart';
+import 'package:tob/features/auth/bloc/forgot_password_bloc.dart';
 import 'package:tob/features/handyman/bloc/handyman_bloc.dart';
 import 'package:tob/features/handyman/repositories/handyman_repository.dart';
 import 'package:tob/features/artisan_profile/bloc/artisan_profile_bloc.dart';
 import 'package:tob/features/tenant_profile/bloc/_tenant_profile_bloc.dart';
 import 'package:tob/features/tenants/bloc/tenant_bloc.dart';
+import 'package:tob/features/tenants/repositories/tenant_repository.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'core/theme/theme_cubit.dart' hide ThemeMode;
@@ -68,6 +70,12 @@ class MyApp extends StatelessWidget {
         RepositoryProvider(
           create: (context) => AllPropertiesRepository(context.read<ApiService>()),
         ),
+        RepositoryProvider(
+          create: (context) => TenantRepository(
+            context.read<ApiService>(),
+            context.read<MediaUploadService>(),
+          ),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -77,13 +85,14 @@ class MyApp extends StatelessWidget {
             authBloc: context.read<AuthBloc>(),
           )),
           BlocProvider(create: (context) => RegisterBloc(authRepository: context.read<AuthRepository>())),
+          BlocProvider(create: (context) => ForgotPasswordBloc(authRepository: context.read<AuthRepository>())),
           BlocProvider(create: (context) => OnboardingCubit()),
           BlocProvider(create: (context) => ThemeCubit()),
           BlocProvider(create: (context) => DashboardBloc()),
           BlocProvider(create: (context) => HomeBloc()),
           BlocProvider(create: (context) => AddPropertyBloc(propertyRepository: context.read<PropertyRepository>())),
-          BlocProvider(create: (context) => TenantBloc()),
-          BlocProvider(create: (context) => TenantProfileBloc()),
+          BlocProvider(create: (context) => TenantBloc(context.read<TenantRepository>())),
+          BlocProvider(create: (context) => TenantProfileBloc(context.read<TenantRepository>())),
           BlocProvider(create: (context) => ExpensesBloc()),
           BlocProvider(create: (context) => AllPropertyBloc(repository: context.read<AllPropertiesRepository>(),)),
           BlocProvider(create: (context) => HandymanBloc(handymanRepository: context.read<HandymanRepository>())),

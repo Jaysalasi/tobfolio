@@ -27,9 +27,7 @@ class PropertyRepository {
             fileName: fileName,
           );
           uploadedImageUrls.add(uploadedUrl);
-          print('Successfully uploaded image: $fileName -> $uploadedUrl');
         } catch (e) {
-          print('Failed to upload image: $imagePath, error: $e');
           // Continue with other images, but you might want to handle this differently
         }
       }
@@ -42,7 +40,6 @@ class PropertyRepository {
         'propertyImages': uploadedImageUrls,
       };
 
-      print('Creating property with uploaded image URLs: $uploadedImageUrls');
       final response = await _apiService.post('/properties', data: requestData);
 
       if (response.statusCode == 201 || response.statusCode == 200) {

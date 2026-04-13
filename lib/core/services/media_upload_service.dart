@@ -56,14 +56,12 @@ class MediaUploadService {
       });
 
       final response = await _apiService.postFormData('/upload', data: formData);
-      print('-------- Uploading file: $response');
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         final responseData = response.data as Map<String, dynamic>;
         
         if (responseData['success'] == true && responseData['url'] != null) {
           final uploadedUrl = responseData['url'] as String;
-          print('File uploaded successfully: $uploadedUrl');
           return uploadedUrl;
         } else {
           throw Exception('Upload failed: ${responseData['message'] ?? 'Unknown error'}');
@@ -76,14 +74,11 @@ class MediaUploadService {
         );
       }
     } on DioException catch (e) {
-      print('Dio error in upload: ${e.message}');
-      print('Response data: ${e.response?.data}');
       throw DioException(
         requestOptions: e.requestOptions,
         message: 'Network error: ${e.message}',
       );
     } catch (e) {
-      print('Unexpected error in upload: $e');
       throw Exception('Unexpected error: $e');
     }
   }
@@ -105,7 +100,6 @@ class MediaUploadService {
         );
         uploadedUrls.add(url);
       } catch (e) {
-        print('Failed to upload file $fileName: $e');
         // Continue with other files, but you might want to handle this differently
       }
     }

@@ -114,7 +114,7 @@ Column overdueCardMeth(
                           borderRadius: BorderRadius.circular(12),
                         ),
                         // title: Text('Are you sure?'),
-                        content: Container(
+                        content: SizedBox(
                           height: 300,
                           child: Column(
                             children: [
@@ -150,7 +150,6 @@ Column overdueCardMeth(
                   : state.rentFrequency,
               type: AltFieldType.dropdown,
               onChanged: (value) {
-                print("Rent frequency: $value");
                 context.read<TenantBloc>().add(UpdateRentFrequency(value));
               },
             ),

@@ -26,6 +26,15 @@ class _TenantScreenState extends State<TenantScreen> {
   int selectedTab = 0;
 
   @override
+  void initState() {
+    super.initState();
+    // Fetch tenants when screen loads
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<TenantBloc>().add(FetchTenants());
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
@@ -85,26 +94,74 @@ class _TenantScreenState extends State<TenantScreen> {
                 const SizedBox(height: 10),
 
                 Expanded(
-                  child: ListView.builder(
-                    padding: const EdgeInsets.all(20),
-                    itemCount: 6,
-                    itemBuilder: (context, index) {
-                      if (selectedTab == 0) {
-                        return ActiveTenantCard(
-                          state: TenantState(),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    const TenantProfileScreen(),
-                              ),
+                  child: BlocBuilder<TenantBloc, TenantState>(
+                    builder: (context, tenantState) {
+                      if (tenantState.isLoading) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+
+                      if (tenantState.error != null) {
+                        return Center(
+                          child: Text(
+                            'Error: ${tenantState.error}',
+                            style: const TextStyle(color: Colors.red),
+                          ),
+                        );
+                      }
+
+                      final tenants = tenantState.tenants ?? [];
+                      final now = DateTime.now();
+
+                      // Separate tenants into active and overdue
+                      final activeTenants = tenants.where((tenant) {
+                        if (tenant['rentEnd'] == null) return true;
+                        final rentEnd = DateTime.tryParse(tenant['rentEnd']?.toString() ?? '');
+                        if (rentEnd == null) return true;
+                        return rentEnd.isAfter(now);
+                      }).toList();
+
+                      final overdueTenants = tenants.where((tenant) {
+                        if (tenant['rentEnd'] == null) return false;
+                        final rentEnd = DateTime.tryParse(tenant['rentEnd']?.toString() ?? '');
+                        if (rentEnd == null) return false;
+                        return !rentEnd.isAfter(now);
+                      }).toList();
+
+                      final displayTenants = selectedTab == 0 ? activeTenants : overdueTenants;
+
+                      if (displayTenants.isEmpty) {
+                        return Center(
+                          child: Text(
+                            selectedTab == 0 ? 'No active tenants' : 'No overdue tenants',
+                            style: theme.textTheme.bodyLarge,
+                          ),
+                        );
+                      }
+
+                      return RefreshIndicator(
+                        onRefresh: () async {
+                          context.read<TenantBloc>().add(FetchTenants());
+                        },
+                        child: ListView.builder(
+                          padding: const EdgeInsets.all(20),
+                          itemCount: displayTenants.length,
+                          itemBuilder: (context, index) {
+                            final tenant = displayTenants[index];
+                            return ActiveTenantCard(
+                              tenant: tenant,
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        TenantProfileScreen(tenantId: tenant['_id']),
+                                  ),
+                                );
+                              },
                             );
                           },
-                        );
-                      } else {
-                        return overdueCardMeth(theme, context, state);
-                      }
+                        ),
+                      );
                     },
                   ),
                 ),
@@ -209,7 +266,7 @@ class _TenantScreenState extends State<TenantScreen> {
                                 ),
                                 SizedBox(height: 10),
                                 AppButton(
-                                  title: 'Evict',
+                                  title: 'Vacate',
                                   onPressed: () {
                                     // TODO: Implement eviction logic
                                   },
@@ -258,7 +315,6 @@ class _TenantScreenState extends State<TenantScreen> {
                                     ),
                                     AltTextField(
                                        onTap: () async {
-                                        print("tap");
                                         final DateTime? picked = await showDatePicker(
                                           context: context,
                                           firstDate: DateTime.now(),

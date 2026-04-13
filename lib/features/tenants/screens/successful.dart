@@ -28,7 +28,13 @@ class Successful extends StatelessWidget {
                     style: theme.textTheme.headlineMedium,
                   ),
                   Spacer(),
-                  AppButton(title: "Close", onPressed: () => Navigator.pop(context)),
+                  AppButton(
+                    title: "Close",
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    },
+                  ),
                 ],
               ),
             ),

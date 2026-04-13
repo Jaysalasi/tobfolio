@@ -64,3 +64,22 @@ class InfoTile extends StatelessWidget {
     );
   }
 }
+
+
+Future<dynamic> statefulBottomSheetMeth({
+  required BuildContext context,
+  required Widget Function(BuildContext, StateSetter) builder,
+}) {
+  return showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    builder: (context) {
+      return StatefulBuilder(
+        builder: (context, setState) {
+          return builder(context, setState);
+        },
+      );
+    },
+  );
+}

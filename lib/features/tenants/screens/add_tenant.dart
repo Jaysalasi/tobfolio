@@ -12,8 +12,15 @@ import 'package:tob/core/utils/components/widgets.dart';
 import 'package:tob/core/utils/constants/assets/svg.dart';
 import 'package:tob/features/add_property/utils/alt_text_field.dart';
 import 'package:tob/features/add_property/utils/phone_text_field.dart';
+import 'package:tob/features/all_properties/bloc/all_properties_bloc.dart';
+import 'package:tob/features/all_properties/bloc/all_properties_event.dart';
+import 'package:tob/features/all_properties/bloc/all_properties_state.dart';
+import 'package:tob/features/all_properties/model/all_property_model.dart';
+import 'package:tob/features/all_properties/repositories/all_properties_repository.dart';
 import 'package:tob/features/tenants/bloc/tenant_bloc.dart';
+import 'package:tob/features/tenants/bloc/tenant_event.dart';
 import 'package:tob/features/tenants/bloc/tenant_state.dart';
+import 'package:intl/intl.dart';
 import 'package:tob/features/tenants/screens/successful.dart';
 
 class AddTenantScreen extends StatefulWidget {
@@ -28,6 +35,19 @@ class _AddTenantScreenState extends State<AddTenantScreen> {
   int _currentPage = 0;
 
   CountryCode selectedCountry = countryCodes.first;
+  PropertyModel? selectedProperty;
+  String? selectedUnit;
+  
+  // Form data
+  String tenantName = '';
+  String tenantEmail = '';
+  String tenantPhone = '';
+  String rentAmount = '';
+  String rentFrequency = 'Monthly';
+  String rentDuration = '1 year';
+  String rentEntryDate = '';
+  String rentExpiryDate = '';
+  String notes = '';
 
   @override
   void initState() {
@@ -73,22 +93,26 @@ class _AddTenantScreenState extends State<AddTenantScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final size = MediaQuery.of(context).size;
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            if (_currentPage == 0) {
-              Navigator.pop(context);
-            } else {
-              _pageController.previousPage(
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeInOut,
-              );
-            }
-          },
-          icon: SvgPicture.asset(SvgAssets.backOutline),
-        ),
-        backgroundColor: theme.colorScheme.tertiary,
+    return BlocProvider(
+      create: (context) => AllPropertyBloc(
+        repository: context.read<AllPropertiesRepository>(),
+      )..add(LoadProperties()),
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            onPressed: () {
+              if (_currentPage == 0) {
+                Navigator.pop(context);
+              } else {
+                _pageController.previousPage(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                );
+              }
+            },
+            icon: SvgPicture.asset(SvgAssets.backOutline),
+          ),
+          backgroundColor: theme.colorScheme.tertiary,
         title: Text(
           "Add Tenant",
           style: theme.textTheme.headlineSmall?.copyWith(
@@ -111,12 +135,45 @@ class _AddTenantScreenState extends State<AddTenantScreen> {
       ),
       backgroundColor: theme.colorScheme.tertiary,
       body: SafeArea(
-        child: BlocBuilder<TenantBloc, TenantState>(
-          builder: (context, state) {
-            return PageView(
-              controller: _pageController,
-              physics: const NeverScrollableScrollPhysics(),
-              children: [
+        child: BlocListener<TenantBloc, TenantState>(
+          listener: (context, state) {
+            if (state.isLoading) {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) => const Center(
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            } else {
+              // Close any loading dialog
+              Navigator.of(context, rootNavigator: true).pop();
+              
+              if (state.error != null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Error: ${state.error}'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              } else {
+                // Success - navigate to successful screen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    settings: const RouteSettings(name: 'successful'),
+                    builder: (context) => const Successful(),
+                  ),
+                );
+              }
+            }
+          },
+          child: BlocBuilder<TenantBloc, TenantState>(
+            builder: (context, state) {
+              return PageView(
+                controller: _pageController,
+                physics: const NeverScrollableScrollPhysics(),
+                children: [
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -161,33 +218,39 @@ class _AddTenantScreenState extends State<AddTenantScreen> {
                         child: AppButton(
                           title: "Save",
                           onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) => GestureDetector(
-                                onTap: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    CircularProgressIndicator(),
-                                  ],
+                            // Validate required fields
+                            if (tenantName.isEmpty || 
+                                tenantEmail.isEmpty || 
+                                tenantPhone.isEmpty || 
+                                selectedProperty == null || 
+                                selectedUnit == null ||
+                                rentAmount.isEmpty ||
+                                rentEntryDate.isEmpty ||
+                                rentExpiryDate.isEmpty) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Please fill all required fields'),
+                                  backgroundColor: Colors.red,
                                 ),
-                              ),
-                            );
-                            Future.delayed(const Duration(seconds: 1), () {
-                              // Navigate to successful screen
-                              if (context.mounted) {
-                                Navigator.pop(context);
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    settings: RouteSettings(name: 'successful'),
-                                    builder: (context) => const Successful(),
-                                  ),
-                                );
-                              }
-                            });
+                              );
+                              return;
+                            }
+
+                            // Create tenant
+                            context.read<TenantBloc>().add(CreateTenant(
+                              name: tenantName,
+                              email: tenantEmail,
+                              phone: tenantPhone,
+                              propertyId: selectedProperty!.id,
+                              unitNumber: selectedUnit!,
+                              rentAmount: double.tryParse(rentAmount) ?? 0.0,
+                              rentStart: rentEntryDate,
+                              rentEnd: rentExpiryDate,
+                              rentDuration: rentDuration,
+                              paymentFrequency: rentFrequency.toLowerCase(),
+                              imagePath: documentPath,
+                              notes: notes,
+                            ));
                           },
                         ),
                       ),
@@ -198,6 +261,8 @@ class _AddTenantScreenState extends State<AddTenantScreen> {
             );
           },
         ),
+        ),
+      ),
       ),
     );
   }
@@ -225,12 +290,28 @@ class _AddTenantScreenState extends State<AddTenantScreen> {
             ],
           ),
           SizedBox(height: 20),
-          AltTextField(label: "Full name", hint: "James Smith"),
-          AltTextField(label: "Email", hint: "james.smith@example.com"),
+          AltTextField(
+            label: "Full name", 
+            hint: "James Smith",
+            onChanged: (value) {
+              setState(() {
+                tenantName = value;
+              });
+            },
+          ),
+          AltTextField(
+            label: "Email", 
+            hint: "james.smith@example.com",
+            onChanged: (value) {
+              setState(() {
+                tenantEmail = value;
+              });
+            },
+          ),
           PhoneTextField(
             label: "Phone Number",
             hint: "Enter phone number",
-            phoneNumber: "",
+            phoneNumber: tenantPhone,
             countryCode: selectedCountry.dialCode,
             countryCodes: countryCodes.map((e) => e.dialCode).toList(),
             onCountryChanged: (country) {
@@ -238,6 +319,11 @@ class _AddTenantScreenState extends State<AddTenantScreen> {
                 selectedCountry = countryCodes.firstWhere(
                   (e) => e.dialCode == country,
                 );
+              });
+            },
+            onChanged: (value) {
+              setState(() {
+                tenantPhone = value;
               });
             },
           ),
@@ -255,17 +341,59 @@ class _AddTenantScreenState extends State<AddTenantScreen> {
               });
             },
           ),
-          AltTextField(
-            label: "Property",
-            hint: "Select Property",
-            type: AltFieldType.dropdown,
-            items: ["House 1", "House 2", "House 3"],
+          BlocBuilder<AllPropertyBloc, AllPropertyState>(
+            builder: (context, state) {
+              if (state is PropertyLoading) {
+                return AltTextField(
+                  label: "Property",
+                  hint: "Loading properties...",
+                  type: AltFieldType.dropdown,
+                  items: ["Loading..."],
+                );
+              }
+
+              if (state is PropertyLoaded) {
+                final propertyNames = state.properties.map((p) => p.name).toList();
+                
+                return AltTextField(
+                  label: "Property",
+                  hint: selectedProperty?.name ?? "Select Property",
+                  type: AltFieldType.dropdown,
+                  items: propertyNames,
+                  value: selectedProperty?.name,
+                  onChanged: (value) {
+                    setState(() {
+                      selectedProperty = state.properties.firstWhere(
+                        (p) => p.name == value,
+                        orElse: () => state.properties.first,
+                      );
+                      selectedUnit = null; // Reset unit when property changes
+                    });
+                  },
+                );
+              }
+
+              return AltTextField(
+                label: "Property",
+                hint: "No properties available",
+                type: AltFieldType.dropdown,
+                items: ["No properties"],
+              );
+            },
           ),
           AltTextField(
             label: "Select Unit",
-            hint: "1",
+            hint: selectedProperty != null ? "Select Unit" : "Select property first",
             type: AltFieldType.dropdown,
-            items: ["House 1", "House 2", "House 3"],
+            items: selectedProperty != null 
+                ? List.generate(selectedProperty!.units, (index) => "Unit ${index + 1}")
+                : ["No property selected"],
+            value: selectedUnit,
+            onChanged: selectedProperty != null ? (value) {
+              setState(() {
+                selectedUnit = value;
+              });
+            } : null,
           ),
         ],
       ),
@@ -283,12 +411,31 @@ class _AddTenantScreenState extends State<AddTenantScreen> {
             hint: "Select frequency",
             type: AltFieldType.dropdown,
             items: ["Monthly", "Quarterly", "Annually"],
+            value: rentFrequency,
+            onChanged: (value) {
+              setState(() {
+                rentFrequency = value;
+              });
+            },
+          ),
+          AltTextField(
+            label: "Rent Duration",
+            hint: "Select duration",
+            type: AltFieldType.dropdown,
+            items: ["1 year", "2 years", "3 years"],
+            value: rentDuration,
+            onChanged: (value) {
+              setState(() {
+                rentDuration = value;
+              });
+            },
           ),
           AltTextField(
             label: "Rent Entry Date",
-            hint: "Select entry date",
+            hint: rentEntryDate ?? "Select entry date",
             type: AltFieldType.text,
             enabled: true,
+            value: rentEntryDate,
             onTap: () async {
               final DateTime? picked = await showDatePicker(
                 context: context,
@@ -296,23 +443,30 @@ class _AddTenantScreenState extends State<AddTenantScreen> {
                 lastDate: DateTime.now().add(const Duration(days: 365)),
               );
               if (picked != null) {
-                 
+                final formattedDate = DateFormat('yyyy-MM-dd').format(picked);
+                setState(() {
+                  rentEntryDate = formattedDate;
+                });
               }
             },
           ),
           AltTextField(
             label: "Rent Expiry Date",
-            hint: "Select expiry date",
+            hint: rentExpiryDate ?? "Select expiry date",
             type: AltFieldType.text,
             enabled: true,
+            value: rentExpiryDate,
             onTap: () async {
               final DateTime? picked = await showDatePicker(
                 context: context,
                 firstDate: DateTime.now(),
-                lastDate: DateTime.now().add(const Duration(days: 365)),
+                lastDate: DateTime.now().add(const Duration(days: 3650)),
               );
               if (picked != null) {
-                 
+                final formattedDate = DateFormat('yyyy-MM-dd').format(picked);
+                setState(() {
+                  rentExpiryDate = formattedDate;
+                });
               }
             },
           ),
@@ -321,13 +475,18 @@ class _AddTenantScreenState extends State<AddTenantScreen> {
             label: "Rent Fee",
             hint: "Enter rent fee",
             type: AltFieldType.number,
+            value: rentAmount,
+            onChanged: (value) {
+              setState(() {
+                rentAmount = value;
+              });
+            },
           ),
           AltTextField(
             label: "Late Rent Fee",
             hint: "Enter rent fee",
             type: AltFieldType.number,
           ),
-
           Row(
           children: [
             Expanded(
@@ -384,6 +543,19 @@ class _AddTenantScreenState extends State<AddTenantScreen> {
             ),
           ],
         ),
+       
+          AltTextField(
+            label: "Notes",
+            hint: "Enter notes",
+            type: AltFieldType.multiline,
+            maxLines: 5,
+            onChanged: (value) {
+              setState(() {
+                notes = value;
+              });
+            },
+          ),
+
         ],
       ),
     );

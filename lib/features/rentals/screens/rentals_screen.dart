@@ -86,32 +86,59 @@ class RentalsScreen extends StatelessWidget {
                   create: (context) => AllPropertyBloc(
                     repository: context.read<AllPropertiesRepository>(),
                   )..add(LoadProperties()),
-                  child: BlocBuilder<AllPropertyBloc, AllPropertyState>(
-                    builder: (context, state) {
-                      if (state is PropertyLoading) {
-                        return const Center(child: CircularProgressIndicator());
-                      }
-
-                      if (state is PropertyLoaded) {
-                        if (state.properties.isEmpty) {
-                          return const Center(child: Text("No properties"));
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      context.read<AllPropertyBloc>().add(LoadProperties());
+                    },
+                    child: BlocBuilder<AllPropertyBloc, AllPropertyState>(
+                      builder: (context, state) {
+                        if (state is PropertyLoading) {
+                          return const Center(child: CircularProgressIndicator());
                         }
 
-                        return ListView.builder(
-                          padding: const EdgeInsets.all(0),
-                          itemCount: state.properties.length,
-                          itemBuilder: (context, index) {
-                            return PropertyTile(
-                              theme: theme,
-                              propertyName: state.properties[index].name,
-                              unit: state.properties[index].units,
-                            );
-                          },
-                        );
-                      }
+                        if (state is PropertyError) {
+                          return Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Error: ${state.message}',
+                                  style: const TextStyle(color: Colors.red),
+                                  textAlign: TextAlign.center,
+                                ),
+                                const SizedBox(height: 16),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    context.read<AllPropertyBloc>().add(LoadProperties());
+                                  },
+                                  child: const Text('Retry'),
+                                ),
+                              ],
+                            ),
+                          );
+                        }
 
-                      return const SizedBox(child: Text("data"));
-                    },
+                        if (state is PropertyLoaded) {
+                          if (state.properties.isEmpty) {
+                            return const Center(child: Text("No properties"));
+                          }
+
+                          return ListView.builder(
+                            padding: const EdgeInsets.all(0),
+                            itemCount: state.properties.length,
+                            itemBuilder: (context, index) {
+                              return PropertyTile(
+                                theme: theme,
+                                propertyName: state.properties[index].name,
+                                unit: state.properties[index].units,
+                              );
+                            },
+                          );
+                        }
+
+                        return const Center(child: Text("No data available"));
+                      },
+                    ),
                   ),
                 ),
               ),

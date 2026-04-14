@@ -94,55 +94,68 @@ class _TenantScreenState extends State<TenantScreen> {
                 const SizedBox(height: 10),
 
                 Expanded(
-                  child: BlocBuilder<TenantBloc, TenantState>(
-                    builder: (context, tenantState) {
-                      if (tenantState.isLoading) {
-                        return const Center(child: CircularProgressIndicator());
-                      }
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      context.read<TenantBloc>().add(FetchTenants());
+                    },
+                    child: BlocBuilder<TenantBloc, TenantState>(
+                      builder: (context, tenantState) {
+                        if (tenantState.isLoading) {
+                          return const Center(child: CircularProgressIndicator());
+                        }
 
-                      if (tenantState.error != null) {
-                        return Center(
-                          child: Text(
-                            'Error: ${tenantState.error}',
-                            style: const TextStyle(color: Colors.red),
-                          ),
-                        );
-                      }
+                        if (tenantState.error != null) {
+                          return Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Error: ${tenantState.error}',
+                                  style: const TextStyle(color: Colors.red),
+                                  textAlign: TextAlign.center,
+                                ),
+                                const SizedBox(height: 16),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    context.read<TenantBloc>().add(FetchTenants());
+                                  },
+                                  child: const Text('Retry'),
+                                ),
+                              ],
+                            ),
+                          );
+                        }
 
-                      final tenants = tenantState.tenants ?? [];
-                      final now = DateTime.now();
+                        final tenants = tenantState.tenants ?? [];
+                        final now = DateTime.now();
 
-                      // Separate tenants into active and overdue
-                      final activeTenants = tenants.where((tenant) {
-                        if (tenant['rentEnd'] == null) return true;
-                        final rentEnd = DateTime.tryParse(tenant['rentEnd']?.toString() ?? '');
-                        if (rentEnd == null) return true;
-                        return rentEnd.isAfter(now);
-                      }).toList();
+                        // Separate tenants into active and overdue
+                        final activeTenants = tenants.where((tenant) {
+                          if (tenant['rentEnd'] == null) return true;
+                          final rentEnd = DateTime.tryParse(tenant['rentEnd']?.toString() ?? '');
+                          if (rentEnd == null) return true;
+                          return rentEnd.isAfter(now);
+                        }).toList();
 
-                      final overdueTenants = tenants.where((tenant) {
-                        if (tenant['rentEnd'] == null) return false;
-                        final rentEnd = DateTime.tryParse(tenant['rentEnd']?.toString() ?? '');
-                        if (rentEnd == null) return false;
-                        return !rentEnd.isAfter(now);
-                      }).toList();
+                        final overdueTenants = tenants.where((tenant) {
+                          if (tenant['rentEnd'] == null) return false;
+                          final rentEnd = DateTime.tryParse(tenant['rentEnd']?.toString() ?? '');
+                          if (rentEnd == null) return false;
+                          return !rentEnd.isAfter(now);
+                        }).toList();
 
-                      final displayTenants = selectedTab == 0 ? activeTenants : overdueTenants;
+                        final displayTenants = selectedTab == 0 ? activeTenants : overdueTenants;
 
-                      if (displayTenants.isEmpty) {
-                        return Center(
-                          child: Text(
-                            selectedTab == 0 ? 'No active tenants' : 'No overdue tenants',
-                            style: theme.textTheme.bodyLarge,
-                          ),
-                        );
-                      }
+                        if (displayTenants.isEmpty) {
+                          return Center(
+                            child: Text(
+                              selectedTab == 0 ? 'No active tenants' : 'No overdue tenants',
+                              style: theme.textTheme.bodyLarge,
+                            ),
+                          );
+                        }
 
-                      return RefreshIndicator(
-                        onRefresh: () async {
-                          context.read<TenantBloc>().add(FetchTenants());
-                        },
-                        child: ListView.builder(
+                        return ListView.builder(
                           padding: const EdgeInsets.all(20),
                           itemCount: displayTenants.length,
                           itemBuilder: (context, index) {
@@ -160,9 +173,9 @@ class _TenantScreenState extends State<TenantScreen> {
                               },
                             );
                           },
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
                 ),
               ],
@@ -355,9 +368,11 @@ class _TenantScreenState extends State<TenantScreen> {
                                           if (picked != null) {
                                             // Format the date and update the state
                                             final formattedDate = "${picked.day}/${picked.month}/${picked.year}";
-                                            context.read<TenantBloc>().add(
-                                              UpdateRentFrequency(formattedDate),
-                                            );
+                                            if (context.mounted) {
+                                              context.read<TenantBloc>().add(
+                                                UpdateRentFrequency(formattedDate),
+                                              );
+                                            }
                                           }
                                         },
                                       label: "Rent Expiry Date",

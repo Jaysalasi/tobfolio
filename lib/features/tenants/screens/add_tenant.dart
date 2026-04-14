@@ -45,8 +45,8 @@ class _AddTenantScreenState extends State<AddTenantScreen> {
   String rentAmount = '';
   String rentFrequency = 'Monthly';
   String rentDuration = '1 year';
-  String rentEntryDate = 'Select entry date';
-  String rentExpiryDate = 'Select entry date';
+  String rentEntryDate = '';
+  String rentExpiryDate = '';
   String notes = '';
 
   @override
@@ -432,7 +432,7 @@ class _AddTenantScreenState extends State<AddTenantScreen> {
           ),
           AltTextField(
             label: "Rent Entry Date",
-            hint: rentEntryDate ,
+            hint: rentEntryDate ?? "" ,
             type: AltFieldType.text,
             enabled: true,
             value: rentEntryDate,

@@ -86,7 +86,7 @@ class ExpensesScreen extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    "Maintenance History",
+                    "Expense History",
                     style: theme.textTheme.headlineSmall,
                   ),
                   const Spacer(),

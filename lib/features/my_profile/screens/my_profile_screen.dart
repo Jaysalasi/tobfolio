@@ -107,9 +107,9 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                       },
                     ),
 
-                    SettingsTile(
+                    SettingsPremiumTile(
                       title: "Download Account Statement",
-                      showArrow: false,
+                      showArrow: true,
                       onTap: () {
                         // Navigator.of(context).push(
                         //   MaterialPageRoute(
@@ -245,6 +245,53 @@ class SettingsTile extends StatelessWidget {
               ),
 
             if (showArrow) const Icon(Icons.chevron_right, color: Colors.grey),
+          ],
+        ),
+      ),
+    );
+  }
+}
+class SettingsPremiumTile extends StatelessWidget {
+  final String title;
+  final String? trailingText;
+  final bool showArrow;
+  final VoidCallback? onTap;
+
+  const SettingsPremiumTile({
+    super.key,
+    required this.title,
+    this.trailingText,
+    this.showArrow = false,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    // final theme = Theme.of(context);
+
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        decoration: BoxDecoration(
+          color: AppTheme.lightSurfaceColor,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: AppTheme.grayAltColor),
+        ),
+        child: Row(
+          children: [
+            Text(title, style: TextStyle(fontSize: 16)),
+
+            const Spacer(),
+
+            if (trailingText != null)
+              Text(
+                trailingText!,
+                style: const TextStyle(fontWeight: FontWeight.w500),
+              ),
+
+            if (showArrow) SvgPicture.asset(SvgAssets.premium),
           ],
         ),
       ),

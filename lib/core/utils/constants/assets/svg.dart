@@ -61,6 +61,8 @@ static const String evict = "assets/svg/evict.svg";
 
 static const String good = "assets/svg/good.svg";
 
+static const String premium = "assets/svg/premium.svg";
+
 
 
  
@@ -116,6 +118,7 @@ static const String good = "assets/svg/good.svg";
     backwardThree,
     forwardThree,
     good,
+    premium
   ];
 
    static Future<void> preCacheSVGs() async {

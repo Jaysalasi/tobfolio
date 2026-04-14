@@ -66,36 +66,36 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
                       },
                     ),
-                    SizedBox(width: 5),
-                    GestureDetector(
-                      child: SvgPicture.asset(SvgAssets.bell),
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            title: const Text('Logout'),
-                            content: const Text(
-                              'Are you sure you want to logout?',
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.of(context).pop(),
-                                child: const Text('Cancel'),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                  context.read<AuthBloc>().add(
-                                    LogoutRequested(),
-                                  );
-                                },
-                                child: const Text('Logout'),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
+                    // SizedBox(width: 5),
+                    // GestureDetector(
+                    //   child: SvgPicture.asset(SvgAssets.bell),
+                    //   onTap: () {
+                    //     showDialog(
+                    //       context: context,
+                    //       builder: (context) => AlertDialog(
+                    //         title: const Text('Logout'),
+                    //         content: const Text(
+                    //           'Are you sure you want to logout?',
+                    //         ),
+                    //         actions: [
+                    //           TextButton(
+                    //             onPressed: () => Navigator.of(context).pop(),
+                    //             child: const Text('Cancel'),
+                    //           ),
+                    //           TextButton(
+                    //             onPressed: () {
+                    //               Navigator.of(context).pop();
+                    //               context.read<AuthBloc>().add(
+                    //                 LogoutRequested(),
+                    //               );
+                    //             },
+                    //             child: const Text('Logout'),
+                    //           ),
+                    //         ],
+                    //       ),
+                    //     );
+                    //   },
+                    // ),
                   ],
                 ),
               ],

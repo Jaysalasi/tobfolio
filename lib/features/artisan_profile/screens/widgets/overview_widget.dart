@@ -84,7 +84,6 @@ Expanded overviewMeth(BuildContext context, ThemeData theme, Handyman detail, Li
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: List.generate(images.length, (index) {
-                      print("images ----- ${images[index]}");
                       return Container(
                         width: 126,
                         height: 113,

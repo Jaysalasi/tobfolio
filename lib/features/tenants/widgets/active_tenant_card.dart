@@ -43,7 +43,6 @@ class ActiveTenantCard extends StatelessWidget {
       if (percentage < 0.0) return 0.0;
       if (percentage > 1.0) return 1.0;
       
-      print("days left: $daysLeft, percentage: $percentage");
       return percentage;
     } catch (e) {
       return 0.0;

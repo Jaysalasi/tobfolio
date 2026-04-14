@@ -14,7 +14,7 @@ class _LeasePropertyScreenState extends State<LeasePropertyScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final size = MediaQuery.of(context).size;
+    // final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: theme.colorScheme.tertiary,
       appBar: AppBar(

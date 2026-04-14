@@ -121,7 +121,6 @@ class ArtisanProfileBloc extends Bloc<ArtisanProfileEvent, ArtisanProfileState> 
       if (e.toString().toLowerCase().contains('authorization') ||
           e.toString().toLowerCase().contains('token') ||
           e.toString().toLowerCase().contains('unauthorized')) {
-        print('Auth error detected in artisan profile BLoC - triggering logout');
         await _authRepository.logout();
       }
       

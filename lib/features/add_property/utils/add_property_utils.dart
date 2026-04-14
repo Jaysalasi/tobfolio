@@ -192,11 +192,13 @@ void showUploadOptions(BuildContext context) {
               title: const Text("Camera"),
               onTap: () async {
                 final path = await pickFromCamera();
-                if (path != null) {
+                if (path != null && context.mounted) {
                   context.read<AddPropertyBloc>().add(AddPhoto(path));
                 }
 
-                Navigator.pop(context);
+                if (context.mounted) {
+                  Navigator.pop(context);
+                }
               },
             ),
 
@@ -205,11 +207,13 @@ void showUploadOptions(BuildContext context) {
               title: const Text("Gallery"),
               onTap: () async {
                 final path = await pickFromGallery();
-                if (path != null) {
+                if (path != null && context.mounted) {
                   context.read<AddPropertyBloc>().add(AddPhoto(path));
                 }
 
-                Navigator.pop(context);
+                if (context.mounted) {
+                  Navigator.pop(context);
+                }
               },
             ),
           ],

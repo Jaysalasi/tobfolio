@@ -47,21 +47,15 @@ class TenantProfileBloc
     UpdateTenant event,
     Emitter<TenantProfileState> emit,
   ) async {
-    print('DEBUG: _updateTenant called');
-    print('DEBUG: tenantId: ${event.tenantId}');
-    print('DEBUG: updatedData: ${event.updatedData}');
     
     emit(TenantProfileLoading());
 
     try {
-      print('DEBUG: Calling repository.updateTenant');
       await _repository.updateTenant(event.tenantId, event.updatedData);
-      print('DEBUG: Repository update completed successfully');
       
       // Show success message or navigate back
       emit(TenantProfileSuccess('Tenant updated successfully'));
     } catch (e) {
-      print('DEBUG: Update failed with error: $e');
       emit(TenantProfileError(e.toString()));
     }
   }

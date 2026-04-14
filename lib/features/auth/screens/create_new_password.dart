@@ -27,17 +27,17 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
     super.dispose();
   }
 
-  void _login() {
-    if (_formKey.currentState!.validate()) {
-      FocusScope.of(context).unfocus();
-      context.read<LoginBloc>().add(
-        LoginSubmitted(
-          email: _emailController.text.trim(),
-          password: _passwordController.text,
-        ),
-      );
-    }
-  }
+  // void _login() {
+  //   if (_formKey.currentState!.validate()) {
+  //     FocusScope.of(context).unfocus();
+  //     context.read<LoginBloc>().add(
+  //       LoginSubmitted(
+  //         email: _emailController.text.trim(),
+  //         password: _passwordController.text,
+  //       ),
+  //     );
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

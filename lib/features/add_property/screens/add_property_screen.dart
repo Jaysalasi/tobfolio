@@ -46,7 +46,9 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
               setState(() {
                 documentPath = path;
               });
-              context.read<AddPropertyBloc>().add(AddDocument(path));
+              if (mounted) {
+                context.read<AddPropertyBloc>().add(AddDocument(path));
+              }
             } else {}
           }
         });
@@ -326,25 +328,25 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
         ),
         const SizedBox(height: 10),
         const Spacer(),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: GestureDetector(
-                onTap: () {
-                  // TODO: Add another unit
-                },
-                child: Row(
-                  children: [
-                    Icon(Icons.add),
-                    Text("Add Another Unit"),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
+        // Row(
+        //   mainAxisAlignment: MainAxisAlignment.center,
+        //   children: [
+        //     Padding(
+        //       padding: const EdgeInsets.all(20),
+        //       child: GestureDetector(
+        //         onTap: () {
+        //           // TODO: Add another unit
+        //         },
+        //         child: Row(
+        //           children: [
+        //             Icon(Icons.add),
+        //             Text("Add Another Unit"),
+        //           ],
+        //         ),
+        //       ),
+        //     ),
+        //   ],
+        // ),
         BlocConsumer<AddPropertyBloc, AddPropertyState>(
           listener: (context, state) {
             if (state.status == AddPropertyStatus.success) {

@@ -55,9 +55,7 @@ class TenantRepository {
         throw Exception('Failed to create tenant: ${response.statusCode}');
       }
       
-      print('Tenant created successfully: ${response.data}');
     } catch (e) {
-      print('Error creating tenant: $e');
       rethrow;
     }
   }
@@ -84,32 +82,21 @@ class TenantRepository {
         throw Exception('Failed to fetch tenant: ${response.statusCode}');
       }
     } catch (e) {
-      print('Error fetching tenant: $e');
       rethrow;
     }
   }
 
   Future<void> updateTenant(String tenantId, Map<String, dynamic> updatedData) async {
-    print('DEBUG: Repository.updateTenant called');
-    print('DEBUG: tenantId: $tenantId');
-    print('DEBUG: endpoint: /tenants/$tenantId');
-    print('DEBUG: updatedData: $updatedData');
     
     try {
-      print('DEBUG: Making PUT request to /tenants/$tenantId');
       final response = await _apiService.put('/tenants/$tenantId', data: updatedData);
       
-      print('DEBUG: Response status code: ${response.statusCode}');
-      print('DEBUG: Response data: ${response.data}');
       
       if (response.statusCode == 200) {
-        print('DEBUG: Tenant updated successfully: ${response.data}');
       } else {
-        print('DEBUG: Failed to update tenant: ${response.statusCode}');
         throw Exception('Failed to update tenant: ${response.statusCode}');
       }
     } catch (e) {
-      print('DEBUG: Error updating tenant: $e');
       rethrow;
     }
   }
@@ -136,7 +123,6 @@ class TenantRepository {
         throw Exception('Failed to fetch tenants: ${response.statusCode}');
       }
     } catch (e) {
-      print('Error fetching tenants: $e');
       rethrow;
     }
   }

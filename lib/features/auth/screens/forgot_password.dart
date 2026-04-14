@@ -57,7 +57,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               showError(state.errorMsg!);
             } else if (state.status == ForgotPasswordStatus.success) {
               showSuccess(state.forgotPasswordResponse!.message);
-              print("object ${state.forgotPasswordResponse!.message}");
               Navigator.of(context).pushReplacementNamed('/login');
             }
           }

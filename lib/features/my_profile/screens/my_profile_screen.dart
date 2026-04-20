@@ -5,6 +5,7 @@ import 'package:tob/core/theme/app_theme.dart';
 import 'package:tob/core/utils/components/app_button.dart';
 import 'package:tob/core/utils/constants/assets/svg.dart';
 import 'package:tob/features/auth/bloc/auth_bloc.dart';
+import 'package:tob/features/home/bloc/home_bloc.dart';
 import 'package:tob/features/my_profile/screens/contact_us_screen.dart';
 import 'package:tob/features/my_profile/screens/currency_screen.dart';
 import 'package:tob/features/my_profile/screens/policy_screen.dart';
@@ -22,17 +23,19 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: theme.colorScheme.tertiary,
-        title: Text(
-          "Hi, Divine",
-          style: theme.textTheme.headlineSmall?.copyWith(
-            fontWeight: FontWeight.w500,
+    return BlocBuilder<HomeBloc, HomeState>(
+      builder: (context, homeState) {
+        return Scaffold(
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            backgroundColor: theme.colorScheme.tertiary,
+            title: Text(
+              "Hi, ${homeState.dashboard?.userName ?? 'User'}",
+              style: theme.textTheme.headlineSmall?.copyWith(
+                fontWeight: FontWeight.w500,
+              ),
+            ),
           ),
-        ),
-      ),
       backgroundColor: theme.colorScheme.tertiary,
       body: SafeArea(
         child: Padding(
@@ -65,7 +68,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                   children: [
                     SettingsTile(
                       title: "Full Name",
-                      trailingText: "John Doe",
+                      trailingText: homeState.dashboard?.userName ?? "John Doe",
                       showArrow: false,
                       onTap: () {},
                     ),
@@ -83,17 +86,17 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                       },
                     ),
 
-                    SettingsTile(
-                      title: "Security",
-                      showArrow: true,
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const SecurityScreen(),
-                          ),
-                        );
-                      },
-                    ),
+                    // SettingsTile(
+                    //   title: "Security",
+                    //   showArrow: true,
+                    //   onTap: () {
+                    //     Navigator.of(context).push(
+                    //       MaterialPageRoute(
+                    //         builder: (context) => const SecurityScreen(),
+                    //       ),
+                    //     );
+                    //   },
+                    // ),
 
                     SettingsTile(
                       title: "Contact Us",
@@ -199,7 +202,8 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
             ],
           ),
         ),
-      ),
+         ) );
+      },
     );
   }
 }

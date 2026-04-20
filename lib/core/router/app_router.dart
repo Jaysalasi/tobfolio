@@ -11,6 +11,9 @@ import 'package:tob/features/auth/bloc/register_bloc.dart';
 import 'package:tob/features/auth/screens/forgot_password.dart';
 import 'package:tob/features/auth/screens/create_new_password.dart';
 import 'package:tob/features/home/bloc/home_bloc.dart';
+import 'package:tob/features/home/repository/home_repository.dart';
+import 'package:tob/features/referral/bloc/referral_bloc.dart';
+import 'package:tob/features/referral/repository/referral_repository.dart';
 import 'package:tob/features/tenant_profile/bloc/_tenant_profile_bloc.dart';
 import 'package:tob/features/tenants/bloc/tenant_bloc.dart';
 import 'package:tob/features/tenants/repositories/tenant_repository.dart';
@@ -24,6 +27,7 @@ import '../../features/onboarding/cubit/onboarding_cubit.dart';
 import '../../features/dashboard/bloc/dashboard_bloc.dart';
 import '../../core/theme/theme_cubit.dart';
 import '../../core/network/api_service.dart';
+import '../../core/services/media_upload_service.dart';
 import '../../core/storage/secure_storage_service.dart';
 import '../../features/auth/repositories/auth_repository.dart';
 
@@ -47,12 +51,8 @@ class AppRouter {
     return {
       splash: (context) => MultiRepositoryProvider(
         providers: [
-          RepositoryProvider(
-            create: (context) => ApiService(),
-          ),
-          RepositoryProvider(
-            create: (context) => SecureStorageService(),
-          ),
+          RepositoryProvider(create: (context) => ApiService()),
+          RepositoryProvider(create: (context) => SecureStorageService()),
           RepositoryProvider(
             create: (context) => AuthRepository(
               apiService: context.read<ApiService>(),
@@ -62,15 +62,28 @@ class AppRouter {
         ],
         child: MultiBlocProvider(
           providers: [
-            BlocProvider(create: (context) => AuthBloc(authRepository: context.read<AuthRepository>())),
-            BlocProvider(create: (context) => LoginBloc(
-              authRepository: context.read<AuthRepository>(),
-              authBloc: context.read<AuthBloc>(),
-            )),
+            BlocProvider(
+              create: (context) =>
+                  AuthBloc(authRepository: context.read<AuthRepository>()),
+            ),
+            BlocProvider(
+              create: (context) => LoginBloc(
+                authRepository: context.read<AuthRepository>(),
+                authBloc: context.read<AuthBloc>(),
+              ),
+            ),
             BlocProvider(create: (context) => OnboardingCubit()),
             BlocProvider(create: (context) => ThemeCubit()),
             BlocProvider(create: (context) => DashboardBloc()),
-            BlocProvider(create: (context) => AddPropertyBloc(propertyRepository: context.read<PropertyRepository>(),)),
+            BlocProvider(
+              create: (context) =>
+                  HomeBloc(homeRepository: context.read<HomeRepository>()),
+            ),
+            BlocProvider(
+              create: (context) => AddPropertyBloc(
+                propertyRepository: context.read<PropertyRepository>(),
+              ),
+            ),
           ],
           child: const SplashScreen(),
         ),
@@ -80,7 +93,8 @@ class AppRouter {
         child: const OnboardingScreen(),
       ),
       auth: (context) => BlocProvider(
-        create: (context) => AuthBloc(authRepository: context.read<AuthRepository>()),
+        create: (context) =>
+            AuthBloc(authRepository: context.read<AuthRepository>()),
         child: const LoginScreen(),
       ),
       login: (context) => BlocProvider(
@@ -91,11 +105,13 @@ class AppRouter {
         child: const LoginScreen(),
       ),
       register: (context) => BlocProvider(
-        create: (context) => RegisterBloc(authRepository: context.read<AuthRepository>()),
+        create: (context) =>
+            RegisterBloc(authRepository: context.read<AuthRepository>()),
         child: const RegisterScreen(),
       ),
       forgotPassword: (context) => BlocProvider(
-        create: (context) => RegisterBloc(authRepository: context.read<AuthRepository>()),
+        create: (context) =>
+            RegisterBloc(authRepository: context.read<AuthRepository>()),
         child: const ForgotPasswordScreen(),
       ),
       createNewPassword: (context) => BlocProvider(
@@ -109,7 +125,7 @@ class AppRouter {
         create: (context) => AddPropertyBloc(
           propertyRepository: context.read<PropertyRepository>(),
           // authRepository: context.read<AuthRepository>()
-          ),
+        ),
         child: const AddPropertyScreen(),
       ),
       allProperties: (context) => BlocProvider(
@@ -118,17 +134,74 @@ class AppRouter {
         ),
         child: const PropertyListScreen(),
       ),
-      dashboard: (context) => MultiBlocProvider(
+      dashboard: (context) => MultiRepositoryProvider(
         providers: [
-          BlocProvider(create: (context) => AuthBloc(authRepository: context.read<AuthRepository>())),
-          BlocProvider(create: (context) => DashboardBloc()),
-          BlocProvider(create: (context) => ThemeCubit()),
-          BlocProvider(create: (context) => HomeBloc()),
-          BlocProvider(create: (context) => AddPropertyBloc(propertyRepository: context.read<PropertyRepository>(),)),
-          BlocProvider(create: (context) => TenantBloc(context.read<TenantRepository>())),
-          BlocProvider(create: (context) => TenantProfileBloc(context.read<TenantRepository>())),
+          RepositoryProvider(create: (context) => ApiService()),
+          RepositoryProvider(create: (context) => SecureStorageService()),
+          RepositoryProvider(
+            create: (context) => MediaUploadService(context.read<ApiService>()),
+          ),
+          RepositoryProvider(
+            create: (context) => AuthRepository(
+              apiService: context.read<ApiService>(),
+              storageService: context.read<SecureStorageService>(),
+            ),
+          ),
+          RepositoryProvider(
+            create: (context) =>
+                HomeRepository(apiService: context.read<ApiService>()),
+          ),
+          RepositoryProvider(
+            create: (context) => PropertyRepository(
+              context.read<ApiService>(),
+              context.read<MediaUploadService>(),
+            ),
+          ),
+          RepositoryProvider(
+            create: (context) => TenantRepository(
+              context.read<ApiService>(),
+              context.read<MediaUploadService>(),
+            ),
+          ),
+          RepositoryProvider(
+            create: (context) =>
+                ReferralRepository(apiService: context.read<ApiService>()),
+          ),
         ],
-        child: const DashboardScreen(),
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) =>
+                  AuthBloc(authRepository: context.read<AuthRepository>()),
+            ),
+            BlocProvider(create: (context) => DashboardBloc()),
+            BlocProvider(create: (context) => ThemeCubit()),
+            BlocProvider(
+              create: (context) =>
+                  HomeBloc(homeRepository: context.read<HomeRepository>()),
+            ),
+            BlocProvider(
+              create: (context) => AddPropertyBloc(
+                propertyRepository: context.read<PropertyRepository>(),
+              ),
+            ),
+            BlocProvider(
+              create: (context) => TenantBloc(context.read<TenantRepository>()),
+            ),
+            BlocProvider(
+              create: (context) =>
+                  TenantProfileBloc(context.read<TenantRepository>()),
+            ),
+            BlocProvider(
+              create: (context) => ReferralBloc(
+                referralRepository: ReferralRepository(
+                  apiService: context.read<ApiService>(),
+                ),
+              ),
+            ),
+          ],
+          child: const DashboardScreen(),
+        ),
       ),
     };
   }

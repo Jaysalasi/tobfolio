@@ -38,7 +38,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       context.read<RegisterBloc>().add(
         RegisterSubmitted(
           name: _nameController.text.trim(),
-          email: _emailController.text.trim(),
+          email: _emailController.text.toLowerCase().trim(),
           password: _passwordController.text,
         ),
       );

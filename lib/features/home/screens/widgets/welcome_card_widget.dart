@@ -4,11 +4,13 @@ import 'package:tob/core/router/app_router.dart';
 import 'package:tob/core/utils/components/constants.dart';
 import 'package:tob/core/utils/components/widgets.dart';
 import 'package:tob/core/utils/constants/assets/svg.dart';
+import 'package:tob/features/home/model/dashboard_model.dart';
 
 class WelcomeCard extends StatelessWidget {
   final dynamic user;
+  final DashboardModel? dashboard;
 
-  const WelcomeCard({super.key, required this.user});
+  const WelcomeCard({super.key, required this.user, this.dashboard});
   @override
   Widget build(BuildContext context) {
     final space = MediaQuery.of(context).size;
@@ -52,7 +54,7 @@ class WelcomeCard extends StatelessWidget {
             ],
           ),
           Text(
-            '\$ 20,000',
+            "\$ ${dashboard?.totalIncome.toString() ?? '0'}",
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
               fontWeight: FontWeight.w900,
               fontStyle: FontStyle.italic,

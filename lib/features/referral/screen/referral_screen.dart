@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:tob/core/theme/app_theme.dart';
 import 'package:tob/core/utils/components/constants.dart';
 import 'package:tob/core/utils/components/widgets.dart';
 import 'package:tob/core/utils/constants/assets/pngs.dart';
 import 'package:tob/core/utils/constants/assets/svg.dart';
+import 'package:tob/features/referral/bloc/referral_bloc.dart';
+import 'package:tob/features/referral/bloc/referral_event.dart';
+import 'package:tob/features/referral/bloc/referral_state.dart';
 import 'package:tob/features/referral/screen/referral_reward_screen.dart';
 
 class ReferralScreen extends StatefulWidget {
@@ -15,6 +20,13 @@ class ReferralScreen extends StatefulWidget {
 }
 
 class _ReferralScreenState extends State<ReferralScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Load referral data when the screen is first displayed
+    context.read<ReferralBloc>().add(LoadReferralData());
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -67,7 +79,7 @@ class _ReferralScreenState extends State<ReferralScreen> {
                             color: theme.colorScheme.surface,
                             fontWeight: FontWeight.bold,
                           ),
-                        ),                        
+                        ),
                         Text(
                           "Enjoy your rewards with your friends through our rewards points system.",
                           style: theme.textTheme.bodyMedium?.copyWith(
@@ -109,84 +121,148 @@ class _ReferralScreenState extends State<ReferralScreen> {
             Center(
               child: Text(
                 "Your Referral Link",
-                style: theme.textTheme.bodyLarge?.copyWith( 
+                style: theme.textTheme.bodyLarge?.copyWith(
                   fontWeight: FontWeight.w500,
                 ),
               ),
             ),
 
             const SizedBox(height: 20),
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: theme.colorScheme.primary, width: 1,),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-                    child: Text(
-                      "https//www.tobfolio/register?invitecode=FISBA",
-                      style: theme.textTheme.bodySmall?.copyWith( 
-                      ),
-                    ),
-                  ),
-                  plusButtonMeth(label: "Copy", theme: theme, icon: SvgAssets.copy, borderRadius: 16),
-                  
-                ],
-              ),
-            ),
+            BlocBuilder<ReferralBloc, ReferralState>(
+              builder: (context, state) {
+                return state.isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : Column(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: theme.colorScheme.primary,
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                    vertical: 5,
+                                  ),
+                                  child: Text(
+                                    state.rewardsModel?.referralLink ?? "",
+                                    style: theme.textTheme.bodySmall?.copyWith(
+                                      fontSize: 11,
+                                    ),
+                                  ),
+                                ),
+                                plusButtonMeth(
+                                  onTap: () {
+                                    final referralLink = state.rewardsModel?.referralLink ?? '';
+                                    if (referralLink.isNotEmpty) {
+                                      Clipboard.setData(ClipboardData(text: referralLink));
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                          content: Text('Referral link copied to clipboard!'),
+                                          duration: Duration(seconds: 2),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                  label: "Copy",
+                                  theme: theme,
+                                  icon: SvgAssets.copy,
+                                  borderRadius: 16,
+                                ),
+                              ],
+                            ),
+                          ),
 
-            SizedBox(height: 20), 
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              decoration: BoxDecoration(
-                color: AppTheme.lightSurfaceColor,
-                border: Border.all(color: AppTheme.grayAltColor, width: 1,),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Column(
-                children: [
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const ReferralRewardScreen()));
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("Total Earned", style: theme.textTheme.bodyLarge?.copyWith(
-                      fontWeight: FontWeight.w500,
-                    ),),
-                
-                    Row(children: [ 
-                      Text("\$ 10", style: theme.textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w500,
-                      ),),
-                      Icon(Icons.arrow_forward_ios_rounded)
-                    ],)
-                  ],
-                ),
-              )  ,
-              Divider(
-                height:   20,
-                color: AppTheme.grayAltColor,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Invitation Record", style: theme.textTheme.bodyLarge?.copyWith(
-                    fontWeight: FontWeight.w500,
-                  ),),
-                  Text("10", style: theme.textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.w500,
-                  ),),
-                ],
-              )    
-                ],
-              ),
-            )
+                          SizedBox(height: 20),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 12,
+                            ),
+                            decoration: BoxDecoration(
+                              color: AppTheme.lightSurfaceColor,
+                              border: Border.all(
+                                color: AppTheme.grayAltColor,
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: Column(
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const ReferralRewardScreen(),
+                                      ),
+                                    );
+                                  },
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "Total Earned",
+                                        style: theme.textTheme.bodyLarge
+                                            ?.copyWith(
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                      ),
+
+                                      Row(
+                                        children: [
+                                          Text(
+                                           "\$${state.rewardsModel?.referralPoints}" ?? "0",
+                                            style: theme.textTheme.bodyMedium
+                                                ?.copyWith(
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                          ),
+                                          Icon(Icons.arrow_forward_ios_rounded),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                // Divider(
+                                //   height: 20,
+                                //   color: AppTheme.grayAltColor,
+                                // ),
+                                // Row(
+                                //   mainAxisAlignment:
+                                //       MainAxisAlignment.spaceBetween,
+                                //   children: [
+                                //     Text(
+                                //       "Invitation Record",
+                                //       style: theme.textTheme.bodyLarge
+                                //           ?.copyWith(
+                                //             fontWeight: FontWeight.w500,
+                                //           ),
+                                //     ),
+                                //     Text(
+                                //       "10",
+                                //       style: theme.textTheme.bodyMedium
+                                //           ?.copyWith(
+                                //             fontWeight: FontWeight.w500,
+                                //           ),
+                                //     ),
+                                //   ],
+                                // ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      );
+              },
+            ),
           ],
         ),
       ),

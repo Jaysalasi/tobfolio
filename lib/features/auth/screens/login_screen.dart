@@ -35,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
       FocusScope.of(context).unfocus();
       context.read<LoginBloc>().add(
         LoginSubmitted(
-          email: _emailController.text.trim(),
+          email: _emailController.text.toLowerCase().trim(),
           password: _passwordController.text,
         ),
       );

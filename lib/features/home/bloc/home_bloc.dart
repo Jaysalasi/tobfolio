@@ -3,12 +3,15 @@ import 'package:equatable/equatable.dart';
 import 'package:tob/core/storage/secure_storage_service.dart';
 import 'package:tob/core/utils/logger.dart';
 import 'package:tob/features/auth/models/user.dart';
+import 'package:tob/features/home/model/dashboard_model.dart';
+import 'package:tob/features/home/repository/home_repository.dart';
 
 part 'home_event.dart';
 part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  HomeBloc() : super(const HomeState()) {
+  final HomeRepository _homeRepository;
+  HomeBloc({required HomeRepository homeRepository}) : _homeRepository = homeRepository, super(const HomeState()) {
     on<LoadHomeData>(_onLoadHomeData);
   }
   final SecureStorageService _storageService = SecureStorageService();
@@ -20,12 +23,17 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     
     try {
       // Simulate API call
-      await Future.delayed(const Duration(seconds: 2));
+      // await Future.delayed(const Duration(seconds: 2));
+      final res = await _homeRepository.getDashboardData();
+
+      final dashboardData = DashboardModel.fromJson(res);
+
+      print('Dashboard data: $dashboardData');
       
       // Get stored user data
       final user = await getStoredUser();
       // Emit state with user data
-      emit(state.copyWith(isLoading: false, user: user));
+      emit(state.copyWith(isLoading: false, user: user, dashboard: dashboardData));
     } catch (e) {
       emit(state.copyWith(
         isLoading: false,

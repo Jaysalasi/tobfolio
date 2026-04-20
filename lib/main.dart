@@ -9,6 +9,9 @@ import 'package:tob/features/auth/bloc/forgot_password_bloc.dart';
 import 'package:tob/features/handyman/bloc/handyman_bloc.dart';
 import 'package:tob/features/handyman/repositories/handyman_repository.dart';
 import 'package:tob/features/artisan_profile/bloc/artisan_profile_bloc.dart';
+import 'package:tob/features/home/repository/home_repository.dart';
+import 'package:tob/features/referral/bloc/referral_bloc.dart';
+import 'package:tob/features/referral/repository/referral_repository.dart';
 import 'package:tob/features/tenant_profile/bloc/_tenant_profile_bloc.dart';
 import 'package:tob/features/tenants/bloc/tenant_bloc.dart';
 import 'package:tob/features/tenants/repositories/tenant_repository.dart';
@@ -57,6 +60,18 @@ class MyApp extends StatelessWidget {
           ),
         ),
         RepositoryProvider(
+          create: (context) => TenantRepository(
+            context.read<ApiService>(),
+            context.read<MediaUploadService>(),
+          ),
+        ),
+        RepositoryProvider(
+          create: (context) => HomeRepository(
+            apiService: context.read<ApiService>(),
+          ),
+        ),
+        RepositoryProvider(create: (context) => ReferralRepository(apiService: context.read<ApiService>())),
+        RepositoryProvider(
           create: (context) => HandymanRepository(
             apiService: context.read<ApiService>(),
           ),
@@ -89,7 +104,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (context) => OnboardingCubit()),
           BlocProvider(create: (context) => ThemeCubit()),
           BlocProvider(create: (context) => DashboardBloc()),
-          BlocProvider(create: (context) => HomeBloc()),
+          BlocProvider(create: (context) => HomeBloc(homeRepository: context.read<HomeRepository>())),
           BlocProvider(create: (context) => AddPropertyBloc(propertyRepository: context.read<PropertyRepository>())),
           BlocProvider(create: (context) => TenantBloc(context.read<TenantRepository>())),
           BlocProvider(create: (context) => TenantProfileBloc(context.read<TenantRepository>())),
@@ -100,6 +115,7 @@ class MyApp extends StatelessWidget {
             handymanRepository: context.read<HandymanRepository>(),
             authRepository: context.read<AuthRepository>(),
           )),
+          BlocProvider(create: (context) => ReferralBloc(referralRepository: context.read<ReferralRepository>())),
         ],
         child: BlocBuilder<ThemeCubit, ThemeState>(
           builder: (context, themeState) {

@@ -3,10 +3,17 @@ import 'package:tob/core/theme/app_theme.dart';
 import 'package:tob/core/utils/components/constants.dart';
 import 'package:tob/core/utils/components/widgets.dart';
 import 'package:tob/core/utils/constants/assets/pngs.dart';
+import 'package:tob/features/expenses/model/expenses_model.dart';
 
-class ExpensesHistoryDetail extends StatelessWidget {
-  const ExpensesHistoryDetail({super.key});
+class ExpensesHistoryDetail extends StatefulWidget {
+  final ExpensesModel expenseDetail;
+  const ExpensesHistoryDetail({super.key, required this.expenseDetail});
 
+  @override
+  State<ExpensesHistoryDetail> createState() => _ExpensesHistoryDetailState();
+}
+
+class _ExpensesHistoryDetailState extends State<ExpensesHistoryDetail> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -57,11 +64,11 @@ class ExpensesHistoryDetail extends StatelessWidget {
                           children: [
                             Image.asset(AppImages.logoFramed),
                             Text(
-                              "N340,000",
+                              widget.expenseDetail.cost.toString(),
                               style: theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
                             ),
                             Text(
-                              "Successful",
+                             widget.expenseDetail.status!,
                               style: theme.textTheme.bodyMedium?.copyWith(
                                 color: AppTheme.green,
                               ),
@@ -72,74 +79,73 @@ class ExpensesHistoryDetail extends StatelessWidget {
                       rowText(
                         theme: theme,
                         title: "Property Name",
-                        subtitle: "Lekki House",
+                        subtitle: widget.expenseDetail.propertyId!.name!,
                       ),
                       rowText(
                         theme: theme,
                         title: "Amount Spent",
-                        subtitle: "N340,000",
+                        subtitle: widget.expenseDetail.cost.toString(),
                       ),
                       rowText(
                         theme: theme,
                         title: "Date",
                         subtitle: "Nov 15th, 2025",
                       ),
-                      rowText(theme: theme, title: "Unit", subtitle: "6"),
+                      rowText(theme: theme, title: "Unit", subtitle:widget.expenseDetail.propertyId!.name!),
                       rowText(
                         theme: theme,
                         title: "Description",
                         subtitle:
-                            "lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ",
-                      ),
+                            widget.expenseDetail.description! ),
 
-                      Text(
-                        "Attachments",
-                        style: theme.textTheme.bodyLarge?.copyWith(
-                          fontWeight: FontWeight.w500,
-                        ),
-                        textAlign: TextAlign.left,
-                      ),
+                      // Text(
+                      //   "Attachments",
+                      //   style: theme.textTheme.bodyLarge?.copyWith(
+                      //     fontWeight: FontWeight.w500,
+                      //   ),
+                      //   textAlign: TextAlign.left,
+                      // ),
 
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          // borderRadius: BorderRadius.circular(8),
-                          // border: Border.all(color: AppTheme.grey),
-                        ),
-                        child: Row(
-                          spacing: 5,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(6),
-                              child: Image.asset(
-                                AppImages.worker1,
-                                width: size.width * 0.255,
-                                height: size.width * 0.255,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(6),
-                              child: Image.asset(
-                                AppImages.worker1,
-                                width: size.width * 0.255,
-                                height: size.width * 0.255,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(6),
-                              child: Image.asset(
-                                AppImages.worker1,
-                                width: size.width * 0.255,
-                                height: size.width * 0.255,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      // Container(
+                      //   decoration: BoxDecoration(
+                      //     color: Colors.white,
+                      //     // borderRadius: BorderRadius.circular(8),
+                      //     // border: Border.all(color: AppTheme.grey),
+                      //   ),
+                      //   child: Row(
+                      //     spacing: 5,
+                      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //     children: [
+                      //       ClipRRect(
+                      //         borderRadius: BorderRadius.circular(6),
+                      //         child: Image.asset(
+                      //           AppImages.worker1,
+                      //           width: size.width * 0.255,
+                      //           height: size.width * 0.255,
+                      //           fit: BoxFit.cover,
+                      //         ),
+                      //       ),
+                      //       ClipRRect(
+                      //         borderRadius: BorderRadius.circular(6),
+                      //         child: Image.asset(
+                      //           AppImages.worker1,
+                      //           width: size.width * 0.255,
+                      //           height: size.width * 0.255,
+                      //           fit: BoxFit.cover,
+                      //         ),
+                      //       ),
+                      //       ClipRRect(
+                      //         borderRadius: BorderRadius.circular(6),
+                      //         child: Image.asset(
+                      //           AppImages.worker1,
+                      //           width: size.width * 0.255,
+                      //           height: size.width * 0.255,
+                      //           fit: BoxFit.cover,
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),

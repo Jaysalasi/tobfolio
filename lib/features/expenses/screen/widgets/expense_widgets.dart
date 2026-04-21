@@ -66,3 +66,35 @@ Widget expenseCardMeth(BuildContext context, ThemeData theme, VoidCallback? onTa
                   ),
                 );
   }
+
+
+
+
+  IconData getExpenseIcon(String? type) {
+    switch (type?.toLowerCase()) {
+      case 'cleaning & renovation':
+        return Icons.cleaning_services;
+      case 'fix & repairs':
+        return Icons.build;
+      case 'staff salary':
+        return Icons.people;
+      case 'utility & bills':
+        return Icons.receipt_long;
+      default:
+        return Icons.money;
+    }
+  }
+
+  Color getStatusColor(String? status) {
+    switch (status?.toLowerCase()) {
+      case 'completed':
+        return Colors.green;
+      case 'pending':
+        return Colors.orange;
+      case 'failed':
+      case 'cancelled':
+        return Colors.red;
+      default:
+        return Colors.grey;
+    }
+  }

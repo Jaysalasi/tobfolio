@@ -38,6 +38,7 @@ class AuthRepository {
       authLogger.i('Login successful for user: ${loginResponse.user.name}');
       return loginResponse;
     } else {
+      print("response : ${response}");
       final errorMessage = NetworkExceptions.getErrorMessage(response.data);
       authLogger.e('Login failed: $errorMessage');
       throw errorMessage;

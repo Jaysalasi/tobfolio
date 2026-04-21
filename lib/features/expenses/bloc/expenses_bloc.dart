@@ -1,32 +1,50 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'expenses_event.dart';
 import 'expenses_state.dart';
-import '../model/expenses_model.dart';
+import '../repository/expenses_repository.dart';
 
 class ExpensesBloc extends Bloc<ExpensesEvent, ExpensesState> {
-  ExpensesBloc() : super(ExpensesInitial()) {
-    on<LoadExpenses>(_load);
+  final ExpensesRepository _repository;
+
+  ExpensesBloc({required ExpensesRepository repository})
+      : _repository = repository,
+        super(ExpensesInitial()) {
+    on<LoadExpenses>(_loadExpenses);
     on<AddExpense>(_addExpense);
   }
 
-  final List<Expense> _expenses = [];
-
-  void _load(
+  Future<void> _loadExpenses(
     LoadExpenses event,
     Emitter<ExpensesState> emit,
   ) async {
     emit(ExpensesLoading());
-
-    await Future.delayed(const Duration(milliseconds: 500));
-
-    emit(ExpensesLoaded(_expenses));
+    
+      print("expenses loaded one seeeeeee");
+    try {
+      final expenses = await _repository.getExpenses();
+      print("expenses loaded ${expenses}");
+      emit(ExpensesLoaded(expenses));
+    } catch (e) {
+      emit(ExpensesError(e.toString()));
+    }
   }
 
-  void _addExpense(
+  Future<void> _addExpense(
     AddExpense event,
     Emitter<ExpensesState> emit,
-  ) {
-    _expenses.add(event.expense);
-    emit(ExpensesLoaded(List.from(_expenses)));
+  ) async {
+    emit(ExpensesLoading());
+    
+    try {
+       final res = await _repository.createMaintenanceExpense(event.expense);
+      print("expense created with status ${res}");
+      // Refresh the expenses list after creating a new one
+      final expenses = await _repository.getExpenses();
+      print("expenses loaded after add ${expenses}");
+      emit(ExpensesLoaded(expenses));
+      print("expenses loaded after add second gear ${expenses}");
+    } catch (e) {
+      emit(CreateExpensesError(e.toString()));
+    }
   }
 }

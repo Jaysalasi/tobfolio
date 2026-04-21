@@ -7,10 +7,10 @@ class NetworkExceptions {
     }
     
     if (error is Map) {
-      return error['message'] ?? 'An unknown error occurred';
+      return error['message'] ?? 'An unknown error occurred $error';
     }
     
-    return 'An unknown error occurred';
+    return 'An unknown error occurred $error';
   }
   
   static String handleDioError(DioException dioError) {

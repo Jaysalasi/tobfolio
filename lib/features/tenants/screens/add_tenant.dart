@@ -327,20 +327,20 @@ class _AddTenantScreenState extends State<AddTenantScreen> {
               });
             },
           ),
-          PhoneTextField(
-            label: "Next of Kin Phone Number",
-            hint: "Enter phone number",
-            phoneNumber: "",
-            countryCode: selectedCountry.dialCode,
-            countryCodes: countryCodes.map((e) => e.dialCode).toList(),
-            onCountryChanged: (country) {
-              setState(() {
-                selectedCountry = countryCodes.firstWhere(
-                  (e) => e.dialCode == country,
-                );
-              });
-            },
-          ),
+          // PhoneTextField(
+          //   label: "Next of Kin Phone Number",
+          //   hint: "Enter phone number",
+          //   phoneNumber: "",
+          //   countryCode: selectedCountry.dialCode,
+          //   countryCodes: countryCodes.map((e) => e.dialCode).toList(),
+          //   onCountryChanged: (country) {
+          //     setState(() {
+          //       selectedCountry = countryCodes.firstWhere(
+          //         (e) => e.dialCode == country,
+          //       );
+          //     });
+          //   },
+          // ),
           BlocBuilder<AllPropertyBloc, AllPropertyState>(
             builder: (context, state) {
               if (state is PropertyLoading) {
@@ -383,7 +383,7 @@ class _AddTenantScreenState extends State<AddTenantScreen> {
           ),
           AltTextField(
             label: "Select Unit",
-            hint: selectedProperty != null ? "Select Unit" : "Select property first",
+            hint: selectedUnit != null ? selectedUnit! : (selectedProperty != null ? "Select Unit" : "Select property first"),
             type: AltFieldType.dropdown,
             items: selectedProperty != null 
                 ? List.generate(selectedProperty!.units, (index) => "Unit ${index + 1}")

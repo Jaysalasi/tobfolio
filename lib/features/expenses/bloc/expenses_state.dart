@@ -13,7 +13,7 @@ class ExpensesInitial extends ExpensesState {}
 class ExpensesLoading extends ExpensesState {}
 
 class ExpensesLoaded extends ExpensesState {
-  final List<Expense> expenses;
+  final List<ExpensesModel> expenses;
 
   const ExpensesLoaded(this.expenses);
 
@@ -25,4 +25,10 @@ class ExpensesError extends ExpensesState {
   final String message;
 
   const ExpensesError(this.message);
+}
+
+class CreateExpensesError extends ExpensesState {
+  final String message;
+
+  const CreateExpensesError(this.message);
 }

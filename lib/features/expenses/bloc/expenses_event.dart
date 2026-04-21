@@ -20,3 +20,4 @@ class SelectExpense extends ExpensesEvent {
 
   const SelectExpense(this.id);
 }
+

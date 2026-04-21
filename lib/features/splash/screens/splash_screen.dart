@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tob/core/utils/constants/assets/pngs.dart';
 import 'package:tob/features/auth/bloc/auth_bloc.dart';
 import 'package:tob/features/onboarding/cubit/onboarding_cubit.dart'; 
 class SplashScreen extends StatefulWidget {
@@ -91,35 +92,42 @@ class _SplashScreenState extends State<SplashScreen>
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   // 🔷 LOGO
-                  Container(
-                    height: 120,
-                    width: 120,
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
-                      borderRadius: BorderRadius.circular(24),
-                    ),
-                    child: const Icon(
-                      Icons.home,
-                      size: 60,
-                      color: Colors.white,
-                    ),
-                  ),
+                  // Container(
+                  //   height: 120,
+                  //   width: 120,
+                  //   decoration: BoxDecoration(
+                  //     color: Colors.blue,
+                  //     borderRadius: BorderRadius.circular(24),
+                  //   ),
+                  //   child: const Icon(
+                  //     Icons.home,
+                  //     size: 60,
+                  //     color: Colors.white,
+                  //   ),
+                  // ),
+
+                  Image.asset(AppImages.logoFramed),
+
 
                   const SizedBox(height: 24),
 
-                  // 🔤 APP NAME
-                  const Text(
-                    'Estate Manager',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  // // 🔤 APP NAME
+                  // const Text(
+                  //   'Estate Manager',
+                  //   style: TextStyle(
+                  //     fontSize: 24,
+                  //     fontWeight: FontWeight.bold,
+                  //   ),
+                  // ),
 
-                  const SizedBox(height: 12),
+                  // const SizedBox(height: 12),
 
                   // 🔄 LOADING
-                  const CircularProgressIndicator(),
+                  SizedBox(
+                    height: 31,
+                    width: 31,
+                    child: const CircularProgressIndicator(),
+                  ),
                 ],
               ),
             ),

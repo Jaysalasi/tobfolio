@@ -18,6 +18,12 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
     return Scaffold(
       backgroundColor: theme.colorScheme.tertiary,
       appBar: AppBar(
+        leading: IconButton(
+            onPressed: () {
+               Navigator.pop(context);
+            },
+            icon: SvgPicture.asset(SvgAssets.backOutline),
+          ),
         backgroundColor: theme.colorScheme.tertiary,
         title: const Text("Contact Us"),
       ),

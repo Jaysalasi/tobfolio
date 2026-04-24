@@ -76,7 +76,7 @@ class _PropertyListView extends StatelessWidget {
             );
           }
 
-          return const SizedBox(child: Text("data"),);
+          return const SizedBox(child: Text("Error"),);
         },
       ),
     );

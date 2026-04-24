@@ -13,6 +13,7 @@ import 'package:tob/features/tenants/bloc/tenant_event.dart';
 import 'package:tob/features/tenants/bloc/tenant_state.dart';
 import 'package:tob/features/tenants/screens/add_tenant.dart';
 import 'package:tob/features/tenants/widgets/active_tenant_card.dart';
+import 'package:tob/features/tenants/widgets/expired_tenant_card.dart';
 import 'package:tob/features/tenants/widgets/overdue_tenant_card.dart';
 
 class TenantScreen extends StatefulWidget {
@@ -160,6 +161,8 @@ class _TenantScreenState extends State<TenantScreen> {
                           itemCount: displayTenants.length,
                           itemBuilder: (context, index) {
                             final tenant = displayTenants[index];
+                            if (selectedTab == 0) {
+                              
                             return ActiveTenantCard(
                               tenant: tenant,
                               onTap: () {
@@ -172,6 +175,23 @@ class _TenantScreenState extends State<TenantScreen> {
                                 );
                               },
                             );
+                            } else {
+                            return ExpiredTenantCard(
+                              tenant: tenant,
+                              state: state,
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        TenantProfileScreen(tenantId: tenant['_id']),
+                                  ),
+                                );
+                              },
+                            );
+                             
+
+                            }
                           },
                         );
                       },
@@ -186,244 +206,7 @@ class _TenantScreenState extends State<TenantScreen> {
     );
   }
 
-  Column overdueCardMeth(
-    ThemeData theme,
-    BuildContext context,
-    TenantState state,
-  ) {
-    return Column(
-      children: [
-        Container(
-          margin: const EdgeInsets.only(bottom: 16),
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: theme.scaffoldBackgroundColor,
-            borderRadius: BorderRadius.circular(18),
-            boxShadow: appShadow(context),
-          ),
-          child: Column(
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const CircleAvatar(
-                    radius: 24,
-                    backgroundImage: NetworkImage(
-                      "https://images.unsplash.com/photo-1507089947368-19c1da9775ae",
-                    ),
-                  ),
-
-                  const SizedBox(width: 12),
-
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Bella J",
-                          style: theme.textTheme.headlineSmall?.copyWith(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        SizedBox(height: 4),
-                        Text(
-                          "6 days overdue",
-                          style: theme.textTheme.bodyMedium,
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  Text(
-                    "Room D5",
-                    style: theme.textTheme.bodyLarge?.copyWith(
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 14),
-
-              Row(
-                children: [
-                  expandedContainerMeth(
-                    state: TenantState(),
-                    theme: theme,
-                    text: 'Evict',
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          title: Text('Are you sure?'),
-                          content: SizedBox(
-                            height: 130,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'This will permanently evict your tenant. This action cannot be undone.',
-                                ),
-                                Row(
-                                  spacing: 5,
-                                  children: [
-                                    SvgPicture.asset(SvgAssets.evict),
-                                    Text(
-                                      'Yes, I want to evict this tenant',
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 10),
-                                AppButton(
-                                  title: 'Vacate',
-                                  onPressed: () {
-                                    // TODO: Implement eviction logic
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                          
-                        ),
-                      );
-                    },
-                  ),
-
-                  SizedBox(width: 12),
-                  expandedContainerMeth(
-                    state: TenantState(),
-                    theme: theme,
-                    text: 'Renew',
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          // title: Text('Are you sure?'),
-                          content: BlocBuilder<TenantBloc, TenantState>(
-                            builder: (context, state) {
-                              return SizedBox(
-                                height: 450,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    AltTextField(
-                                      label: "Rent Frequency",
-                                      items: ["Monthly", "Quarterly", "Yearly"],
-                                      hint: state.rentFrequency == ''
-                                          ? "Select rent frequency"
-                                          : state.rentFrequency,
-                                      type: AltFieldType.dropdown,
-                                      onChanged: (value) {
-                                        context.read<TenantBloc>().add(
-                                          UpdateRentFrequency(value),
-                                        );
-                                      },
-                                    ),
-                                    AltTextField(
-                                       onTap: () async {
-                                        final DateTime? picked = await showDatePicker(
-                                          context: context,
-                                          firstDate: DateTime.now(),
-                                          lastDate: DateTime.now().add(
-                                            const Duration(days: 365),
-                                          ),
-                                        );
-                                        if (picked != null) {
-                                          // Format the date and update the state
-                                          final formattedDate = "${picked.day}/${picked.month}/${picked.year}";
-                                          context.read<TenantBloc>().add(
-                                            UpdateRentFrequency(formattedDate),
-                                          );
-                                        }
-                                      },
-                                      label: "Renewal Date",
-                                       
-                                      hint: state.rentFrequency == ''
-                                          ? "Select rent frequency"
-                                          : state.rentFrequency,
-                                      type: AltFieldType.text,
-                                      enabled: true,
-                                      onChanged: (value) {
-                                        context.read<TenantBloc>().add(
-                                          UpdateRentFrequency(value),
-                                        );
-                                      },
-                                    ),
-                                    AltTextField(
-                                        onTap: () async {
-                                          final DateTime? picked = await showDatePicker(
-                                            context: context,
-                                            firstDate: DateTime.now(),
-                                            lastDate: DateTime.now().add(
-                                              const Duration(days: 365),
-                                            ),
-                                          );
-                                          if (picked != null) {
-                                            // Format the date and update the state
-                                            final formattedDate = "${picked.day}/${picked.month}/${picked.year}";
-                                            if (context.mounted) {
-                                              context.read<TenantBloc>().add(
-                                                UpdateRentFrequency(formattedDate),
-                                              );
-                                            }
-                                          }
-                                        },
-                                      label: "Rent Expiry Date",
-                                      hint: state.rentFrequency == ''
-                                          ? "Select rent expiry date"
-                                          : state.rentFrequency,
-                                      type: AltFieldType.text,
-                                      enabled: true,
-                                      onChanged: (value) {
-                                        if (context.mounted) {
-                                          context.read<TenantBloc>().add(
-                                            UpdateRentFrequency(value),
-                                          );
-                                        }
-                                      },
-                                    ),
-                                    AltTextField(
-                                      label: "Rent Fee",
-                                      hint: state.rentFee == ''
-                                          ? "Enter rent fee"
-                                          : state.rentFee,
-                                      type: AltFieldType.text,
-                                      onChanged: (value) {
-                                        context.read<TenantBloc>().add(
-                                          UpdateRentFee(value),
-                                        );
-                                      },
-                                    ),
-                                    AppButton(title: "Renew", onPressed: () {
-                                      Navigator.pop(context);
-                                    }),
-                                  ],
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      );
-                    },
-                    bgColor: theme.primaryColor,
-                    txtColor: AppTheme.lightSurfaceColor,
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
+ 
   Widget _tabButton(String title, int index, ThemeData theme) {
     bool selected = selectedTab == index;
     return Expanded(

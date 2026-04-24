@@ -17,6 +17,7 @@ import 'package:tob/features/all_properties/bloc/all_properties_event.dart';
 import 'package:tob/features/all_properties/bloc/all_properties_state.dart';
 import 'package:tob/features/all_properties/model/all_property_model.dart';
 import 'package:tob/features/all_properties/repositories/all_properties_repository.dart';
+import 'package:tob/features/home/bloc/home_bloc.dart';
 import 'package:tob/features/tenants/bloc/tenant_bloc.dart';
 import 'package:tob/features/tenants/bloc/tenant_event.dart';
 import 'package:tob/features/tenants/bloc/tenant_state.dart';
@@ -472,7 +473,7 @@ class _AddTenantScreenState extends State<AddTenantScreen> {
           ),
            
           AltTextField(
-            label: "Rent Fee",
+            label: "Rent Fee (${context.watch<HomeBloc>().state.user?.currency})",
             hint: "Enter rent fee",
             type: AltFieldType.number,
             value: rentAmount,
@@ -483,7 +484,7 @@ class _AddTenantScreenState extends State<AddTenantScreen> {
             },
           ),
           AltTextField(
-            label: "Late Rent Fee",
+            label: "Late Rent Fee (${context.watch<HomeBloc>().state.user?.currency})",
             hint: "Enter rent fee",
             type: AltFieldType.number,
           ),

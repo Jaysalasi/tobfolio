@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tob/core/theme/app_theme.dart';
 import 'package:tob/core/utils/components/constants.dart';
 import 'package:tob/core/utils/components/widgets.dart';
+import 'package:tob/core/utils/currency_formatter.dart';
+import 'package:tob/features/auth/bloc/auth_bloc.dart';
 import 'package:tob/features/expenses/bloc/expenses_bloc.dart';
 import 'package:tob/features/expenses/bloc/expenses_event.dart';
 import 'package:tob/features/expenses/bloc/expenses_state.dart';
@@ -12,6 +14,7 @@ import 'package:tob/features/expenses/screen/expenses_history.dart';
 import 'package:tob/features/expenses/screen/expenses_history_detail.dart';
 import 'package:tob/features/expenses/screen/widgets/expense_category_tile.dart';
 import 'package:tob/features/expenses/screen/widgets/expense_widgets.dart';
+import 'package:tob/features/home/bloc/home_bloc.dart';
 
 class ExpensesScreen extends StatefulWidget {
   const ExpensesScreen({super.key});
@@ -29,7 +32,7 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
 
   Map<String, List<dynamic>> _getExpensesByType(List expenses) {
     final Map<String, List<dynamic>> groupedExpenses = {};
-    
+
     for (final expense in expenses) {
       final type = expense.type?.toString() ?? 'Other';
       if (!groupedExpenses.containsKey(type)) {
@@ -37,10 +40,9 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
       }
       groupedExpenses[type]!.add(expense);
     }
-    
+
     return groupedExpenses;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +56,7 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
       ),
       body: BlocBuilder<ExpensesBloc, ExpensesState>(
         builder: (context, state) {
-            if (state is ExpensesLoading) {
+          if (state is ExpensesLoading) {
             return const Center(child: CircularProgressIndicator());
           }
 
@@ -94,7 +96,9 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
             );
           }
 
-          final expenses = state is ExpensesLoaded ? state.expenses : <ExpensesModel>[];
+          final expenses = state is ExpensesLoaded
+              ? state.expenses
+              : <ExpensesModel>[];
           print("statee placards  $state");
           return Padding(
             padding: const EdgeInsets.all(16),
@@ -120,7 +124,19 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                             ),
                             const SizedBox(height: 6),
                             Text(
-                              "\$${expenses.fold<double>(0, (sum, expense) => sum + (expense.cost?.toDouble() ?? 0.0)).toStringAsFixed(2)}",
+                              CurrencyFormatter.formatCurrency(
+                                expenses.fold<double>(
+                                  0,
+                                  (sum, expense) =>
+                                      sum + (expense.cost?.toDouble() ?? 0.0),
+                                ),
+                                currencyCode: context
+                                    .watch<HomeBloc>()
+                                    .state
+                                    .user
+                                    ?.currency,
+                              ),
+                              // "\$${expenses.fold<double>(0, (sum, expense) => sum + (expense.cost?.toDouble() ?? 0.0)).toStringAsFixed(2)}",
                               style: theme.textTheme.bodyLarge?.copyWith(
                                 fontWeight: FontWeight.bold,
                                 fontStyle: FontStyle.italic,
@@ -144,9 +160,9 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                       ],
                     ),
                   ),
-          
+
                   const SizedBox(height: 16),
-          
+
                   // Group expenses by type and calculate totals
                   ..._getExpensesByType(expenses).entries.map((entry) {
                     final typeTotal = entry.value.fold<double>(
@@ -155,10 +171,18 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                     );
                     return ExpenseCategoryTile(
                       title: entry.key,
-                      amount: "\$${typeTotal.toStringAsFixed(2)}",
+                      amount: CurrencyFormatter.formatCurrency(
+                        typeTotal.toStringAsFixed(2),
+                        currencyCode: context
+                            .watch<HomeBloc>()
+                            .state
+                            .user
+                            ?.currency,
+                      ),
+                      // amount: "\$${typeTotal.toStringAsFixed(2)}",
                     );
                   }),
-          
+
                   Row(
                     children: [
                       Text(
@@ -171,7 +195,8 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>  ExpensesHistory(expenses: expenses,),
+                              builder: (context) =>
+                                  ExpensesHistory(expenses: expenses),
                             ),
                           );
                         },
@@ -205,13 +230,18 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) =>  ExpensesHistoryDetail(expenseDetail: expense,),
+                                    builder: (context) => ExpensesHistoryDetail(
+                                      expenseDetail: expense,
+                                    ),
                                   ),
                                 );
                               },
                               child: Container(
                                 margin: const EdgeInsets.symmetric(vertical: 8),
-                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 12,
+                                ),
                                 decoration: BoxDecoration(
                                   color: theme.colorScheme.surface,
                                   borderRadius: BorderRadius.circular(12),
@@ -223,7 +253,9 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                                       width: 40,
                                       height: 40,
                                       decoration: BoxDecoration(
-                                        color: AppTheme.accentColor.withValues(alpha: 0.1),
+                                        color: AppTheme.accentColor.withValues(
+                                          alpha: 0.1,
+                                        ),
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       child: Icon(
@@ -235,28 +267,40 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                                     const SizedBox(width: 10),
                                     Expanded(
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            (expense.description?.length ?? 0) > 30
+                                            (expense.description?.length ?? 0) >
+                                                    30
                                                 ? "${expense.description!.substring(0, 30)}..."
-                                                : expense.description ?? 'No description',
+                                                : expense.description ??
+                                                      'No description',
                                             style: theme.textTheme.bodyLarge,
                                           ),
                                           Text(
                                             expense.type ?? 'Unknown type',
-                                            style: theme.textTheme.bodySmall?.copyWith(
-                                              color: Colors.grey,
-                                            ),
+                                            style: theme.textTheme.bodySmall
+                                                ?.copyWith(color: Colors.grey),
                                           ),
                                         ],
                                       ),
                                     ),
                                     Column(
-                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
                                       children: [
                                         Text(
-                                          "\$${expense.cost?.toStringAsFixed(2) ?? '0.00'}",
+                                          // "\$${expense.cost?.toStringAsFixed(2) ?? '0.00'}",
+                                          CurrencyFormatter.formatCurrency(
+                                            expense.cost?.toStringAsFixed(2) ??
+                                                '0.00',
+                                            currencyCode: context
+                                                .watch<HomeBloc>()
+                                                .state
+                                                .user
+                                                ?.currency,
+                                          ),
                                           style: theme.textTheme.bodyLarge,
                                         ),
                                         Container(
@@ -265,15 +309,22 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                                             vertical: 2,
                                           ),
                                           decoration: BoxDecoration(
-                                            color: getStatusColor(expense.status).withValues(alpha: 0.1),
-                                            borderRadius: BorderRadius.circular(4),
+                                            color: getStatusColor(
+                                              expense.status,
+                                            ).withValues(alpha: 0.1),
+                                            borderRadius: BorderRadius.circular(
+                                              4,
+                                            ),
                                           ),
                                           child: Text(
                                             expense.status ?? 'Unknown',
-                                            style: theme.textTheme.bodySmall?.copyWith(
-                                              color: getStatusColor(expense.status),
-                                              fontSize: 10,
-                                            ),
+                                            style: theme.textTheme.bodySmall
+                                                ?.copyWith(
+                                                  color: getStatusColor(
+                                                    expense.status,
+                                                  ),
+                                                  fontSize: 10,
+                                                ),
                                           ),
                                         ),
                                       ],
@@ -288,7 +339,7 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
               ),
             ),
           );
-        }
+        },
       ),
     );
   }

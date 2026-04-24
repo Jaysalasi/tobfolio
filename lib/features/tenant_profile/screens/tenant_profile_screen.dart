@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tob/core/theme/app_theme.dart';
 import 'package:tob/features/add_property/utils/alt_text_field.dart';
+import 'package:tob/features/auth/bloc/auth_bloc.dart';
+import 'package:tob/features/home/bloc/home_bloc.dart';
 import 'package:tob/features/tenant_profile/bloc/_tenant_profile_bloc.dart';
 import 'package:tob/features/tenant_profile/screens/widgets/info_tile_widget.dart';
 import '../../../features/tenants/repositories/tenant_repository.dart';
@@ -45,6 +47,7 @@ class _TenantProfileViewState extends State<_TenantProfileView> {
   @override
   void initState() {
     super.initState();
+    context.read<HomeBloc>().add(LoadHomeData());
   }
 
   @override
@@ -163,7 +166,11 @@ class _TenantProfileViewState extends State<_TenantProfileView> {
                 const SizedBox(height: 12),
 
                 _card([
-                  InfoTile(title: "Rental fee (USD)", value: tenant.rentFee),
+                  InfoTile(
+                    title:
+                        "Rental fee ${context.watch<AuthBloc>().state.user?.currency}",
+                    value: tenant.rentFee,
+                  ),
                   InfoTile(
                     title: tenant.property,
                     value: tenant.room,
@@ -498,7 +505,6 @@ class _TenantProfileViewState extends State<_TenantProfileView> {
   }
 
   void saveChanges(BuildContext context, String tenantId) {
-
     // Get current tenant data
     final currentState = context.read<TenantProfileBloc>().state;
     if (currentState is TenantProfileLoaded) {
@@ -521,14 +527,11 @@ class _TenantProfileViewState extends State<_TenantProfileView> {
         "isActive": true, // Keep as active
       };
 
-
       // Dispatch update event with the tenantId
       context.read<TenantProfileBloc>().add(
         UpdateTenant(tenantId: tenantId, updatedData: updatedData),
       );
-
-    } else {
-    }
+    } else {}
   }
 
   Widget _card(List<Widget> children) {

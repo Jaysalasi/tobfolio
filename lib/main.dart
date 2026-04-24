@@ -30,6 +30,9 @@ import 'features/onboarding/cubit/onboarding_cubit.dart';
 import 'features/dashboard/bloc/dashboard_bloc.dart';
 import 'features/home/bloc/home_bloc.dart';
 import 'features/expenses/bloc/expenses_bloc.dart';
+import 'features/my_profile/bloc/currency_bloc.dart';
+import 'features/my_profile/bloc/profile_bloc.dart';
+import 'features/my_profile/repositories/profile_repositories.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
@@ -95,6 +98,9 @@ class MyApp extends StatelessWidget {
         RepositoryProvider(
           create: (context) => ExpensesRepository( context.read<ApiService>()),
         ),
+        RepositoryProvider(
+          create: (context) => ProfileRepository(apiService: context.read<ApiService>()),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -120,6 +126,8 @@ class MyApp extends StatelessWidget {
             authRepository: context.read<AuthRepository>(),
           )),
           BlocProvider(create: (context) => ReferralBloc(referralRepository: context.read<ReferralRepository>())),
+          BlocProvider(create: (context) => CurrencyBloc(profileRepository: context.read<ProfileRepository>())),
+          BlocProvider(create: (context) => ProfileBloc(profileRepository: context.read<ProfileRepository>())),
         ],
         child: BlocBuilder<ThemeCubit, ThemeState>(
           builder: (context, themeState) {

@@ -12,6 +12,7 @@ import 'package:tob/features/expenses/bloc/expenses_bloc.dart';
 import 'package:tob/features/expenses/bloc/expenses_event.dart';
 import 'package:tob/features/expenses/bloc/expenses_state.dart';
 import 'package:tob/features/expenses/model/expenses_model.dart';
+import 'package:tob/features/home/bloc/home_bloc.dart';
 
 class AddExpenseScreen extends StatefulWidget {
   const AddExpenseScreen({super.key});
@@ -33,6 +34,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
     super.initState();
     // Initialize with first property if available
     context.read<AllPropertyBloc>().add(LoadProperties());
+     context.read<HomeBloc>().add(LoadHomeData());
   }
 
   @override
@@ -176,7 +178,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                   ),
                   AltTextField(
                     type: AltFieldType.text,
-                    label: "Money Spent",
+                    label: "Money Spent  (${context.watch<HomeBloc>().state.user?.currency})",
                     hint: "Enter amount spent",
                     onChanged: (value) {
                       _costController.text = value;

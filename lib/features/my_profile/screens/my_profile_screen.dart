@@ -8,6 +8,7 @@ import 'package:tob/features/auth/bloc/auth_bloc.dart';
 import 'package:tob/features/home/bloc/home_bloc.dart';
 import 'package:tob/features/my_profile/screens/contact_us_screen.dart';
 import 'package:tob/features/my_profile/screens/currency_screen.dart';
+import 'package:tob/features/my_profile/screens/edit_profile_screen.dart';
 import 'package:tob/features/my_profile/screens/policy_screen.dart';
 import 'package:tob/features/my_profile/screens/security_screen.dart';
 import 'package:tob/features/my_profile/screens/terms_screen.dart';
@@ -64,18 +65,29 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
 
               /// Settings List
               Expanded(
-                child: ListView(
-                  children: [
+                child: RefreshIndicator(
+                  onRefresh: () async {
+                    context.read<HomeBloc>().add(LoadHomeData());
+                  },
+                  child: ListView(
+                    padding: EdgeInsets.zero,
+                    children: [
                     SettingsTile(
                       title: "Full Name",
                       trailingText: homeState.dashboard?.userName ?? "John Doe",
                       showArrow: false,
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const EditProfileScreen(),
+                          ),
+                        );
+                      },
                     ),
 
                     SettingsTile(
                       title: "Currency",
-                      trailingText: "USD",
+                      trailingText: homeState.user?.currency,
                       showArrow: false,
                       onTap: () {
                         Navigator.of(context).push(
@@ -199,6 +211,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                   ],
                 ),
               ),
+            ),
             ],
           ),
         ),

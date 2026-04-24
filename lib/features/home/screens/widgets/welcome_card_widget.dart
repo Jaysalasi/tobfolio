@@ -4,6 +4,7 @@ import 'package:tob/core/router/app_router.dart';
 import 'package:tob/core/utils/components/constants.dart';
 import 'package:tob/core/utils/components/widgets.dart';
 import 'package:tob/core/utils/constants/assets/svg.dart';
+import 'package:tob/core/utils/currency_formatter.dart';
 import 'package:tob/features/home/model/dashboard_model.dart';
 
 class WelcomeCard extends StatelessWidget {
@@ -54,7 +55,10 @@ class WelcomeCard extends StatelessWidget {
             ],
           ),
           Text(
-            "\$ ${dashboard?.totalIncome.toString() ?? '0'}",
+            CurrencyFormatter.formatCurrency(
+              dashboard?.totalIncome,
+              currencyCode: user?.currencyCode,
+            ),
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
               fontWeight: FontWeight.w900,
               fontStyle: FontStyle.italic,

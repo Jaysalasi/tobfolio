@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:tob/core/theme/app_theme.dart';
 import 'package:tob/core/utils/components/constants.dart';
+import 'package:tob/core/utils/currency_formatter.dart';
 import 'package:tob/core/utils/components/widgets.dart';
 import 'package:tob/core/utils/constants/assets/pngs.dart';
 import 'package:tob/core/utils/constants/assets/svg.dart';
@@ -51,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     Image.asset(AppImages.roblox, width: 50, height: 50),
                     SizedBox(width: 10),
-                    Text('Hi ${state.dashboard?.userName ?? 'Guest'}'),
+                    Text('Hi ${state.user?.name ?? 'Guest'}'),
                   ],
                 ),
                 Row(
@@ -145,7 +146,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(height: 10),
-                        WelcomeCard(user: context.watch<AuthBloc>().state.user, dashboard: state.dashboard),
+                        WelcomeCard(
+                          user: context.watch<AuthBloc>().state.user,
+                          dashboard: state.dashboard,
+                        ),
                         SizedBox(height: 20),
                         GridView.count(
                           shrinkWrap: true,
@@ -158,14 +162,20 @@ class _HomeScreenState extends State<HomeScreen> {
                             homeCardMeth(
                               icon: SvgAssets.expensesOutline,
                               title: 'Expenses',
-                              subtitle: state.dashboard?.maintenance.toString() ?? '0',
+                              subtitle: CurrencyFormatter.formatCurrency(
+                                state.dashboard?.maintenance,
+                                currencyCode: state.user?.currency,
+                              ),
                               theme: Theme.of(context),
                               context: context,
                             ),
                             homeCardMeth(
                               icon: SvgAssets.barChart,
                               title: 'NOI (Profit & Loss)',
-                              subtitle: "\$ ${state.dashboard?.netBalance.toString() ?? '0'}",
+                              subtitle: CurrencyFormatter.formatCurrency(
+                                state.dashboard?.netBalance,
+                                currencyCode: state.user?.currency,
+                              ),
                               theme: Theme.of(context),
                               context: context,
                             ),
@@ -206,7 +216,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => const HandymanScreen(),
+                                    builder: (context) =>
+                                        const HandymanScreen(),
                                   ),
                                 );
                               },

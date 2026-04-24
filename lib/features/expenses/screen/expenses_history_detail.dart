@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tob/core/theme/app_theme.dart';
 import 'package:tob/core/utils/components/constants.dart';
 import 'package:tob/core/utils/components/widgets.dart';
 import 'package:tob/core/utils/constants/assets/pngs.dart';
+import 'package:tob/core/utils/currency_formatter.dart';
 import 'package:tob/features/expenses/model/expenses_model.dart';
+import 'package:tob/features/home/bloc/home_bloc.dart';
 
 class ExpensesHistoryDetail extends StatefulWidget {
   final ExpensesModel expenseDetail;
@@ -17,7 +20,7 @@ class _ExpensesHistoryDetailState extends State<ExpensesHistoryDetail> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final size = MediaQuery.of(context).size;
+    // final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: theme.colorScheme.tertiary,
       appBar: AppBar(
@@ -64,11 +67,21 @@ class _ExpensesHistoryDetailState extends State<ExpensesHistoryDetail> {
                           children: [
                             Image.asset(AppImages.logoFramed),
                             Text(
-                              widget.expenseDetail.cost.toString(),
-                              style: theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
+                         CurrencyFormatter.formatCurrency(
+                          widget.expenseDetail.cost.toString(),
+                          currencyCode: context
+                              .watch<HomeBloc>()
+                              .state
+                              .user
+                              ?.currency,
+                        ),
+                              
+                              style: theme.textTheme.bodyLarge?.copyWith(
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                             Text(
-                             widget.expenseDetail.status!,
+                              widget.expenseDetail.status!,
                               style: theme.textTheme.bodyMedium?.copyWith(
                                 color: AppTheme.green,
                               ),
@@ -84,19 +97,31 @@ class _ExpensesHistoryDetailState extends State<ExpensesHistoryDetail> {
                       rowText(
                         theme: theme,
                         title: "Amount Spent",
-                        subtitle: widget.expenseDetail.cost.toString(),
+                        subtitle:
+                         CurrencyFormatter.formatCurrency(
+                          widget.expenseDetail.cost.toString(),
+                          currencyCode: context
+                              .watch<HomeBloc>()
+                              .state
+                              .user
+                              ?.currency,
+                        ),
                       ),
                       rowText(
                         theme: theme,
                         title: "Date",
                         subtitle: "Nov 15th, 2025",
                       ),
-                      rowText(theme: theme, title: "Unit", subtitle:widget.expenseDetail.propertyId!.name!),
+                      rowText(
+                        theme: theme,
+                        title: "Unit",
+                        subtitle: widget.expenseDetail.propertyId!.name!,
+                      ),
                       rowText(
                         theme: theme,
                         title: "Description",
-                        subtitle:
-                            widget.expenseDetail.description! ),
+                        subtitle: widget.expenseDetail.description!,
+                      ),
 
                       // Text(
                       //   "Attachments",

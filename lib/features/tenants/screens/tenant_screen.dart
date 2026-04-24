@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tob/core/theme/app_theme.dart';
-import 'package:tob/core/utils/components/app_button.dart';
-import 'package:tob/core/utils/components/constants.dart';
 import 'package:tob/core/utils/components/widgets.dart';
-import 'package:tob/core/utils/constants/assets/svg.dart';
-import 'package:tob/features/add_property/utils/alt_text_field.dart';
 import 'package:tob/features/tenant_profile/screens/tenant_profile_screen.dart';
 import 'package:tob/features/tenants/bloc/tenant_bloc.dart';
 import 'package:tob/features/tenants/bloc/tenant_event.dart';
@@ -14,7 +9,6 @@ import 'package:tob/features/tenants/bloc/tenant_state.dart';
 import 'package:tob/features/tenants/screens/add_tenant.dart';
 import 'package:tob/features/tenants/widgets/active_tenant_card.dart';
 import 'package:tob/features/tenants/widgets/expired_tenant_card.dart';
-import 'package:tob/features/tenants/widgets/overdue_tenant_card.dart';
 
 class TenantScreen extends StatefulWidget {
   const TenantScreen({super.key});
@@ -102,7 +96,9 @@ class _TenantScreenState extends State<TenantScreen> {
                     child: BlocBuilder<TenantBloc, TenantState>(
                       builder: (context, tenantState) {
                         if (tenantState.isLoading) {
-                          return const Center(child: CircularProgressIndicator());
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
                         }
 
                         if (tenantState.error != null) {
@@ -118,7 +114,9 @@ class _TenantScreenState extends State<TenantScreen> {
                                 const SizedBox(height: 16),
                                 ElevatedButton(
                                   onPressed: () {
-                                    context.read<TenantBloc>().add(FetchTenants());
+                                    context.read<TenantBloc>().add(
+                                      FetchTenants(),
+                                    );
                                   },
                                   child: const Text('Retry'),
                                 ),
@@ -133,24 +131,32 @@ class _TenantScreenState extends State<TenantScreen> {
                         // Separate tenants into active and overdue
                         final activeTenants = tenants.where((tenant) {
                           if (tenant['rentEnd'] == null) return true;
-                          final rentEnd = DateTime.tryParse(tenant['rentEnd']?.toString() ?? '');
+                          final rentEnd = DateTime.tryParse(
+                            tenant['rentEnd']?.toString() ?? '',
+                          );
                           if (rentEnd == null) return true;
                           return rentEnd.isAfter(now);
                         }).toList();
 
                         final overdueTenants = tenants.where((tenant) {
                           if (tenant['rentEnd'] == null) return false;
-                          final rentEnd = DateTime.tryParse(tenant['rentEnd']?.toString() ?? '');
+                          final rentEnd = DateTime.tryParse(
+                            tenant['rentEnd']?.toString() ?? '',
+                          );
                           if (rentEnd == null) return false;
                           return !rentEnd.isAfter(now);
                         }).toList();
 
-                        final displayTenants = selectedTab == 0 ? activeTenants : overdueTenants;
+                        final displayTenants = selectedTab == 0
+                            ? activeTenants
+                            : overdueTenants;
 
                         if (displayTenants.isEmpty) {
                           return Center(
                             child: Text(
-                              selectedTab == 0 ? 'No active tenants' : 'No overdue tenants',
+                              selectedTab == 0
+                                  ? 'No active tenants'
+                                  : 'No overdue tenants',
                               style: theme.textTheme.bodyLarge,
                             ),
                           );
@@ -162,35 +168,34 @@ class _TenantScreenState extends State<TenantScreen> {
                           itemBuilder: (context, index) {
                             final tenant = displayTenants[index];
                             if (selectedTab == 0) {
-                              
-                            return ActiveTenantCard(
-                              tenant: tenant,
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        TenantProfileScreen(tenantId: tenant['_id']),
-                                  ),
-                                );
-                              },
-                            );
+                              return ActiveTenantCard(
+                                tenant: tenant,
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => TenantProfileScreen(
+                                        tenantId: tenant['_id'],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
                             } else {
-                            return ExpiredTenantCard(
-                              tenant: tenant,
-                              state: state,
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        TenantProfileScreen(tenantId: tenant['_id']),
-                                  ),
-                                );
-                              },
-                            );
-                             
-
+                              return ExpiredTenantCard(
+                                tenant: tenant,
+                                state: state,
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => TenantProfileScreen(
+                                        tenantId: tenant['_id'],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
                             }
                           },
                         );
@@ -206,7 +211,6 @@ class _TenantScreenState extends State<TenantScreen> {
     );
   }
 
- 
   Widget _tabButton(String title, int index, ThemeData theme) {
     bool selected = selectedTab == index;
     return Expanded(

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:tob/core/router/app_router.dart';
 import 'package:tob/core/utils/components/constants.dart';
 import 'package:tob/core/utils/components/widgets.dart';
 import 'package:tob/core/utils/constants/assets/svg.dart';
 import 'package:tob/core/utils/currency_formatter.dart';
+import 'package:tob/features/home/bloc/home_bloc.dart';
 import 'package:tob/features/home/model/dashboard_model.dart';
 
 class WelcomeCard extends StatelessWidget {
@@ -32,7 +34,7 @@ class WelcomeCard extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    'Total Income (USD)',
+                    'Total Income (${context.read<HomeBloc>().state.user?.currency})',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -57,7 +59,7 @@ class WelcomeCard extends StatelessWidget {
           Text(
             CurrencyFormatter.formatCurrency(
               dashboard?.totalIncome,
-              currencyCode: user?.currencyCode,
+              currencyCode: context.read<HomeBloc>().state.user?.currency,
             ),
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
               fontWeight: FontWeight.w900,

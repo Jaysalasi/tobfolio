@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:tob/core/theme/app_theme.dart';
+import 'package:tob/core/utils/components/app_button.dart';
 import 'package:tob/core/utils/components/constants.dart';
 import 'package:tob/features/add_property/utils/alt_text_field.dart';
+import 'package:tob/features/home/bloc/home_bloc.dart';
 import 'package:tob/features/tenants/bloc/tenant_bloc.dart';
 import 'package:tob/features/tenants/bloc/tenant_event.dart';
 import 'package:tob/features/tenants/bloc/tenant_state.dart';
 import 'package:tob/features/tenants/widgets/overdue_tenant_card.dart';
 
-class ExpiredTenantCard extends StatelessWidget {
+class ExpiredTenantCard extends StatefulWidget {
   final Map<String, dynamic> tenant;
   final TenantState state;
   final VoidCallback onTap;
@@ -19,53 +22,22 @@ class ExpiredTenantCard extends StatelessWidget {
     required this.onTap,
   });
 
-  double _calculateProgress() {
-    try {
-      final now = DateTime.now();
-      final rentEndStr = tenant['rentEnd']?.toString();
+  @override
+  State<ExpiredTenantCard> createState() => _ExpiredTenantCardState();
+}
 
-      if (rentEndStr == null) {
-        return 0.0;
-      }
-
-      final rentEnd = DateTime.tryParse(rentEndStr);
-
-      if (rentEnd == null) {
-        return 0.0;
-      }
-
-      // Calculate days left
-      final daysLeft = rentEnd.difference(now).inDays;
-
-      if (daysLeft <= 0) {
-        return 1.0; // 100% complete (expired)
-      }
-
-      // Create percentage based on user requirements
-      double percentage;
-      if (daysLeft > 100) {
-        // If days left > 100, use daysLeft/1000
-        percentage = daysLeft / 1000;
-      } else {
-        // If days left <= 100, use daysLeft/100
-        percentage = daysLeft / 100;
-      }
-
-      // Clamp between 0.0 and 1.0
-      if (percentage < 0.0) return 0.0;
-      if (percentage > 1.0) return 1.0;
-
-      return percentage;
-    } catch (e) {
-      return 0.0;
-    }
-  }
-
+class _ExpiredTenantCardState extends State<ExpiredTenantCard> {
+  String rentEntryDate = '';
+  String rentExpiryDate = '';
+  String rentFrequency = '';
+  String rentAmount = '';
+  BuildContext? _dialogContext;
+  // double _calculateProgress() {
   String _calculateDaysLeft() {
     try {
       final now = DateTime.now();
-      final rentEndStr = tenant['rentEnd']?.toString();
-      final rentStartStr = tenant['rentStart']?.toString();
+      final rentEndStr = widget.tenant['rentEnd']?.toString();
+      final rentStartStr = widget.tenant['rentStart']?.toString();
 
       if (rentEndStr == null || rentStartStr == null) {
         return 'Unknown';
@@ -92,13 +64,31 @@ class ExpiredTenantCard extends StatelessWidget {
   }
 
   @override
+  void initState() {
+    super.initState();
+    context.read<HomeBloc>().add(LoadHomeData());
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Builder(
-      builder: (context) {
-        return GestureDetector(
-          onTap: onTap,
-          child: Container(
+    return BlocListener<TenantBloc, TenantState>(
+      listener: (context, state) {
+        if (state.isActionSuccess) {
+          if (_dialogContext != null && Navigator.of(_dialogContext!).canPop()) {
+            Navigator.of(_dialogContext!).pop();
+            _dialogContext = null;
+          }
+        }
+        if (state.actionError != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.actionError!), backgroundColor: Colors.red),
+          );
+        }
+      },
+      child: GestureDetector(
+        onTap: widget.onTap,
+        child: Container(
             margin: const EdgeInsets.only(bottom: 16),
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
@@ -124,7 +114,7 @@ class ExpiredTenantCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            tenant['name'] ?? '',
+                            widget.tenant['name'] ?? '',
                             style: theme.textTheme.headlineSmall?.copyWith(
                               fontSize: 18,
                               fontWeight: FontWeight.w500,
@@ -132,14 +122,10 @@ class ExpiredTenantCard extends StatelessWidget {
                           ),
 
                           const SizedBox(height: 8),
-
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: LinearProgressIndicator(
-                              value: _calculateProgress(),
-                              backgroundColor: AppTheme.grayColor,
-                              color: Colors.black,
-                              minHeight: 2,
+                          Text(
+                            _calculateDaysLeft(),
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: AppTheme.secondaryColor,
                             ),
                           ),
                         ],
@@ -152,56 +138,54 @@ class ExpiredTenantCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          tenant['unitNumber'] ?? '',
+                          widget.tenant['unitNumber'] ?? '',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
                         SizedBox(height: 4),
-                        Text(
-                          _calculateDaysLeft(),
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color: AppTheme.secondaryColor,
-                          ),
-                        ),
                       ],
                     ),
                   ],
                 ),
-                SizedBox(height: 20,),
+                SizedBox(height: 20),
                 Row(
                   children: [
                     expandedContainerMeth(
                       state: TenantState(),
                       theme: theme,
-                      text: 'Evict',
+                      text: 'Vacate',
                       onTap: () {
                         showDialog(
                           context: context,
-                          builder: (context) => AlertDialog(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            title: Text('Are you sure?'),
-                            content: const Text(
-                              'This will permanently evict your tenant. This action cannot be undone.',
-                            ),
-                            // actions: [
-                            //   TextButton(
-                            //     onPressed: () => Navigator.of(context).pop(),
-                            //     child: const Text('Cancel'),
-                            //   ),
-                            //   TextButton(
-                            //     onPressed: () {
-                            //       // Navigator.of(context).pop();
-                            //       // context.read<AuthBloc>().add(
-                            //       //   LogoutRequested(),
-                            //       // );
-                            //     },
-                            //     child: const Text('Logout'),
-                            //   ),
-                            // ],
+                          builder: (dialogCtx) => StatefulBuilder(
+                            builder: (dialogCtx, setDialogState) {
+                              _dialogContext = dialogCtx;
+                              return AlertDialog(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                title: Text('Are you sure?'),
+                                content: const Text(
+                                  'This will permanently evict your tenant. This action cannot be undone.',
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () =>
+                                        Navigator.of(dialogCtx).pop(),
+                                    child: const Text('Cancel'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      final id = widget.tenant['_id']?.toString() ?? '';
+                                      context.read<TenantBloc>().add(DeleteTenant(id));
+                                    },
+                                    child: const Text('Vacate'),
+                                  ),
+                                ],
+                              );
+                            },
                           ),
                         );
                       },
@@ -215,34 +199,117 @@ class ExpiredTenantCard extends StatelessWidget {
                       onTap: () {
                         showDialog(
                           context: context,
-                          builder: (context) => AlertDialog(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            // title: Text('Are you sure?'),
-                            content: SizedBox(
-                              height: 300,
-                              child: Column(
-                                children: [
-                                  AltTextField(
-                                    label: "Rent Frequency",
-                                    items: ["Monthly", "Quarterly", "Yearly"],
-                                    hint: state.rentFrequency == ''
-                                        ? "Select rent frequency"
-                                        : state.rentFrequency,
-                                    type: AltFieldType.dropdown,
-                                    onChanged: (value) {
-                                      context.read<TenantBloc>().add(
-                                        UpdateRentFrequency(value),
-                                      );
-                                    },
-                                  ),
-                                ],
+                          builder: (dialogCtx) => StatefulBuilder(
+                            builder: (dialogCtx, setDialogState) {
+                              _dialogContext = dialogCtx;
+                              return AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
                               ),
-                            ),
-                          ),
-                        );
-                      },
+                              // title: Text('Are you sure?'),
+                              content: SizedBox(
+                                height: 450,
+                                child: Column(
+                                  children: [
+                                    AltTextField(
+                                      label: "Rent Frequency",
+                                      items: ["Monthly", "Quarterly", "Yearly"],
+                                      hint: rentFrequency == ''
+                                          ? "Select rent frequency"
+                                          : rentFrequency,
+                                      type: AltFieldType.dropdown,
+                                      onChanged: (value) {
+                                        setDialogState(() {
+                                          rentFrequency = value;
+                                        });
+                                      },
+                                    ),
+                                    AltTextField(
+                                      label: "Rent Entry Date",
+                                      hint: rentEntryDate,
+                                      type: AltFieldType.text,
+                                      enabled: true,
+                                      value: rentEntryDate,
+                                      onTap: () async {
+                                        final DateTime? picked =
+                                            await showDatePicker(
+                                              context: context,
+                                              firstDate: DateTime.now(),
+                                              lastDate: DateTime.now().add(
+                                                const Duration(days: 365),
+                                              ),
+                                            );
+                                        if (picked != null) {
+                                          final formattedDate = DateFormat(
+                                            'yyyy-MM-dd',
+                                          ).format(picked);
+                                          setDialogState(() {
+                                            rentEntryDate = formattedDate;
+                                          });
+                                        }
+                                      },
+                                    ),
+                                    AltTextField(
+                                      label: "Rent Expiry Date",
+                                      hint: rentExpiryDate,
+                                      type: AltFieldType.text,
+                                      enabled: true,
+                                      value: rentExpiryDate,
+                                      onTap: () async {
+                                        final DateTime? picked =
+                                            await showDatePicker(
+                                              context: context,
+                                              firstDate: DateTime.now(),
+                                              lastDate: DateTime.now().add(
+                                                const Duration(days: 3650),
+                                              ),
+                                            );
+                                        if (picked != null) {
+                                          final formattedDate = DateFormat(
+                                            'yyyy-MM-dd',
+                                          ).format(picked);
+                                          setDialogState(() {
+                                            rentExpiryDate = formattedDate;
+                                          });
+                                        }
+                                      },
+                                    ),
+                                    AltTextField(
+                                      label: context.read<HomeBloc>().state.user?.currency != null
+                                          ? "Rental Fee (${context.read<HomeBloc>().state.user!.currency})"
+                                          : "Rental Fee",
+                                      hint: "Enter rental fee",
+                                      value: rentAmount,
+                                      type: AltFieldType.number,
+                                      onChanged: (value) => setDialogState(
+                                        () => rentAmount = value,
+                                      ),
+                                    ),
+                                    SizedBox(height: 20,),
+                                    AppButton(
+                                      isLoading: context.read<TenantBloc>().state.isLoading,
+                                      title: "Renew",
+                                      onPressed: () {
+                                        final id = widget.tenant['_id']?.toString() ?? '';
+                                        context.read<TenantBloc>().add(
+                                          RenewTenant(
+                                            tenantId: id,
+                                            paymentFrequency: rentFrequency,
+                                            rentStart: rentEntryDate,
+                                            rentEnd: rentExpiryDate,
+                                            rentAmount: double.tryParse(rentAmount) ?? 0,
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    },
                       bgColor: theme.primaryColor,
                       txtColor: AppTheme.lightSurfaceColor,
                     ),
@@ -251,8 +318,7 @@ class ExpiredTenantCard extends StatelessWidget {
               ],
             ),
           ),
-        );
-      },
+        ),
     );
   }
 }

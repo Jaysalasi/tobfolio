@@ -46,3 +46,24 @@ class UpdateRentFee extends TenantEvent {
   final String rentFee;
   UpdateRentFee(this.rentFee);
 }
+
+class DeleteTenant extends TenantEvent {
+  final String tenantId;
+  DeleteTenant(this.tenantId);
+}
+
+class RenewTenant extends TenantEvent {
+  final String tenantId;
+  final String paymentFrequency;
+  final String rentStart;
+  final String rentEnd;
+  final double rentAmount;
+
+  RenewTenant({
+    required this.tenantId,
+    required this.paymentFrequency,
+    required this.rentStart,
+    required this.rentEnd,
+    required this.rentAmount,
+  });
+}

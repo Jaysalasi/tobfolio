@@ -410,7 +410,7 @@ class _TenantProfileViewState extends State<_TenantProfileView> {
                               setState(() => tenantPhone = value),
                         ),
                         AltTextField(
-                          label: "Rental Fee",
+                          label: "Rental Fee (${ context.read<HomeBloc>().state.user?.currency})",
                           hint: "Enter rental fee",
                           value: rentAmount,
                           type: AltFieldType.number,

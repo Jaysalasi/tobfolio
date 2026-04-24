@@ -47,9 +47,37 @@ class TenantBloc extends Bloc<TenantEvent, TenantState> {
     on<UpdateRentFrequency>((event, emit) {
       emit(state.copyWith(rentFrequency: event.type));
     });
-    
+
     on<UpdateRentFee>((event, emit) {
       emit(state.copyWith(rentFee: event.rentFee));
+    });
+
+    on<DeleteTenant>((event, emit) async {
+      emit(state.copyWith(isActionLoading: true, isActionSuccess: false, actionError: null));
+      try {
+        await _repository.deleteTenant(event.tenantId);
+        final tenants = await _repository.getTenants();
+        emit(state.copyWith(isActionLoading: false, isActionSuccess: true, tenants: tenants));
+      } catch (e) {
+        emit(state.copyWith(isActionLoading: false, actionError: e.toString()));
+      }
+    });
+
+    on<RenewTenant>((event, emit) async {
+      emit(state.copyWith(isActionLoading: true, isActionSuccess: false, actionError: null));
+      try {
+        await _repository.renewTenant(
+          tenantId: event.tenantId,
+          paymentFrequency: event.paymentFrequency,
+          rentStart: event.rentStart,
+          rentEnd: event.rentEnd,
+          rentAmount: event.rentAmount,
+        );
+        final tenants = await _repository.getTenants();
+        emit(state.copyWith(isActionLoading: false, isActionSuccess: true, tenants: tenants));
+      } catch (e) {
+        emit(state.copyWith(isActionLoading: false, actionError: e.toString()));
+      }
     });
   }
 }

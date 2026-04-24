@@ -101,6 +101,34 @@ class TenantRepository {
     }
   }
 
+  Future<void> deleteTenant(String tenantId) async {
+    final response = await _apiService.delete('/tenant/$tenantId');
+    if (!response.success) {
+      throw Exception(response.message ?? 'Failed to delete tenant');
+    }
+  }
+
+  Future<void> renewTenant({
+    required String tenantId,
+    required String paymentFrequency,
+    required String rentStart,
+    required String rentEnd,
+    required double rentAmount,
+  }) async {
+    final response = await _apiService.put(
+      '/tenants/$tenantId/renew',
+      data: {
+        'paymentFrequency': paymentFrequency,
+        'rentStart': rentStart,
+        'rentEnd': rentEnd,
+        'rentAmount': rentAmount,
+      },
+    );
+    if (!response.success) {
+      throw Exception(response.message ?? 'Failed to renew tenant');
+    }
+  }
+
   Future<List<Map<String, dynamic>>> getTenants() async {
     try {
       final response = await _apiService.get('/tenants');

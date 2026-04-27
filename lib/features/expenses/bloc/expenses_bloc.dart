@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'expenses_event.dart';
 import 'expenses_state.dart';
@@ -18,11 +19,9 @@ class ExpensesBloc extends Bloc<ExpensesEvent, ExpensesState> {
     Emitter<ExpensesState> emit,
   ) async {
     emit(ExpensesLoading());
-    
-      print("expenses loaded one seeeeeee");
+     
     try {
-      final expenses = await _repository.getExpenses();
-      print("expenses loaded ${expenses}");
+      final expenses = await _repository.getExpenses(); 
       emit(ExpensesLoaded(expenses));
     } catch (e) {
       emit(ExpensesError(e.toString()));
@@ -37,12 +36,12 @@ class ExpensesBloc extends Bloc<ExpensesEvent, ExpensesState> {
     
     try {
        final res = await _repository.createMaintenanceExpense(event.expense);
-      print("expense created with status ${res}");
+      debugPrint("expense created with status $res");
       // Refresh the expenses list after creating a new one
       final expenses = await _repository.getExpenses();
-      print("expenses loaded after add ${expenses}");
+      debugPrint("expenses loaded after add $expenses");
       emit(ExpensesLoaded(expenses));
-      print("expenses loaded after add second gear ${expenses}");
+      debugPrint("expenses loaded after add second gear $expenses");
     } catch (e) {
       emit(CreateExpensesError(e.toString()));
     }

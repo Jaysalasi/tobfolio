@@ -1,7 +1,7 @@
-import 'dart:convert';
+ 
 
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; 
 import 'package:tob/core/network/api_service.dart';
 import 'package:tob/core/utils/toasts.dart';
 import '../model/expenses_model.dart';
@@ -41,7 +41,7 @@ class ExpensesRepository {
         
         if (data is List) {
           final res = data.map((json) => ExpensesModel.fromJson(json)).toList();
-          print("expenses list: $res");
+          debugPrint("expenses list: $res");
           return res;
         } else {
           throw Exception('Invalid response format: expected List but got ${data.runtimeType}');

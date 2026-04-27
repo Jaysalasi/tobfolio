@@ -1,4 +1,7 @@
+// import 'dart:convert';
+
 import 'package:dio/dio.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tob/features/auth/bloc/forgot_password_state.dart';
 import '../../../core/utils/logger.dart';
 import '../models/user.dart';
@@ -20,6 +23,63 @@ class AuthRepository {
   })  : _apiService = apiService,
         _storageService = storageService;
 
+  bool _googleSignInInitialized = false;
+
+  final List<String> scopes = <String>[
+  'email',
+  "openid",
+  "profile",
+  // 'https://www.googleapis.com/auth/contacts.readonly',
+];
+
+
+  Future<LoginResponse> googleSignIn() async {
+    authLogger.d('Google sign in attempt');
+    try {
+      if (!_googleSignInInitialized) {
+        await GoogleSignIn.instance.initialize(
+          // serverClientId: "977205241570-1ivc6682mate69rplppni1be3emdiul1.apps.googleusercontent.com",
+          serverClientId: "977205241570-aeevdvmo2sf5g5qrpo8t2k5s1f3kbkai.apps.googleusercontent.com"
+        );
+        _googleSignInInitialized = true;
+      }
+
+      final account = await GoogleSignIn.instance.authenticate(
+        scopeHint: scopes
+      );
+      final auth = await account.authorizationClient.authorizeScopes(scopes);
+      authLogger.d("google response ${auth}");
+
+      // if (auth == null) throw 'Google sign in failed: no ID token received';
+
+      final response = await _apiService.post(
+        '/auth/google',
+        data: {'token': auth.accessToken},
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final loginResponse = LoginResponse.fromJson(response.data);
+        await _storageService.saveToken(loginResponse.token);
+        await _storageService.saveUser(loginResponse.user.toJson());
+        await saveTokenWithTime(loginResponse.token);
+        authLogger.i('Google sign in successful for user: ${loginResponse.user.name}');
+        return loginResponse;
+      } else {
+        final errorMessage = NetworkExceptions.getErrorMessage(response.data);
+        authLogger.e('Google sign in failed: $errorMessage');
+        throw errorMessage;
+      }
+    } catch (e) {
+      if (e is DioException) {
+        final errorMessage = NetworkExceptions.handleDioError(e);
+        authLogger.e('Google sign in Dio error: $errorMessage');
+        throw errorMessage;
+      }
+      authLogger.e('Google sign in error: $e');
+      rethrow;
+    }
+  }
+
   Future<LoginResponse> login(LoginRequest request) async {
   authLogger.d('Login attempt for email: ${request.email}');
   try {
@@ -38,7 +98,7 @@ class AuthRepository {
       authLogger.i('Login successful for user: ${loginResponse.user.name}');
       return loginResponse;
     } else {
-      print("response : ${response}");
+      
       final errorMessage = NetworkExceptions.getErrorMessage(response.data);
       authLogger.e('Login failed: $errorMessage');
       throw errorMessage;
@@ -110,6 +170,15 @@ class AuthRepository {
       final errorMessage = NetworkExceptions.getErrorMessage(e);
       authLogger.e('Registration error: $errorMessage');
       throw errorMessage;
+    }
+  }
+
+  Future<void> googleSignOut() async {
+    try {
+      await GoogleSignIn.instance.signOut();
+      authLogger.d('Google sign out successful');
+    } catch (e) {
+      authLogger.w('Google sign out failed: $e');
     }
   }
 

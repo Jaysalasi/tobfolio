@@ -66,8 +66,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 state.errorMessage != null) {
               showError(state.errorMessage!);
             } else if (state.status == RegisterStatus.success) {
-              showSuccess('Account created successfully!');
-              Navigator.of(context).pushReplacementNamed('/login');
+              if (state.isGoogleSignIn) {
+                showSuccess('Signed in with Google!');
+                Navigator.of(context).pushReplacementNamed('/dashboard');
+              } else {
+                showSuccess('Account created successfully!');
+                Navigator.of(context).pushReplacementNamed('/login');
+              }
             }
           }
         },
@@ -79,7 +84,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               // crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(height: 150),
+                const SizedBox(height: 100),
 
                 Text(
                   'Create Account',
@@ -167,7 +172,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        context.read<RegisterBloc>().add(const GoogleSignInSubmitted());
+                      },
                       child: SvgPicture.asset(SvgAssets.google),
                     ),
                     SizedBox(width: 20),

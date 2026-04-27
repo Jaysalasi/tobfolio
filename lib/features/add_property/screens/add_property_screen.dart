@@ -335,7 +335,7 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
         //       padding: const EdgeInsets.all(20),
         //       child: GestureDetector(
         //         onTap: () {
-        //           // TODO: Add another unit
+        //            
         //         },
         //         child: Row(
         //           children: [
@@ -408,7 +408,7 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
           hint: state.unitType != '' ? state.unitType : "Enter unit type",
           value: state.unitType,
           type: AltFieldType.dropdown,
-          // items: ["Flat", "Room", "Villa", "Office", "Plot"],
+          items: ["Flat", "Room", "Villa", "Office", "Plot"],
           onChanged: (v) =>
               context.read<AddPropertyBloc>().add(UpdateUnitType(v)),
         ),

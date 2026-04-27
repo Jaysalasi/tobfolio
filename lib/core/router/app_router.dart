@@ -6,6 +6,7 @@ import 'package:tob/features/add_property/screens/add_property_screen.dart';
 import 'package:tob/features/all_properties/bloc/all_properties_bloc.dart';
 import 'package:tob/features/all_properties/repositories/all_properties_repository.dart';
 import 'package:tob/features/all_properties/screen/all_properties_screen.dart';
+import 'package:tob/features/auth/bloc/forgot_password_bloc.dart';
 import 'package:tob/features/auth/bloc/login_bloc.dart';
 import 'package:tob/features/auth/bloc/register_bloc.dart';
 import 'package:tob/features/auth/screens/forgot_password.dart';
@@ -105,13 +106,14 @@ class AppRouter {
         child: const LoginScreen(),
       ),
       register: (context) => BlocProvider(
-        create: (context) =>
-            RegisterBloc(authRepository: context.read<AuthRepository>()),
+        create: (context) => RegisterBloc(
+          authRepository: context.read<AuthRepository>(),
+          authBloc: context.read<AuthBloc>(),
+        ),
         child: const RegisterScreen(),
       ),
       forgotPassword: (context) => BlocProvider(
-        create: (context) =>
-            RegisterBloc(authRepository: context.read<AuthRepository>()),
+        create: (context) => ForgotPasswordBloc(authRepository: context.read<AuthRepository>()),
         child: const ForgotPasswordScreen(),
       ),
       createNewPassword: (context) => BlocProvider(

@@ -19,6 +19,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         _authBloc = authBloc,
         super(const LoginState()) {
     on<LoginSubmitted>(_onLoginSubmitted);
+    on<GoogleSignInSubmitted>(_onGoogleSignInSubmitted);
   }
 
   Future<void> _onLoginSubmitted(
@@ -26,18 +27,40 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     Emitter<LoginState> emit,
   ) async {
     emit(state.copyWith(status: LoginStatus.loading));
-    
+
     try {
       final loginRequest = LoginRequest(
         email: event.email,
-        password: event.password, 
+        password: event.password,
       );
-      
+
       final loginResponse = await _authRepository.login(loginRequest);
-      
-      // Update AuthBloc to maintain logged-in state
+
       _authBloc.add(AuthUserUpdated(loginResponse.user));
-      
+
+      emit(state.copyWith(
+        status: LoginStatus.success,
+        loginResponse: loginResponse,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        status: LoginStatus.failure,
+        errorMessage: e.toString(),
+      ));
+    }
+  }
+
+  Future<void> _onGoogleSignInSubmitted(
+    GoogleSignInSubmitted event,
+    Emitter<LoginState> emit,
+  ) async {
+    emit(state.copyWith(status: LoginStatus.loading));
+
+    try {
+      final loginResponse = await _authRepository.googleSignIn();
+
+      _authBloc.add(AuthUserUpdated(loginResponse.user, isGoogleSignIn: true));
+
       emit(state.copyWith(
         status: LoginStatus.success,
         loginResponse: loginResponse,

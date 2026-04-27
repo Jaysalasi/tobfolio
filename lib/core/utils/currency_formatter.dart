@@ -110,7 +110,7 @@ class CurrencyFormatter {
       }
     }
     
-    return '${currencySymbol}$integerPart${decimalPart.isNotEmpty ? '.$decimalPart' : ''}';
+    return '$currencySymbol$integerPart${decimalPart.isNotEmpty ? '.$decimalPart' : ''}';
   }
   
   /// Formats a numeric value as a simple currency string without thousands separators
@@ -138,7 +138,7 @@ class CurrencyFormatter {
       value = 0.0;
     }
     
-    return '${symbol}${value.toStringAsFixed(decimalDigits)}';
+    return '$symbol${value.toStringAsFixed(decimalDigits)}';
   }
   
   /// Parses a currency string back to a double

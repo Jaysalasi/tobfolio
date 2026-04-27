@@ -10,7 +10,6 @@ import 'package:tob/features/my_profile/screens/contact_us_screen.dart';
 import 'package:tob/features/my_profile/screens/currency_screen.dart';
 import 'package:tob/features/my_profile/screens/edit_profile_screen.dart';
 import 'package:tob/features/my_profile/screens/policy_screen.dart';
-import 'package:tob/features/my_profile/screens/security_screen.dart';
 import 'package:tob/features/my_profile/screens/terms_screen.dart';
 
 class MyProfileScreen extends StatefulWidget {
@@ -158,56 +157,61 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                     ),
 
                     SizedBox(height: 20),
-
                     SignOutButton(
                       onTap: () {
                         showDialog(
                           context: context,
                           builder: (context) {
-                            return AlertDialog(
-                              content: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Center(
-                                    child: Text(
-                                      'Are you sure you want to sign out?',
-                                      textAlign: TextAlign.center,
-                                      style: theme.textTheme.titleLarge
-                                          ?.copyWith(
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                    ),
+                            return StatefulBuilder(
+                              builder: (context, setState) {
+                                return AlertDialog(
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Center(
+                                        child: Text(
+                                          'Are you sure you want to sign out?',
+                                          textAlign: TextAlign.center,
+                                          style: theme.textTheme.titleLarge
+                                              ?.copyWith(
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                        ),
+                                      ),
+                                      Text(
+                                        'For your security, when you sign out your passcode and touch id settings will reset.',
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      SizedBox(height: 15),
+                                      AppButton(
+                                        borderRadius: 8,
+                                        height: 40,
+                                        fontSize: 12,
+                                        title: "Sign Out",
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                          context.read<AuthBloc>().add(
+                                            LogoutRequested(),
+                                          );
+                                           Navigator.of(context).pushReplacementNamed('/login');
+                                        },
+                                      ),
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(),
+                                        child: const Text('Cancel'),
+                                      ),
+                                    ],
                                   ),
-                                  Text(
-                                    'For your security, when you sign out your passcode and touch id settings will reset.',
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  SizedBox(height: 15),
-                                  AppButton(
-                                    borderRadius: 8,
-                                    height: 40,
-                                    fontSize: 12,
-                                    title: "Sign Out",
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                      context.read<AuthBloc>().add(
-                                        LogoutRequested(),
-                                      );
-                                       Navigator.of(context).pushReplacementNamed('/login');
-                                    },
-                                  ),
-                                  TextButton(
-                                    onPressed: () =>
-                                        Navigator.of(context).pop(),
-                                    child: const Text('Cancel'),
-                                  ),
-                                ],
-                              ),
+                                );
+                              }
                             );
                           },
                         );
                       },
                     ),
+                    SizedBox(height: 40),
+
                   ],
                 ),
               ),

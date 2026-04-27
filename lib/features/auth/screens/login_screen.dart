@@ -75,7 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
               // crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(height: 150),
+                const SizedBox(height: 100),
 
                 Text(
                   'Welcome Back!',
@@ -169,7 +169,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        context.read<LoginBloc>().add(const GoogleSignInSubmitted());
+                      },
                       child: SvgPicture.asset(SvgAssets.google),
                     ),
                     SizedBox(width: 20),

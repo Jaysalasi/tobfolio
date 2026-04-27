@@ -109,7 +109,10 @@ class MyApp extends StatelessWidget {
             authRepository: context.read<AuthRepository>(),
             authBloc: context.read<AuthBloc>(),
           )),
-          BlocProvider(create: (context) => RegisterBloc(authRepository: context.read<AuthRepository>())),
+          BlocProvider(create: (context) => RegisterBloc(
+            authRepository: context.read<AuthRepository>(),
+            authBloc: context.read<AuthBloc>(),
+          )),
           BlocProvider(create: (context) => ForgotPasswordBloc(authRepository: context.read<AuthRepository>())),
           BlocProvider(create: (context) => OnboardingCubit()),
           BlocProvider(create: (context) => ThemeCubit()),

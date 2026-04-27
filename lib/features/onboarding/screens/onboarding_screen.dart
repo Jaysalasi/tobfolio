@@ -222,6 +222,7 @@ class OnboardingPageWidget extends StatelessWidget {
               Image.asset(
                 page.icon,
                 // color: Colors.white,
+                height: size.height * (currentPage < 2 ? 0.24 : 0.2),
               ),
               if (currentPage < 2)
                 SvgPicture.asset(SvgAssets.forwardThree)

@@ -3,8 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tob/core/theme/app_theme.dart';
 import 'package:tob/core/utils/components/constants.dart';
 import 'package:tob/core/utils/components/widgets.dart';
-import 'package:tob/core/utils/currency_formatter.dart';
-import 'package:tob/features/auth/bloc/auth_bloc.dart';
+import 'package:tob/core/utils/currency_formatter.dart'; 
 import 'package:tob/features/expenses/bloc/expenses_bloc.dart';
 import 'package:tob/features/expenses/bloc/expenses_event.dart';
 import 'package:tob/features/expenses/bloc/expenses_state.dart';
@@ -99,7 +98,7 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
           final expenses = state is ExpensesLoaded
               ? state.expenses
               : <ExpensesModel>[];
-          print("statee placards  $state");
+          debugPrint("statee placards  $state");
           return Padding(
             padding: const EdgeInsets.all(16),
             child: SingleChildScrollView(

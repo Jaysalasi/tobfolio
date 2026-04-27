@@ -21,3 +21,7 @@ class RegisterSubmitted extends RegisterEvent {
   @override
   List<Object> get props => [name, email, password];
 }
+
+class GoogleSignInSubmitted extends RegisterEvent {
+  const GoogleSignInSubmitted();
+}

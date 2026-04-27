@@ -55,10 +55,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     try {
+      if (state.isGoogleSignIn) {
+        await _authRepository.googleSignOut();
+      }
       await _authRepository.logout();
       emit(state.copyWith(
         status: AuthStatus.unauthenticated,
         user: null,
+        isGoogleSignIn: false,
       ));
     } catch (e) {
       emit(state.copyWith(
@@ -72,6 +76,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthUserUpdated event,
     Emitter<AuthState> emit,
   ) async {
-    emit(state.copyWith(user: event.user));
+    emit(state.copyWith(user: event.user, isGoogleSignIn: event.isGoogleSignIn));
   }
 }

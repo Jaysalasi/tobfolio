@@ -10,11 +10,11 @@ String dashboardModelToJson(DashboardModel data) => json.encode(data.toJson());
 
 class DashboardModel {
     final String? userName;
-    final int? totalIncome;
-    final int? incomeGrowth;
-    final int? totalRentals;
-    final int? netBalance;
-    final int? maintenance;
+    final dynamic totalIncome;
+    final dynamic incomeGrowth;
+    final dynamic totalRentals;
+    final dynamic netBalance;
+    final dynamic maintenance;
     final List<ChartDatum>? chartData;
     final String? lastUpdated;
 

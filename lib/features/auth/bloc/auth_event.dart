@@ -13,9 +13,10 @@ class LogoutRequested extends AuthEvent {}
 
 class AuthUserUpdated extends AuthEvent {
   final User user;
+  final bool isGoogleSignIn;
 
-  const AuthUserUpdated(this.user);
+  const AuthUserUpdated(this.user, {this.isGoogleSignIn = false});
 
   @override
-  List<Object> get props => [user];
+  List<Object> get props => [user, isGoogleSignIn];
 }

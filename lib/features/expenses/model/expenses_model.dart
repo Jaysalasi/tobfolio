@@ -6,7 +6,7 @@ class Expense {
   final String propertyId;
   final String type;
   final String description;
-  final double cost;
+  final dynamic cost;
   final String status;
 
   Expense({
@@ -34,7 +34,7 @@ class Expense {
       propertyId: json['propertyId'] ?? '',
       type: json['type'] ?? '',
       description: json['description'] ?? '',
-      cost: (json['cost'] ?? 0).toDouble(),
+      cost: (json['cost'] ?? 0),
       status: json['status'] ?? '',
     );
   }

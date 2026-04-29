@@ -130,7 +130,7 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
           label: "Property Type",
           hint: state.propertyType != ''
               ? state.propertyType
-              : "Select Property",
+              : "Select Property Type",
           value: state.propertyType,
           type: AltFieldType.dropdown,
           items: ["Residential", "Commercial", "Shortlist", "Land"],
@@ -266,7 +266,7 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
         ),
 
         Text(
-          "Upload Documents",
+          "Upload Documents (Optional)",
           style: theme.textTheme.titleLarge?.copyWith(fontSize: 18),
         ),
         SizedBox(height: 10),
@@ -429,7 +429,7 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
         ),
 
         Text(
-          "Upload Documents",
+          "Upload Documents (Optional)",
           style: theme.textTheme.titleLarge?.copyWith(fontSize: 18),
         ),
         SizedBox(height: 10),

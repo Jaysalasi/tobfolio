@@ -26,7 +26,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void initState() {
     super.initState();
     _pageController = PageController();
-    context.read<DashboardBloc>().add(LoadDashboardData());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<DashboardBloc>().add(LoadDashboardData());
+    });
   }
 
   final _navigatorKeys = List.generate(5, (_) => GlobalKey<NavigatorState>());

@@ -26,7 +26,9 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<ExpensesBloc>().add(LoadExpenses());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<ExpensesBloc>().add(LoadExpenses());
+    });
   }
 
   Map<String, List<dynamic>> _getExpensesByType(List expenses) {

@@ -48,7 +48,7 @@ class AuthRepository {
         scopeHint: scopes
       );
       final auth = await account.authorizationClient.authorizeScopes(scopes);
-      authLogger.d("google response ${auth}");
+      // authLogger.d("google response $auth");
 
       // if (auth == null) throw 'Google sign in failed: no ID token received';
 

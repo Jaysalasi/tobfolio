@@ -128,23 +128,45 @@ class _TenantScreenState extends State<TenantScreen> {
                         final tenants = tenantState.tenants ?? [];
                         final now = DateTime.now();
 
+                        // Debug: Print tenant data structure to understand field names
+                        if (tenants.isNotEmpty) {
+                          debugPrint('Tenant data structure: ${tenants.first.keys.toList()}');
+                          debugPrint('First tenant data: ${tenants.first}');
+                        }
+
                         // Separate tenants into active and overdue
                         final activeTenants = tenants.where((tenant) {
-                          if (tenant['rentEnd'] == null) return true;
-                          final rentEnd = DateTime.tryParse(
-                            tenant['rentEnd']?.toString() ?? '',
-                          );
+                          // Check multiple possible field names for rent end date
+                          final rentEndStr = tenant['rentEnd']?.toString() ?? 
+                                           tenant['rentExpiryDate']?.toString() ?? 
+                                           tenant['expiryDate']?.toString();
+                          
+                          debugPrint('Processing tenant: ${tenant['name'] ?? 'Unknown'}, rentEnd: $rentEndStr');
+                          
+                          if (rentEndStr == null || rentEndStr.isEmpty) return true;
+                          
+                          final rentEnd = DateTime.tryParse(rentEndStr);
                           if (rentEnd == null) return true;
-                          return rentEnd.isAfter(now);
+                          
+                          final isActive = rentEnd.isAfter(now);
+                          debugPrint('Tenant ${tenant['name']} is active: $isActive (end date: $rentEnd, now: $now)');
+                          return isActive;
                         }).toList();
 
                         final overdueTenants = tenants.where((tenant) {
-                          if (tenant['rentEnd'] == null) return false;
-                          final rentEnd = DateTime.tryParse(
-                            tenant['rentEnd']?.toString() ?? '',
-                          );
+                          // Check multiple possible field names for rent end date
+                          final rentEndStr = tenant['rentEnd']?.toString() ?? 
+                                           tenant['rentExpiryDate']?.toString() ?? 
+                                           tenant['expiryDate']?.toString();
+                          
+                          if (rentEndStr == null || rentEndStr.isEmpty) return false;
+                          
+                          final rentEnd = DateTime.tryParse(rentEndStr);
                           if (rentEnd == null) return false;
-                          return !rentEnd.isAfter(now);
+                          
+                          final isOverdue = !rentEnd.isAfter(now);
+                          debugPrint('Tenant ${tenant['name']} is overdue: $isOverdue (end date: $rentEnd, now: $now)');
+                          return isOverdue;
                         }).toList();
 
                         final displayTenants = selectedTab == 0

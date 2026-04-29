@@ -105,18 +105,32 @@ class PhotoGrid extends StatelessWidget {
                   if (state.photos.isEmpty)
                     Row(
                       spacing: size.width * 0.013,
-                      children: [1, 2, 3]
-                          .map(
-                            (e) => Container(
-                              width: size.width * 0.265,
-                              height: size.width * 0.265,
-                              decoration: BoxDecoration(
-                                color: AppTheme.grayAltColor,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                          )
-                          .toList(),
+                      children: [
+                        Container(
+                          width: size.width * 0.265,
+                          height: size.width * 0.265,
+                          decoration: BoxDecoration(
+                            color: AppTheme.grayAltColor,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        Container(
+                          width: size.width * 0.265,
+                          height: size.width * 0.265,
+                          decoration: BoxDecoration(
+                            color: AppTheme.grayAltColor,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        Container(
+                          width: size.width * 0.265,
+                          height: size.width * 0.265,
+                          decoration: BoxDecoration(
+                            color: AppTheme.grayAltColor,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ],
                     ),
 
                   ...List.generate(state.photos.length, (index) {
@@ -159,10 +173,12 @@ class PhotoGrid extends StatelessWidget {
                     );
                   }),
 
-                  GestureDetector(
-                    onTap: () => showUploadOptions(context),
-                    child: Row(children: [Icon(Icons.add), Text("Add Photo")]),
-                  ),
+                  // Only show add button if less than 3 photos
+                  if (state.photos.length < 3)
+                    GestureDetector(
+                      onTap: () => showUploadOptions(context),
+                      child: Row(children: [Icon(Icons.add), Text("Add Photo")]),
+                    ),
                 ],
               ),
             ),

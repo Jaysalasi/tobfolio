@@ -28,7 +28,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
       final dashboardData = DashboardModel.fromJson(res);
 
-      print('Dashboard data: $dashboardData');
+      // print('Dashboard data: $dashboardData');
       
       // Get stored user data
       // final user = await getStoredUser();

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:tob/core/theme/app_theme.dart';
 import 'package:tob/core/utils/components/constants.dart';
 import 'package:tob/core/utils/currency_formatter.dart';
@@ -14,7 +13,6 @@ import 'package:tob/features/home/bloc/home_bloc.dart';
 import 'package:tob/features/home/screens/widgets/welcome_card_widget.dart';
 import 'package:tob/features/lease_property/screen/lease_property_screen.dart';
 import 'package:tob/features/referral/screen/referral_screen.dart';
-import 'package:tob/features/search/screens/search_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -30,8 +28,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    // Load home data when the screen is first displayed
-    context.read<HomeBloc>().add(LoadHomeData());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<HomeBloc>().add(LoadHomeData());
+    });
   }
 
   @override
@@ -59,14 +58,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    GestureDetector(
-                      child: SvgPicture.asset(SvgAssets.search),
-                      onTap: () {
-                        Navigator.of(context, rootNavigator: true).push(
-                          MaterialPageRoute(builder: (_) => SearchScreen()),
-                        );
-                      },
-                    ),
+                    // GestureDetector(
+                    //   child: SvgPicture.asset(SvgAssets.search),
+                    //   onTap: () {
+                    //     Navigator.of(context, rootNavigator: true).push(
+                    //       MaterialPageRoute(builder: (_) => SearchScreen()),
+                    //     );
+                    //   },
+                    // ),
                     // SizedBox(width: 5),
                     // GestureDetector(
                     //   child: SvgPicture.asset(SvgAssets.bell),

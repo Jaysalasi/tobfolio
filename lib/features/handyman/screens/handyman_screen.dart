@@ -247,7 +247,9 @@ class _HandymanScreenState extends State<HandymanScreen> {
                                     children: [
                                       SizedBox(height: 10),
                                       Text(
-                                        handyman.fullName,
+                                        handyman.fullName.length > 30
+                                            ? "${handyman.fullName.substring(0, 25)}..."
+                                            : handyman.fullName,
                                         style: theme.textTheme.headlineSmall!
                                             .copyWith(
                                               fontWeight: FontWeight.w700,
@@ -255,7 +257,9 @@ class _HandymanScreenState extends State<HandymanScreen> {
                                             ),
                                       ),
                                       Text(
-                                        handyman.expertise,
+                                        handyman.expertise.length > 30
+                                            ? "${handyman.expertise.substring(0, 25)}..."
+                                            : handyman.expertise,
                                         style: theme.textTheme.bodyLarge!.copyWith(
                                           fontWeight: FontWeight.w500,
                                           fontSize: 12,
@@ -285,7 +289,7 @@ class _HandymanScreenState extends State<HandymanScreen> {
                                 children: [
                                   Row(children: [
                                     SvgPicture.asset(SvgAssets.starGold),
-                                    Text(handyman.rating.toString(), style: theme.textTheme.bodySmall!.copyWith(fontWeight: FontWeight.w500),),
+                                    Text(handyman.rating.toStringAsFixed(2), style: theme.textTheme.bodySmall!.copyWith(fontWeight: FontWeight.w500),),
                                     Text(" (${handyman.reviewsCount.toString()})", style: theme.textTheme.bodySmall!.copyWith(fontWeight: FontWeight.w500),),
                                   ],
                                   ),

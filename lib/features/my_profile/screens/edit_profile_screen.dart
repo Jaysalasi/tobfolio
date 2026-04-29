@@ -23,12 +23,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<HomeBloc>().add(LoadHomeData());
-    final user = context.read<HomeBloc>().state.user;
-    _name = user?.name ?? '';
-    _email = user?.email ?? '';
-    _phone = user?.phone ?? '';
-    _about = user?.about ?? '';
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<HomeBloc>().add(LoadHomeData());
+      final user = context.read<HomeBloc>().state.user;
+      _name = user?.name ?? '';
+      _email = user?.email ?? '';
+      _phone = user?.phone ?? '';
+      _about = user?.about ?? '';
+    });
   }
 
   void _submit() {

@@ -15,6 +15,10 @@ class DashboardModel {
     final dynamic totalRentals;
     final dynamic netBalance;
     final dynamic maintenance;
+    final dynamic totalUnits;
+    final dynamic occupiedUnits;
+    final dynamic vacantUnits;
+    final dynamic occupancyRate;
     final List<ChartDatum>? chartData;
     final String? lastUpdated;
 
@@ -25,6 +29,10 @@ class DashboardModel {
         this.totalRentals,
         this.netBalance,
         this.maintenance,
+        this.totalUnits,
+        this.occupiedUnits,
+        this.vacantUnits,
+        this.occupancyRate,
         this.chartData,
         this.lastUpdated,
     });
@@ -36,6 +44,10 @@ class DashboardModel {
         totalRentals: json["totalRentals"],
         netBalance: json["netBalance"],
         maintenance: json["maintenance"],
+        totalUnits: json["totalUnits"],
+        occupiedUnits: json["occupiedUnits"],
+        vacantUnits: json["vacantUnits"],
+        occupancyRate: json["occupancyRate"],
         chartData: json["chartData"] == null ? [] : List<ChartDatum>.from(json["chartData"]!.map((x) => ChartDatum.fromJson(x))),
         lastUpdated: json["lastUpdated"],
     );
@@ -47,6 +59,10 @@ class DashboardModel {
         "totalRentals": totalRentals,
         "netBalance": netBalance,
         "maintenance": maintenance,
+        "totalUnits": totalUnits,
+        "occupiedUnits": occupiedUnits,
+        "vacantUnits": vacantUnits,
+        "occupancyRate": occupancyRate,
         "chartData": chartData == null ? [] : List<dynamic>.from(chartData!.map((x) => x.toJson())),
         "lastUpdated": lastUpdated,
     };

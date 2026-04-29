@@ -23,40 +23,42 @@ Expanded overviewMeth(BuildContext context, ThemeData theme, Handyman detail, Li
                           //   backgroundImage: AssetImage(guys[0]['image']),
                           // ),
                           SizedBox(width: 10),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(height: 10),
-                              Text(
-                                detail.fullName,
-                                style: theme.textTheme.headlineSmall!
-                                    .copyWith(
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 16,
-                                    ),
-                              ),
-                              Text(
-                                detail.expertise,
-                                style: theme.textTheme.bodyLarge!.copyWith(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 12,
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(height: 10),
+                                Text(
+                                  detail.fullName,
+                                  style: theme.textTheme.headlineSmall!
+                                      .copyWith(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 16,
+                                      ),
                                 ),
-                              ),
-                              SizedBox(height: 5),
-                              Row(
-                                children: [
-                                  SvgPicture.asset(SvgAssets.location),
-                                  Text(
-                                    detail.location,
-                                    style: theme.textTheme.bodyLarge!
-                                        .copyWith(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 12,
-                                        ),
+                                Text(
+                                  detail.expertise,
+                                  style: theme.textTheme.bodyLarge!.copyWith(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 12,
                                   ),
-                                ],
-                              ),
-                            ],
+                                ),
+                                SizedBox(height: 5),
+                                Row(
+                                  children: [
+                                    SvgPicture.asset(SvgAssets.location),
+                                    Text(
+                                      detail.location,
+                                      style: theme.textTheme.bodyLarge!
+                                          .copyWith(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 12,
+                                          ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -68,11 +70,17 @@ Expanded overviewMeth(BuildContext context, ThemeData theme, Handyman detail, Li
                         ),
                       ),
                       SizedBox(height: 10),
-                      Text(
-                        detail.description,
-                        style: theme.textTheme.bodyMedium!.copyWith(
-                          fontWeight: FontWeight.w500,
-                        ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              detail.description,
+                              style: theme.textTheme.bodyMedium!.copyWith(
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                       SizedBox(height: 10),
                     ],

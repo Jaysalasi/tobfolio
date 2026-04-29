@@ -66,7 +66,9 @@ class _ExpiredTenantCardState extends State<ExpiredTenantCard> {
   @override
   void initState() {
     super.initState();
-    context.read<HomeBloc>().add(LoadHomeData());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<HomeBloc>().add(LoadHomeData());
+    });
   }
 
   @override

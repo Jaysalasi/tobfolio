@@ -69,9 +69,9 @@ class ActiveTenantCard extends StatelessWidget {
       // Calculate remaining days
       final remainingDays = rentEnd.difference(now).inDays;
       
-      if (remainingDays <= 0) {
-        return 'Expired';
-      }
+      // if (remainingDays <= 0) {
+      //   return 'Expired';
+      // }
       
       return '$remainingDays days left';
     } catch (e) {

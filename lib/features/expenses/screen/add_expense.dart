@@ -33,8 +33,10 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   void initState() {
     super.initState();
     // Initialize with first property if available
-    context.read<AllPropertyBloc>().add(LoadProperties());
-     context.read<HomeBloc>().add(LoadHomeData());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<AllPropertyBloc>().add(LoadProperties());
+      context.read<HomeBloc>().add(LoadHomeData());
+    });
   }
 
   @override

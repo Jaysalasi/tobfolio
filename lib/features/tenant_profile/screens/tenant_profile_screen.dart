@@ -47,7 +47,9 @@ class _TenantProfileViewState extends State<_TenantProfileView> {
   @override
   void initState() {
     super.initState();
-    context.read<HomeBloc>().add(LoadHomeData());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<HomeBloc>().add(LoadHomeData());
+    });
   }
 
   @override

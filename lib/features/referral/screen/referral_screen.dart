@@ -25,8 +25,9 @@ class _ReferralScreenState extends State<ReferralScreen> {
   @override
   void initState() {
     super.initState();
-    // Load referral data when the screen is first displayed
-    context.read<ReferralBloc>().add(LoadReferralData());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<ReferralBloc>().add(LoadReferralData());
+    });
   }
 
   @override

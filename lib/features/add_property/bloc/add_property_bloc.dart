@@ -1,9 +1,9 @@
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tob/features/add_property/bloc/add_property_event.dart';
-import 'package:tob/features/add_property/bloc/add_property_state.dart';
-import 'package:tob/features/add_property/utils/add_property_utils.dart';
-import 'package:tob/features/add_property/repositories/property_repository.dart';
+import 'package:tobfolio/features/add_property/bloc/add_property_event.dart';
+import 'package:tobfolio/features/add_property/bloc/add_property_state.dart';
+import 'package:tobfolio/features/add_property/utils/add_property_utils.dart';
+import 'package:tobfolio/features/add_property/repositories/property_repository.dart';
 
 class AddPropertyBloc extends Bloc<AddPropertyEvent, AddPropertyState> {
   final PropertyRepository _propertyRepository;

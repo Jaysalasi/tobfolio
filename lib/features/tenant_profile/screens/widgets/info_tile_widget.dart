@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tob/core/theme/app_theme.dart';
+import 'package:tobfolio/core/theme/app_theme.dart';
 
 class InfoTile extends StatelessWidget {
   final String title;

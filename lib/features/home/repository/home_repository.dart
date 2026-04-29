@@ -1,6 +1,6 @@
-import 'package:tob/core/network/api_service.dart';
-import 'package:tob/core/storage/secure_storage_service.dart';
-import 'package:tob/features/auth/models/user.dart';
+import 'package:tobfolio/core/network/api_service.dart';
+import 'package:tobfolio/core/storage/secure_storage_service.dart';
+import 'package:tobfolio/features/auth/models/user.dart';
 
 class HomeRepository {
   final ApiService _apiService;

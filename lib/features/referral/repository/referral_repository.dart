@@ -1,4 +1,4 @@
-import 'package:tob/core/network/api_service.dart';
+import 'package:tobfolio/core/network/api_service.dart';
 
 class ReferralRepository {
   final ApiService _apiService;

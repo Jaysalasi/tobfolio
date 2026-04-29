@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:tob/core/theme/app_theme.dart';
-import 'package:tob/core/utils/components/widgets.dart';
-import 'package:tob/core/utils/constants/assets/svg.dart';
-import 'package:tob/core/utils/constants/assets/pngs.dart';
+import 'package:tobfolio/core/theme/app_theme.dart';
+import 'package:tobfolio/core/utils/components/widgets.dart';
+import 'package:tobfolio/core/utils/constants/assets/svg.dart';
+import 'package:tobfolio/core/utils/constants/assets/pngs.dart';
 import '../../models/review.dart';
 import '../../../handyman/models/handyman.dart';
 import 'write_review_dialog.dart';

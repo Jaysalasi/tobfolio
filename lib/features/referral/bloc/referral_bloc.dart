@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tob/features/referral/bloc/referral_event.dart';
-import 'package:tob/features/referral/bloc/referral_state.dart';
-import 'package:tob/features/referral/model/rewards_model.dart';
-import 'package:tob/features/referral/repository/referral_repository.dart';
+import 'package:tobfolio/features/referral/bloc/referral_event.dart';
+import 'package:tobfolio/features/referral/bloc/referral_state.dart';
+import 'package:tobfolio/features/referral/model/rewards_model.dart';
+import 'package:tobfolio/features/referral/repository/referral_repository.dart';
 
 class ReferralBloc extends Bloc<ReferralEvent, ReferralState> {
   final ReferralRepository _referralRepository;

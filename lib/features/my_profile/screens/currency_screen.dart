@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:tob/core/theme/app_theme.dart';
-import 'package:tob/core/utils/constants/assets/svg.dart';
-import 'package:tob/core/utils/toasts.dart';
-import 'package:tob/features/my_profile/bloc/currency_bloc.dart';
+import 'package:tobfolio/core/theme/app_theme.dart';
+import 'package:tobfolio/core/utils/constants/assets/svg.dart';
+import 'package:tobfolio/core/utils/toasts.dart';
+import 'package:tobfolio/features/my_profile/bloc/currency_bloc.dart';
 
 class CurrencyScreen extends StatefulWidget {
   const CurrencyScreen({super.key});

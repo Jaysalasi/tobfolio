@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
-import 'package:tob/core/network/api_service.dart';
+import 'package:tobfolio/core/network/api_service.dart';
 
 class MediaUploadService {
   final ApiService _apiService;

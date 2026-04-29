@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:tob/core/router/app_router.dart';
-import 'package:tob/core/utils/components/widgets.dart';
-import 'package:tob/core/utils/constants/assets/svg.dart';
-import 'package:tob/features/all_properties/bloc/all_properties_bloc.dart';
-import 'package:tob/features/all_properties/bloc/all_properties_event.dart';
-import 'package:tob/features/all_properties/bloc/all_properties_state.dart';
-import 'package:tob/features/all_properties/repositories/all_properties_repository.dart';
-import 'package:tob/features/all_properties/screen/widgets/all_property_card.dart';
+import 'package:tobfolio/core/router/app_router.dart';
+import 'package:tobfolio/core/utils/components/widgets.dart';
+import 'package:tobfolio/core/utils/constants/assets/svg.dart';
+import 'package:tobfolio/features/all_properties/bloc/all_properties_bloc.dart';
+import 'package:tobfolio/features/all_properties/bloc/all_properties_event.dart';
+import 'package:tobfolio/features/all_properties/bloc/all_properties_state.dart';
+import 'package:tobfolio/features/all_properties/repositories/all_properties_repository.dart';
+import 'package:tobfolio/features/all_properties/screen/widgets/all_property_card.dart';
 
 class PropertyListScreen extends StatelessWidget {
   const PropertyListScreen({super.key});

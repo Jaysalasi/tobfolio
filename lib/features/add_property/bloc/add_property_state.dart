@@ -1,4 +1,4 @@
-import 'package:tob/features/add_property/utils/add_property_utils.dart';
+import 'package:tobfolio/features/add_property/utils/add_property_utils.dart';
 
 enum AddPropertyStatus {
   initial,

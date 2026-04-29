@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:tob/features/all_properties/model/all_property_model.dart';
+import 'package:tobfolio/features/all_properties/model/all_property_model.dart';
 
 abstract class AllPropertyState extends Equatable {
   const AllPropertyState();

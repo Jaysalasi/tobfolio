@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:tob/core/utils/constants/assets/svg.dart';
-// import 'package:tob/core/utils/constants/assets/pngs.dart';
-import 'package:tob/features/artisan_profile/bloc/artisan_profile_bloc.dart';
-import 'package:tob/features/artisan_profile/screens/widgets/overview_widget.dart';
-import 'package:tob/features/artisan_profile/screens/widgets/reviews_widget.dart';
-// import 'package:tob/features/auth/repositories/auth_repository.dart';
+import 'package:tobfolio/core/utils/constants/assets/svg.dart';
+// import 'package:tobfolio/core/utils/constants/assets/pngs.dart';
+import 'package:tobfolio/features/artisan_profile/bloc/artisan_profile_bloc.dart';
+import 'package:tobfolio/features/artisan_profile/screens/widgets/overview_widget.dart';
+import 'package:tobfolio/features/artisan_profile/screens/widgets/reviews_widget.dart';
+// import 'package:tobfolio/features/auth/repositories/auth_repository.dart';
 
 class ArtisanProfileScreen extends StatefulWidget {
   final String id;

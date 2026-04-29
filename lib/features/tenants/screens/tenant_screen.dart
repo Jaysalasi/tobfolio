@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tob/core/theme/app_theme.dart';
-import 'package:tob/core/utils/components/widgets.dart';
-import 'package:tob/features/tenant_profile/screens/tenant_profile_screen.dart';
-import 'package:tob/features/tenants/bloc/tenant_bloc.dart';
-import 'package:tob/features/tenants/bloc/tenant_event.dart';
-import 'package:tob/features/tenants/bloc/tenant_state.dart';
-import 'package:tob/features/tenants/screens/add_tenant.dart';
-import 'package:tob/features/tenants/widgets/active_tenant_card.dart';
-import 'package:tob/features/tenants/widgets/expired_tenant_card.dart';
+import 'package:tobfolio/core/theme/app_theme.dart';
+import 'package:tobfolio/core/utils/components/widgets.dart';
+import 'package:tobfolio/features/tenant_profile/screens/tenant_profile_screen.dart';
+import 'package:tobfolio/features/tenants/bloc/tenant_bloc.dart';
+import 'package:tobfolio/features/tenants/bloc/tenant_event.dart';
+import 'package:tobfolio/features/tenants/bloc/tenant_state.dart';
+import 'package:tobfolio/features/tenants/screens/add_tenant.dart';
+import 'package:tobfolio/features/tenants/widgets/active_tenant_card.dart';
+import 'package:tobfolio/features/tenants/widgets/expired_tenant_card.dart';
 
 class TenantScreen extends StatefulWidget {
   const TenantScreen({super.key});

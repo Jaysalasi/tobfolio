@@ -5,7 +5,7 @@
 // // JsonSerializableGenerator
 // // **************************************************************************
 
-// import 'package:tob/features/auth/models/auth_response.dart';
+// import 'package:tobfolio/features/auth/models/auth_response.dart';
 
 // AuthResponse _$AuthResponseFromJson(Map<String, dynamic> json) => AuthResponse(
 //   user: User.fromJson(json['user'] as Map<String, dynamic>),

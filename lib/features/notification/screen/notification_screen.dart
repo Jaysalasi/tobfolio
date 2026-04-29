@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tob/features/notification/bloc/notification_bloc.dart';
-import 'package:tob/features/notification/bloc/notification_event.dart';
-import 'package:tob/features/notification/bloc/notification_state.dart';
-import 'package:tob/features/notification/screen/widgets/notification_widget.dart';
+import 'package:tobfolio/features/notification/bloc/notification_bloc.dart';
+import 'package:tobfolio/features/notification/bloc/notification_event.dart';
+import 'package:tobfolio/features/notification/bloc/notification_state.dart';
+import 'package:tobfolio/features/notification/screen/widgets/notification_widget.dart';
 
 class NotificationScreen extends StatelessWidget {
   const NotificationScreen({super.key});

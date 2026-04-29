@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';  
-import 'package:tob/core/utils/components/app_button.dart';
-import 'package:tob/core/utils/components/app_text_field.dart';
-import 'package:tob/core/utils/constants/assets/svg.dart';
-import 'package:tob/core/utils/toasts.dart';
+import 'package:tobfolio/core/utils/components/app_button.dart';
+import 'package:tobfolio/core/utils/components/app_text_field.dart';
+import 'package:tobfolio/core/utils/constants/assets/svg.dart';
+import 'package:tobfolio/core/utils/toasts.dart';
 import '../bloc/register_bloc.dart';
 
 class RegisterScreen extends StatefulWidget {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:tob/core/utils/components/constants.dart';
-import 'package:tob/core/utils/constants/assets/svg.dart';
+import 'package:tobfolio/core/utils/components/constants.dart';
+import 'package:tobfolio/core/utils/constants/assets/svg.dart';
 
 class LeasePropertyScreen extends StatefulWidget {
   const LeasePropertyScreen({super.key});

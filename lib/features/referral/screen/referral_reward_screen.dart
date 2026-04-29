@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:tob/core/utils/components/app_button.dart';
-import 'package:tob/core/utils/components/constants.dart';
-import 'package:tob/core/utils/constants/assets/svg.dart';
-import 'package:tob/features/referral/screen/referral_points_withdraw_screen.dart';
+import 'package:tobfolio/core/utils/components/app_button.dart';
+import 'package:tobfolio/core/utils/components/constants.dart';
+import 'package:tobfolio/core/utils/constants/assets/svg.dart';
+import 'package:tobfolio/features/referral/screen/referral_points_withdraw_screen.dart';
 
 class ReferralRewardScreen extends StatefulWidget {
   const ReferralRewardScreen({super.key});

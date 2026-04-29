@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:tob/core/utils/components/app_button.dart';
-import 'package:tob/core/utils/constants/assets/svg.dart';
-import 'package:tob/features/add_property/utils/alt_text_field.dart';
-import 'package:tob/features/home/bloc/home_bloc.dart';
-import 'package:tob/features/my_profile/bloc/profile_bloc.dart';
+import 'package:tobfolio/core/utils/components/app_button.dart';
+import 'package:tobfolio/core/utils/constants/assets/svg.dart';
+import 'package:tobfolio/features/add_property/utils/alt_text_field.dart';
+import 'package:tobfolio/features/home/bloc/home_bloc.dart';
+import 'package:tobfolio/features/my_profile/bloc/profile_bloc.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});

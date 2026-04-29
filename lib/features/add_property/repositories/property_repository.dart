@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:tob/core/network/api_service.dart';
-import 'package:tob/core/services/media_upload_service.dart';
+import 'package:tobfolio/core/network/api_service.dart';
+import 'package:tobfolio/core/services/media_upload_service.dart';
 
 class PropertyRepository {
   final ApiService _apiService;

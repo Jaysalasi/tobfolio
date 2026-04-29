@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tob/features/notification/model/notification_model.dart';
+import 'package:tobfolio/features/notification/model/notification_model.dart';
 
 class NotificationCard extends StatelessWidget {
   final AppNotification notification;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tob/core/utils/components/constants.dart';
+import 'package:tobfolio/core/utils/components/constants.dart';
 
 class ExpenseCategoryTile extends StatelessWidget {
   final String title;

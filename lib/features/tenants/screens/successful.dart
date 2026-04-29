@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
-import 'package:tob/core/utils/components/app_button.dart';
-import 'package:tob/core/utils/constants/assets/svg.dart';
+import 'package:tobfolio/core/utils/components/app_button.dart';
+import 'package:tobfolio/core/utils/constants/assets/svg.dart';
 
 class Successful extends StatelessWidget {
   const Successful({super.key});

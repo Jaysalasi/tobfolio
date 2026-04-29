@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:tob/features/expenses/model/expenses_model.dart';
+import 'package:tobfolio/features/expenses/model/expenses_model.dart';
 
 abstract class ExpensesState extends Equatable {
   const ExpensesState();

@@ -1,4 +1,4 @@
-import 'package:tob/features/auth/models/user.dart';
+import 'package:tobfolio/features/auth/models/user.dart';
 
 class AuthResponse {
   final String referralCode;

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tob/core/utils/constants/assets/pngs.dart';
-import 'package:tob/features/auth/bloc/auth_bloc.dart';
-import 'package:tob/features/onboarding/cubit/onboarding_cubit.dart'; 
+import 'package:tobfolio/core/utils/constants/assets/pngs.dart';
+import 'package:tobfolio/features/auth/bloc/auth_bloc.dart';
+import 'package:tobfolio/features/onboarding/cubit/onboarding_cubit.dart'; 
 class SplashScreen extends StatefulWidget {
   static const routeName = '/';
 

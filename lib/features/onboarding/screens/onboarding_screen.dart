@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:tob/core/utils/components/app_button.dart';
-import 'package:tob/core/utils/constants/assets/pngs.dart';
-import 'package:tob/core/utils/constants/assets/svg.dart';
+import 'package:tobfolio/core/utils/components/app_button.dart';
+import 'package:tobfolio/core/utils/constants/assets/pngs.dart';
+import 'package:tobfolio/core/utils/constants/assets/svg.dart';
 import '../../../core/theme/app_theme.dart';
 import '../cubit/onboarding_cubit.dart';
 

@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:tob/features/referral/model/rewards_model.dart';
+import 'package:tobfolio/features/referral/model/rewards_model.dart';
 
 class ReferralState extends Equatable {
   final bool isLoading;

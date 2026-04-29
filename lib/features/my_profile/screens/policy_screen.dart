@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:tob/core/utils/constants/assets/svg.dart';
+import 'package:tobfolio/core/utils/constants/assets/svg.dart';
 
 class PolicyScreen extends StatelessWidget {
   const PolicyScreen({super.key});

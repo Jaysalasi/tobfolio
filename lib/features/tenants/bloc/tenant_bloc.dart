@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tob/features/tenants/bloc/tenant_event.dart';
-import 'package:tob/features/tenants/bloc/tenant_state.dart';
-import 'package:tob/features/tenants/repositories/tenant_repository.dart';
+import 'package:tobfolio/features/tenants/bloc/tenant_event.dart';
+import 'package:tobfolio/features/tenants/bloc/tenant_state.dart';
+import 'package:tobfolio/features/tenants/repositories/tenant_repository.dart';
 
 class TenantBloc extends Bloc<TenantEvent, TenantState> {
   final TenantRepository _repository;

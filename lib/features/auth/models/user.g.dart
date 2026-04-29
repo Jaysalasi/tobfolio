@@ -3,7 +3,7 @@
 // JsonSerializableGenerator
 // **************************************************************************
 
-// import 'package:tob/features/auth/models/user.dart';
+// import 'package:tobfolio/features/auth/models/user.dart';
 
 // User _$UserFromJson(Map<String, dynamic> json) => User(
 //   id: json['id'] as int,

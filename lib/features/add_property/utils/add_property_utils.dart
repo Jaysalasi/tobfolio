@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:tob/core/theme/app_theme.dart';
-import 'package:tob/features/add_property/bloc/add_property_bloc.dart';
-import 'package:tob/features/add_property/bloc/add_property_event.dart';
-import 'package:tob/features/add_property/bloc/add_property_state.dart';
+import 'package:tobfolio/core/theme/app_theme.dart';
+import 'package:tobfolio/features/add_property/bloc/add_property_bloc.dart';
+import 'package:tobfolio/features/add_property/bloc/add_property_event.dart';
+import 'package:tobfolio/features/add_property/bloc/add_property_state.dart';
 
 void showPropertyTypeModal(BuildContext context) {
   final options = ["Residential", "Commercial", "Shortlet", "Land"];

@@ -2,7 +2,7 @@
 
 import 'package:dio/dio.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:tob/features/auth/bloc/forgot_password_state.dart';
+import 'package:tobfolio/features/auth/bloc/forgot_password_state.dart';
 import '../../../core/utils/logger.dart';
 import '../models/user.dart';
 import '../models/login_request.dart';

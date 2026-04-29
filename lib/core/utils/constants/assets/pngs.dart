@@ -1,7 +1,7 @@
 class AppImages {
   AppImages._();
 
-  static final logoWhite = "assets/png/tob-white.png";
+  static final logoWhite = "assets/png/tobfolio-white.png";
   static final roblox = "assets/png/boxlox.png";
 
   static final house = "assets/jpg/hero-image.jpg";

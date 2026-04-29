@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tob/core/theme/app_theme.dart';
-import 'package:tob/features/add_property/utils/alt_text_field.dart';
-import 'package:tob/features/auth/bloc/auth_bloc.dart';
-import 'package:tob/features/home/bloc/home_bloc.dart';
-import 'package:tob/features/tenant_profile/bloc/_tenant_profile_bloc.dart';
-import 'package:tob/features/tenant_profile/screens/widgets/info_tile_widget.dart';
+import 'package:tobfolio/core/theme/app_theme.dart';
+import 'package:tobfolio/features/add_property/utils/alt_text_field.dart';
+import 'package:tobfolio/features/auth/bloc/auth_bloc.dart';
+import 'package:tobfolio/features/home/bloc/home_bloc.dart';
+import 'package:tobfolio/features/tenant_profile/bloc/_tenant_profile_bloc.dart';
+import 'package:tobfolio/features/tenant_profile/screens/widgets/info_tile_widget.dart';
 import '../../../features/tenants/repositories/tenant_repository.dart';
 
 import '../bloc/tenant_profile_event.dart';

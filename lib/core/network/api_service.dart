@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:ui';
 import 'package:dio/dio.dart';
-import 'package:tob/core/storage/secure_storage_service.dart';
+import 'package:tobfolio/core/storage/secure_storage_service.dart';
 import '../config/api_config.dart';
 import '../utils/logger.dart';
 

@@ -2,8 +2,8 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart'; 
-import 'package:tob/core/network/api_service.dart';
-import 'package:tob/core/utils/toasts.dart';
+import 'package:tobfolio/core/network/api_service.dart';
+import 'package:tobfolio/core/utils/toasts.dart';
 import '../model/expenses_model.dart';
 
 class ExpensesRepository {

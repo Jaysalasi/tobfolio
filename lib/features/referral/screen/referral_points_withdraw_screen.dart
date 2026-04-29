@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:tob/core/theme/app_theme.dart';
-import 'package:tob/core/utils/components/app_button.dart';
-import 'package:tob/core/utils/constants/assets/svg.dart';
-import 'package:tob/features/add_property/utils/alt_text_field.dart';
+import 'package:tobfolio/core/theme/app_theme.dart';
+import 'package:tobfolio/core/utils/components/app_button.dart';
+import 'package:tobfolio/core/utils/constants/assets/svg.dart';
+import 'package:tobfolio/features/add_property/utils/alt_text_field.dart';
 
 class ReferralPointsWithdrawScreen extends StatefulWidget {
   const ReferralPointsWithdrawScreen({super.key});

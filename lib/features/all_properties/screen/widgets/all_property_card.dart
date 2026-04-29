@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:tob/core/theme/app_theme.dart';
-import 'package:tob/core/utils/components/constants.dart';
-import 'package:tob/core/utils/constants/assets/svg.dart';
-import 'package:tob/features/all_properties/model/all_property_model.dart';
+import 'package:tobfolio/core/theme/app_theme.dart';
+import 'package:tobfolio/core/utils/components/constants.dart';
+import 'package:tobfolio/core/utils/constants/assets/svg.dart';
+import 'package:tobfolio/features/all_properties/model/all_property_model.dart';
 
 class PropertyCard extends StatefulWidget {
   final PropertyModel property;

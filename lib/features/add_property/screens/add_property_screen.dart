@@ -5,16 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:tob/core/theme/app_theme.dart';
-import 'package:tob/core/utils/components/app_button.dart';
-import 'package:tob/core/utils/components/widgets.dart';
-import 'package:tob/core/utils/constants/assets/svg.dart';
-import 'package:tob/features/add_property/bloc/add_property_bloc.dart';
-import 'package:tob/features/add_property/bloc/add_property_event.dart';
-import 'package:tob/features/add_property/bloc/add_property_state.dart';
-import 'package:tob/features/add_property/repositories/property_repository.dart';
-import 'package:tob/features/add_property/utils/add_property_utils.dart'; 
-import 'package:tob/features/add_property/utils/alt_text_field.dart';
+import 'package:tobfolio/core/theme/app_theme.dart';
+import 'package:tobfolio/core/utils/components/app_button.dart';
+import 'package:tobfolio/core/utils/components/widgets.dart';
+import 'package:tobfolio/core/utils/constants/assets/svg.dart';
+import 'package:tobfolio/features/add_property/bloc/add_property_bloc.dart';
+import 'package:tobfolio/features/add_property/bloc/add_property_event.dart';
+import 'package:tobfolio/features/add_property/bloc/add_property_state.dart';
+import 'package:tobfolio/features/add_property/repositories/property_repository.dart';
+import 'package:tobfolio/features/add_property/utils/add_property_utils.dart'; 
+import 'package:tobfolio/features/add_property/utils/alt_text_field.dart';
 
 class AddPropertyScreen extends StatefulWidget {
   const AddPropertyScreen({super.key});

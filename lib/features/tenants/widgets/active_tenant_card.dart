@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tob/core/theme/app_theme.dart';
-import 'package:tob/core/utils/components/constants.dart'; 
+import 'package:tobfolio/core/theme/app_theme.dart';
+import 'package:tobfolio/core/utils/components/constants.dart'; 
 
 class ActiveTenantCard extends StatelessWidget {
   final Map<String, dynamic> tenant;

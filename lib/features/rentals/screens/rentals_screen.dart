@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tob/core/router/app_router.dart';
-import 'package:tob/core/theme/app_theme.dart';
-import 'package:tob/core/utils/components/constants.dart';
-import 'package:tob/features/all_properties/bloc/all_properties_bloc.dart';
-import 'package:tob/features/all_properties/bloc/all_properties_event.dart';
-import 'package:tob/features/all_properties/bloc/all_properties_state.dart';
-import 'package:tob/features/all_properties/repositories/all_properties_repository.dart';
-import 'package:tob/features/home/bloc/home_bloc.dart';
+import 'package:tobfolio/core/router/app_router.dart';
+import 'package:tobfolio/core/theme/app_theme.dart';
+import 'package:tobfolio/core/utils/components/constants.dart';
+import 'package:tobfolio/features/all_properties/bloc/all_properties_bloc.dart';
+import 'package:tobfolio/features/all_properties/bloc/all_properties_event.dart';
+import 'package:tobfolio/features/all_properties/bloc/all_properties_state.dart';
+import 'package:tobfolio/features/all_properties/repositories/all_properties_repository.dart';
+import 'package:tobfolio/features/home/bloc/home_bloc.dart';
 
 class RentalsScreen extends StatefulWidget {
   const RentalsScreen({super.key});

@@ -3,12 +3,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart'; 
-import 'package:tob/core/utils/constants/assets/svg.dart';
-import 'package:tob/features/expenses/screen/expenses_screen.dart';
-import 'package:tob/features/home/screens/home_screen.dart';
-import 'package:tob/features/my_profile/screens/my_profile_screen.dart';
-import 'package:tob/features/rentals/screens/rentals_screen.dart'; 
-import 'package:tob/features/tenants/screens/tenant_screen.dart';
+import 'package:tobfolio/core/utils/constants/assets/svg.dart';
+import 'package:tobfolio/features/expenses/screen/expenses_screen.dart';
+import 'package:tobfolio/features/home/screens/home_screen.dart';
+import 'package:tobfolio/features/my_profile/screens/my_profile_screen.dart';
+import 'package:tobfolio/features/rentals/screens/rentals_screen.dart'; 
+import 'package:tobfolio/features/tenants/screens/tenant_screen.dart';
 import '../bloc/dashboard_bloc.dart';
 
 

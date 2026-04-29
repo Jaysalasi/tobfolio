@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:tob/features/notifications/model/notif_model.dart';
+import 'package:tobfolio/features/notifications/model/notif_model.dart';
 
 abstract class NotificationState extends Equatable {
   const NotificationState();

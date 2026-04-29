@@ -1,7 +1,7 @@
   import 'package:flutter/material.dart';
-import 'package:tob/core/theme/app_theme.dart';
-import 'package:tob/core/utils/components/constants.dart';
-import 'package:tob/core/utils/constants/assets/pngs.dart';
+import 'package:tobfolio/core/theme/app_theme.dart';
+import 'package:tobfolio/core/utils/components/constants.dart';
+import 'package:tobfolio/core/utils/constants/assets/pngs.dart';
 
 Widget expenseCardMeth(BuildContext context, ThemeData theme, VoidCallback? onTap) {
     return GestureDetector(

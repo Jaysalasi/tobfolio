@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tob/core/utils/components/constants.dart';
-import 'package:tob/core/utils/components/widgets.dart';
-import 'package:tob/core/utils/constants/assets/pngs.dart';
-import 'package:tob/core/utils/constants/assets/svg.dart';
-import 'package:tob/features/artisan_profile/screens/artisan_profile_screen.dart';
+import 'package:tobfolio/core/utils/components/constants.dart';
+import 'package:tobfolio/core/utils/components/widgets.dart';
+import 'package:tobfolio/core/utils/constants/assets/pngs.dart';
+import 'package:tobfolio/core/utils/constants/assets/svg.dart';
+import 'package:tobfolio/features/artisan_profile/screens/artisan_profile_screen.dart';
 import '../bloc/handyman_bloc.dart';
 
 class HandymanScreen extends StatefulWidget {

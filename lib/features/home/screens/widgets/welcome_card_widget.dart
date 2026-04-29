@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:tob/core/router/app_router.dart';
-import 'package:tob/core/utils/components/constants.dart';
-import 'package:tob/core/utils/components/widgets.dart';
-import 'package:tob/core/utils/constants/assets/svg.dart';
-import 'package:tob/core/utils/currency_formatter.dart';
-import 'package:tob/features/home/bloc/home_bloc.dart';
-import 'package:tob/features/home/model/dashboard_model.dart';
+import 'package:tobfolio/core/router/app_router.dart';
+import 'package:tobfolio/core/utils/components/constants.dart';
+import 'package:tobfolio/core/utils/components/widgets.dart';
+import 'package:tobfolio/core/utils/constants/assets/svg.dart';
+import 'package:tobfolio/core/utils/currency_formatter.dart';
+import 'package:tobfolio/features/home/bloc/home_bloc.dart';
+import 'package:tobfolio/features/home/model/dashboard_model.dart';
 
 class WelcomeCard extends StatelessWidget {
   final dynamic user;

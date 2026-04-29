@@ -1,10 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:tob/core/storage/secure_storage_service.dart';
-import 'package:tob/core/utils/logger.dart';
-import 'package:tob/features/auth/models/user.dart';
-import 'package:tob/features/home/model/dashboard_model.dart';
-import 'package:tob/features/home/repository/home_repository.dart';
+import 'package:tobfolio/core/storage/secure_storage_service.dart';
+import 'package:tobfolio/core/utils/logger.dart';
+import 'package:tobfolio/features/auth/models/user.dart';
+import 'package:tobfolio/features/home/model/dashboard_model.dart';
+import 'package:tobfolio/features/home/repository/home_repository.dart';
 
 part 'home_event.dart';
 part 'home_state.dart';

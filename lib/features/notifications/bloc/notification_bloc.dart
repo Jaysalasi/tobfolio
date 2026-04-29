@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tob/features/notifications/model/notif_model.dart';
+import 'package:tobfolio/features/notifications/model/notif_model.dart';
 import 'notification_event.dart';
 import 'notification_state.dart';
 

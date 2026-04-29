@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart'; 
-import 'package:tob/features/auth/models/login_request.dart';
-import 'package:tob/features/auth/repositories/auth_repository.dart';
+import 'package:tobfolio/features/auth/models/login_request.dart';
+import 'package:tobfolio/features/auth/repositories/auth_repository.dart';
 
 import 'forgot_password_event.dart';
 import 'forgot_password_state.dart';

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:tob/core/utils/components/widgets.dart';
-import 'package:tob/core/utils/constants/assets/pngs.dart';
-import 'package:tob/core/utils/constants/assets/svg.dart';
-import 'package:tob/features/handyman/models/handyman.dart';
+import 'package:tobfolio/core/utils/components/widgets.dart';
+import 'package:tobfolio/core/utils/constants/assets/pngs.dart';
+import 'package:tobfolio/core/utils/constants/assets/svg.dart';
+import 'package:tobfolio/features/handyman/models/handyman.dart';
 
 Expanded overviewMeth(BuildContext context, ThemeData theme, Handyman detail, List images) {
     return Expanded(

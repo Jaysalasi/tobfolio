@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:tob/core/network/api_service.dart';
-import 'package:tob/features/all_properties/model/all_property_model.dart';
+import 'package:tobfolio/core/network/api_service.dart';
+import 'package:tobfolio/features/all_properties/model/all_property_model.dart';
 
 class AllPropertiesRepository {
   final ApiService _apiService;

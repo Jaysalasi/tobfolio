@@ -4,17 +4,24 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:tobfolio/core/router/app_router.dart';
 import 'package:tobfolio/core/theme/app_theme.dart';
 import 'package:tobfolio/core/utils/components/app_button.dart';
 import 'package:tobfolio/core/utils/components/widgets.dart';
 import 'package:tobfolio/core/utils/constants/assets/svg.dart';
+import 'package:tobfolio/core/utils/toasts.dart';
 import 'package:tobfolio/features/add_property/bloc/add_property_bloc.dart';
 import 'package:tobfolio/features/add_property/bloc/add_property_event.dart';
 import 'package:tobfolio/features/add_property/bloc/add_property_state.dart';
 import 'package:tobfolio/features/add_property/repositories/property_repository.dart';
 import 'package:tobfolio/features/add_property/utils/add_property_utils.dart'; 
 import 'package:tobfolio/features/add_property/utils/alt_text_field.dart';
+import 'package:tobfolio/features/add_property/models/unit_model.dart';
+import 'package:tobfolio/features/all_properties/bloc/all_properties_bloc.dart';
+import 'package:tobfolio/features/all_properties/bloc/all_properties_event.dart';
+import 'package:tobfolio/features/home/bloc/home_bloc.dart';
 
 class AddPropertyScreen extends StatefulWidget {
   const AddPropertyScreen({super.key});
@@ -327,44 +334,106 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
           ],
         ),
         const SizedBox(height: 10),
+        
+        // Display added units
+        BlocBuilder<AddPropertyBloc, AddPropertyState>(
+          builder: (context, state) {
+            if (state.units.isEmpty) {
+              return const SizedBox.shrink();
+            }
+            
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Added Units (${state.units.length})",
+                  style: theme.textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                ...state.units.asMap().entries.map((entry) {
+                  final index = entry.key;
+                  final unit = entry.value;
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 8),
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey.shade300),
+                      borderRadius: BorderRadius.circular(8),
+                      color: Colors.grey.shade50,
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Unit ${unit.unitNumber} - ${unit.unitType}",
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              if (unit.description != null && unit.description!.isNotEmpty)
+                                Text(
+                                  unit.description!,
+                                  style: theme.textTheme.bodySmall,
+                                ),
+                            ],
+                          ),
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.delete, color: Colors.red),
+                          onPressed: () {
+                            context.read<AddPropertyBloc>().add(RemoveUnit(index));
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                }).toList(),
+                const SizedBox(height: 16),
+              ],
+            );
+          },
+        ),
+        
         const Spacer(),
-        // Row(
-        //   mainAxisAlignment: MainAxisAlignment.center,
-        //   children: [
-        //     Padding(
-        //       padding: const EdgeInsets.all(20),
-        //       child: GestureDetector(
-        //         onTap: () {
-        //            
-        //         },
-        //         child: Row(
-        //           children: [
-        //             Icon(Icons.add),
-        //             Text("Add Another Unit"),
-        //           ],
-        //         ),
-        //       ),
-        //     ),
-        //   ],
-        // ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: GestureDetector(
+                onTap: () {
+                  _showAddUnitDialog(context, theme);
+                },
+                child: Row(
+                  children: [
+                    Icon(Icons.add),
+                    Text("Add Another Unit"),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
         BlocConsumer<AddPropertyBloc, AddPropertyState>(
           listener: (context, state) {
             if (state.status == AddPropertyStatus.success) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Property created successfully!'),
-                  backgroundColor: Colors.green,
-                ),
-              );
-              // Navigate back or to next screen
-              Navigator.of(context).pop();
+              showSuccess('Property created successfully!');
+              
+              // Refetch all properties and dashboard data before navigating
+              // WidgetsBinding.instance.addPostFrameCallback((_) {
+              //   context.watch<AllPropertyBloc>().add(LoadProperties());
+              //   context.watch<HomeBloc>().add(LoadHomeData());
+              //   // Navigate after refetching data
+              // });
+             Navigator.of(context).pushReplacementNamed('/dashboard');
+              
             } else if (state.status == AddPropertyStatus.error) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.errorMessage ?? 'Failed to create property'),
-                  backgroundColor: Colors.red,
-                ),
-              );
+              showError(state.errorMessage ?? 'Failed to create property');
             }
           },
           builder: (context, state) {
@@ -378,13 +447,26 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                       // Create property with current state data
                       final propertyImages = state.photos.map((photo) => photo.path).toList();
                       
-                      context.read<AddPropertyBloc>().add(CreateProperty(
-                        name: state.name,
-                        type: state.propertyType,
-                        address: state.address,
-                        units: 1, // Single unit apartment
-                        propertyImages: propertyImages,
-                      ));
+                      // Check if we have multiple units
+                      if (state.units.isNotEmpty) {
+                        // Create multiple properties for each unit
+                        context.read<AddPropertyBloc>().add(CreateMultipleProperties(
+                          name: state.name,
+                          type: state.propertyType,
+                          address: state.address,
+                          propertyImages: propertyImages,
+                          units: state.units,
+                        ));
+                      } else {
+                        // Create single property
+                        context.read<AddPropertyBloc>().add(CreateProperty(
+                          name: state.name,
+                          type: state.propertyType,
+                          address: state.address,
+                          units: 1, // Single unit apartment
+                          propertyImages: propertyImages,
+                        ));
+                      }
                     },
             );
           },
@@ -520,6 +602,105 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
           },
         ),
       ],
+    );
+  }
+
+  void _showAddUnitDialog(BuildContext context, ThemeData theme) {
+    String unitType = '';
+    String unitNumber = '';
+    String description = '';
+    String? documentPath;
+
+    showDialog(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) => AlertDialog(
+          title: Text('Add New Unit'),
+          content: SizedBox(
+            width: double.maxFinite,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                AltTextField(
+                  label: "Unit Type",
+                  hint: unitType ?? "Select Unit Type",
+                  type: AltFieldType.dropdown,
+                  items: ["Flat", "Room", "Villa", "Office", "Plot"],
+                  onChanged: (value) {
+                    setState(() {
+                      unitType = value;
+                    });
+                  },
+                ),
+                const SizedBox(height: 16),
+                AltTextField(
+                  label: "Unit Number",
+                  hint: "E.g 101",
+                  onChanged: (value) {
+                    setState(() {
+                      unitNumber = value;
+                    });
+                  },
+                ),
+                const SizedBox(height: 16),
+                AltTextField(
+                  label: "Description (Optional)",
+                  hint: "Enter unit description",
+                  maxLines: 3,
+                  type: AltFieldType.multiline,
+                  onChanged: (value) {
+                    setState(() {
+                      description = value;
+                    });
+                  },
+                ),
+                const SizedBox(height: 16),
+                // Document upload placeholder
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(Icons.upload_file),
+                      const SizedBox(width: 8),
+                      Text(documentPath != null ? 'Document uploaded' : 'Upload document (optional)'),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                if (unitType.isNotEmpty && unitNumber.isNotEmpty) {
+                  final newUnit = PropertyUnit(
+                    unitType: unitType,
+                    unitNumber: int.tryParse(unitNumber) ?? 1,
+                    description: description.isNotEmpty ? description : null,
+                    documentPath: documentPath,
+                  );
+                  context.read<AddPropertyBloc>().add(AddUnit(newUnit));
+                  Navigator.pop(context);
+                } else {
+                  showError('Please fill unit type and number');
+                  // ScaffoldMessenger.of(context).showSnackBar(
+                  //   SnackBar(content: Text('Please fill unit type and number')),
+                  // );
+                } 
+              },
+              child: Text('Add Unit'),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

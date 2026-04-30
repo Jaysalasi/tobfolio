@@ -1,4 +1,5 @@
 import 'package:tobfolio/features/add_property/utils/add_property_utils.dart';
+import 'package:tobfolio/features/add_property/models/unit_model.dart';
 
 enum AddPropertyStatus {
   initial,
@@ -16,6 +17,7 @@ class AddPropertyState {
   final int? unitNumber;
   final List<PropertyPhoto> photos;
   final String document;
+  final List<PropertyUnit> units;
   final AddPropertyStatus status;
   final String? errorMessage;
 
@@ -28,6 +30,7 @@ class AddPropertyState {
     this.unitNumber,
     this.photos = const [],
     this.document = '',
+    this.units = const [],
     this.status = AddPropertyStatus.initial,
     this.errorMessage,
   });
@@ -41,6 +44,7 @@ class AddPropertyState {
     int? unitNumber,
     List<PropertyPhoto>? photos,
     String? document,
+    List<PropertyUnit>? units,
     AddPropertyStatus? status,
     String? errorMessage,
     bool clearError = false,
@@ -54,6 +58,7 @@ class AddPropertyState {
       unitNumber: unitNumber ?? this.unitNumber,
       photos: photos ?? this.photos,
       document: document ?? this.document,
+      units: units ?? this.units,
       status: status ?? this.status,
       errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
     );

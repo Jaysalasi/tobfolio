@@ -1,3 +1,5 @@
+import 'package:tobfolio/features/add_property/models/unit_model.dart';
+
 abstract class AddPropertyEvent {}
 
 class UpdateName extends AddPropertyEvent {
@@ -58,5 +60,38 @@ class CreateProperty extends AddPropertyEvent {
     required this.address,
     required this.units,
     required this.propertyImages,
+  });
+}
+
+// Multi-unit events
+class AddUnit extends AddPropertyEvent {
+  final PropertyUnit unit;
+  AddUnit(this.unit);
+}
+
+class UpdateUnit extends AddPropertyEvent {
+  final int index;
+  final PropertyUnit unit;
+  UpdateUnit(this.index, this.unit);
+}
+
+class RemoveUnit extends AddPropertyEvent {
+  final int index;
+  RemoveUnit(this.index);
+}
+
+class CreateMultipleProperties extends AddPropertyEvent {
+  final String name;
+  final String type;
+  final String address;
+  final List<String> propertyImages;
+  final List<PropertyUnit> units;
+
+  CreateMultipleProperties({
+    required this.name,
+    required this.type,
+    required this.address,
+    required this.propertyImages,
+    required this.units,
   });
 }

@@ -10,6 +10,7 @@ import 'package:tobfolio/core/theme/app_theme.dart';
 import 'package:tobfolio/core/utils/components/app_button.dart';
 import 'package:tobfolio/core/utils/components/widgets.dart';
 import 'package:tobfolio/core/utils/constants/assets/svg.dart';
+import 'package:tobfolio/core/utils/toasts.dart';
 import 'package:tobfolio/features/add_property/utils/alt_text_field.dart';
 import 'package:tobfolio/features/add_property/utils/phone_text_field.dart';
 import 'package:tobfolio/features/all_properties/bloc/all_properties_bloc.dart';
@@ -151,12 +152,13 @@ class _AddTenantScreenState extends State<AddTenantScreen> {
               Navigator.of(context, rootNavigator: true).pop();
               
               if (state.error != null) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Error: ${state.error}'),
-                    backgroundColor: Colors.red,
-                  ),
-                );
+                showError("Error: ${state.error}");
+                // ScaffoldMessenger.of(context).showSnackBar(
+                //   SnackBar(
+                //     content: Text('Error: ${state.error}'),
+                //     backgroundColor: Colors.red,
+                //   ),
+                // );
               } else {
                 // Success - navigate to successful screen
                 Navigator.push(

@@ -4,6 +4,7 @@ import 'package:tobfolio/features/add_property/bloc/add_property_event.dart';
 import 'package:tobfolio/features/add_property/bloc/add_property_state.dart';
 import 'package:tobfolio/features/add_property/utils/add_property_utils.dart';
 import 'package:tobfolio/features/add_property/repositories/property_repository.dart';
+import 'package:tobfolio/features/add_property/models/unit_model.dart';
 
 class AddPropertyBloc extends Bloc<AddPropertyEvent, AddPropertyState> {
   final PropertyRepository _propertyRepository;
@@ -54,7 +55,26 @@ class AddPropertyBloc extends Bloc<AddPropertyEvent, AddPropertyState> {
       emit(state.copyWith(photos: updated));
     });
 
+    on<AddUnit>((event, emit) {
+      final updated = List<PropertyUnit>.from(state.units)..add(event.unit);
+      emit(state.copyWith(units: updated));
+    });
+
+    on<UpdateUnit>((event, emit) {
+      final updated = List<PropertyUnit>.from(state.units);
+      if (event.index >= 0 && event.index < updated.length) {
+        updated[event.index] = event.unit;
+        emit(state.copyWith(units: updated));
+      }
+    });
+
+    on<RemoveUnit>((event, emit) {
+      final updated = List<PropertyUnit>.from(state.units)..removeAt(event.index);
+      emit(state.copyWith(units: updated));
+    });
+
     on<CreateProperty>(_onCreateProperty);
+    on<CreateMultipleProperties>(_onCreateMultipleProperties);
   }
 
   Future<void> _onCreateProperty(
@@ -74,6 +94,41 @@ class AddPropertyBloc extends Bloc<AddPropertyEvent, AddPropertyState> {
         units: event.units,
         propertyImages: event.propertyImages,
       );
+
+      emit(state.copyWith(
+        status: AddPropertyStatus.success,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        status: AddPropertyStatus.error,
+        errorMessage: e.toString(),
+      ));
+    }
+  }
+
+  Future<void> _onCreateMultipleProperties(
+    CreateMultipleProperties event,
+    Emitter<AddPropertyState> emit,
+  ) async {
+    emit(state.copyWith(
+      status: AddPropertyStatus.loading,
+      clearError: true,
+    ));
+
+    try {
+      // Create each unit as a separate property since endpoint doesn't support arrays
+      for (int i = 0; i < event.units.length; i++) {
+        final unit = event.units[i];
+        final unitName = "${event.name} - Unit ${unit.unitNumber}";
+        
+        await _propertyRepository.createProperty(
+          name: unitName,
+          type: event.type,
+          address: event.address,
+          units: 1, // Each unit is created as a separate property
+          propertyImages: unit.photos,
+        );
+      }
 
       emit(state.copyWith(
         status: AddPropertyStatus.success,

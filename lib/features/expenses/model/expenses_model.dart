@@ -54,7 +54,7 @@ class ExpensesModel {
     final String? landlordId;
     final PropertyId? propertyId;
     final String? type;
-    final int? cost;
+    final dynamic cost;
     final String? description;
     final String? status;
     final String? date;

@@ -31,8 +31,9 @@ class Successful extends StatelessWidget {
                   AppButton(
                     title: "Close",
                     onPressed: () {
-                      Navigator.pop(context);
-                      Navigator.pop(context);
+                      // Navigator.pop(context);
+                      // Navigator.pop(context);
+                       Navigator.of(context).pushReplacementNamed('/dashboard');
                     },
                   ),
                 ],

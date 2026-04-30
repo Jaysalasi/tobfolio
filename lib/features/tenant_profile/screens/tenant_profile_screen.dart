@@ -64,6 +64,11 @@ class _TenantProfileViewState extends State<_TenantProfileView> {
     return Scaffold(
       backgroundColor: const Color(0xffF3F4F6),
       appBar: AppBar(
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_rounded),
+          onPressed: () => Navigator.pop(context),
+        ),
         title: const Text("Tenant Profile"),
         centerTitle: true,
         elevation: 0,
@@ -166,11 +171,11 @@ class _TenantProfileViewState extends State<_TenantProfileView> {
                 ]),
 
                 const SizedBox(height: 12),
-
+ 
                 _card([
                   InfoTile(
                     title:
-                        "Rental fee ${context.watch<AuthBloc>().state.user?.currency}",
+                        "Rental fee ${context.watch<HomeBloc>().state.user?.currency}",
                     value: tenant.rentFee,
                   ),
                   InfoTile(

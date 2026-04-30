@@ -32,4 +32,27 @@ class AllPropertiesRepository {
       throw Exception('Unexpected error: $e');
     }
   }
+
+  Future<void> deleteProperty(String propertyId) async {
+    try {
+      final response = await _apiService.delete('/properties/$propertyId');
+      
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        // Property deleted successfully
+        return;
+      } else {
+        throw DioException(
+          requestOptions: RequestOptions(path: '/properties/$propertyId'),
+          message: 'Failed to delete property: ${response.statusCode}',  
+        );
+      }
+    } on DioException catch (e) {
+      throw DioException(
+        requestOptions: e.requestOptions,
+        message: 'Network error: ${e.message}',
+      );
+    } catch (e) {
+      throw Exception('Unexpected error: $e');
+    }
+  }
 }

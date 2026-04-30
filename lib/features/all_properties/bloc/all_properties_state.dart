@@ -21,6 +21,10 @@ class PropertyLoaded extends AllPropertyState {
   List<Object?> get props => [properties];
 }
 
+class PropertyDeleting extends AllPropertyState {}
+
+class PropertyDeleteSuccess extends AllPropertyState {}
+
 class PropertyError extends AllPropertyState {
   final String message;
 

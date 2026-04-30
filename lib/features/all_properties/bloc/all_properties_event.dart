@@ -8,3 +8,12 @@ abstract class AllPropertyEvent extends Equatable {
 }
 
 class LoadProperties extends AllPropertyEvent {}
+
+class DeleteProperty extends AllPropertyEvent {
+  final String propertyId;
+
+  const DeleteProperty(this.propertyId);
+
+  @override
+  List<Object?> get props => [propertyId];
+}

@@ -20,6 +20,7 @@ class _ExpensesHistoryDetailState extends State<ExpensesHistoryDetail> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    print((widget.expenseDetail));
     // final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: theme.colorScheme.tertiary,
@@ -115,7 +116,7 @@ class _ExpensesHistoryDetailState extends State<ExpensesHistoryDetail> {
                       rowText(
                         theme: theme,
                         title: "Unit",
-                        subtitle: widget.expenseDetail.propertyId!.name!,
+                        subtitle: widget.expenseDetail.type!,
                       ),
                       rowText(
                         theme: theme,

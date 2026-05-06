@@ -16,7 +16,8 @@ import 'package:tobfolio/features/add_property/bloc/add_property_bloc.dart';
 import 'package:tobfolio/features/add_property/bloc/add_property_event.dart';
 import 'package:tobfolio/features/add_property/bloc/add_property_state.dart';
 import 'package:tobfolio/features/add_property/repositories/property_repository.dart';
-import 'package:tobfolio/features/add_property/utils/add_property_utils.dart'; 
+import 'package:tobfolio/features/add_property/screens/save_and_add_another_property_unit_screen.dart';
+import 'package:tobfolio/features/add_property/utils/add_property_utils.dart';
 import 'package:tobfolio/features/add_property/utils/alt_text_field.dart';
 import 'package:tobfolio/features/add_property/models/unit_model.dart';
 import 'package:tobfolio/features/all_properties/bloc/all_properties_bloc.dart';
@@ -104,9 +105,19 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                   children: [
                     addPropertyStepOneMeth(context, state, theme),
                     if (selectedUnit == "Single Unit Apartment")
-                      addPropertyStepTwoMeth(context, state, theme, pickDocument),
+                      addPropertyStepTwoMeth(
+                        context,
+                        state,
+                        theme,
+                        pickDocument,
+                      ),
                     if (selectedUnit == "Entire Building")
-                      addPropertyStepTwoMethForBuilding(context, state, theme, pickDocument),
+                      addPropertyStepTwoMethForBuilding(
+                        context,
+                        state,
+                        theme,
+                        pickDocument,
+                      ),
                   ],
                 );
               },
@@ -261,7 +272,9 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
         AltTextField(
           label: "Unit Number",
           hint: "E.g 101",
-          onChanged: (v) => context.read<AddPropertyBloc>().add(UpdateUnitNumber(int.tryParse(v) ?? 0)),
+          onChanged: (v) => context.read<AddPropertyBloc>().add(
+            UpdateUnitNumber(int.tryParse(v) ?? 0),
+          ),
         ),
 
         AltTextField(
@@ -269,7 +282,8 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
           hint: "E.g Modern apartment with city view",
           maxLines: 5,
           type: AltFieldType.multiline,
-          onChanged: (v) => context.read<AddPropertyBloc>().add(UpdateDescription(v)),
+          onChanged: (v) =>
+              context.read<AddPropertyBloc>().add(UpdateDescription(v)),
         ),
 
         Text(
@@ -334,14 +348,14 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
           ],
         ),
         const SizedBox(height: 10),
-        
+
         // Display added units
         BlocBuilder<AddPropertyBloc, AddPropertyState>(
           builder: (context, state) {
             if (state.units.isEmpty) {
               return const SizedBox.shrink();
             }
-            
+
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -375,7 +389,8 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              if (unit.description != null && unit.description!.isNotEmpty)
+                              if (unit.description != null &&
+                                  unit.description!.isNotEmpty)
                                 Text(
                                   unit.description!,
                                   style: theme.textTheme.bodySmall,
@@ -386,7 +401,9 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                         IconButton(
                           icon: Icon(Icons.delete, color: Colors.red),
                           onPressed: () {
-                            context.read<AddPropertyBloc>().add(RemoveUnit(index));
+                            context.read<AddPropertyBloc>().add(
+                              RemoveUnit(index),
+                            );
                           },
                         ),
                       ],
@@ -398,7 +415,7 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
             );
           },
         ),
-        
+
         const Spacer(),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -407,13 +424,17 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
               padding: const EdgeInsets.all(20),
               child: GestureDetector(
                 onTap: () {
-                  _showAddUnitDialog(context, theme);
+                  // _showAddUnitDialog(context, theme);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          SaveAndAddAnotherPropertyUnitScreen(),
+                    ),
+                  );
                 },
                 child: Row(
-                  children: [
-                    Icon(Icons.add),
-                    Text("Add Another Unit"),
-                  ],
+                  children: [Icon(Icons.add), Text("Add Another Unit")],
                 ),
               ),
             ),
@@ -423,49 +444,54 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
           listener: (context, state) {
             if (state.status == AddPropertyStatus.success) {
               showSuccess('Property created successfully!');
-              
+
               // Refetch all properties and dashboard data before navigating
               // WidgetsBinding.instance.addPostFrameCallback((_) {
               //   context.watch<AllPropertyBloc>().add(LoadProperties());
               //   context.watch<HomeBloc>().add(LoadHomeData());
               //   // Navigate after refetching data
               // });
-             Navigator.of(context).pushReplacementNamed('/dashboard');
-              
+              Navigator.of(context).pushReplacementNamed('/dashboard');
             } else if (state.status == AddPropertyStatus.error) {
               showError(state.errorMessage ?? 'Failed to create property');
             }
           },
           builder: (context, state) {
             return AppButton(
-              title: state.status == AddPropertyStatus.loading 
-                  ? "Creating..." 
+              title: state.status == AddPropertyStatus.loading
+                  ? "Creating..."
                   : "Save",
-              onPressed: state.status == AddPropertyStatus.loading 
-                  ? null 
+              onPressed: state.status == AddPropertyStatus.loading
+                  ? null
                   : () {
                       // Create property with current state data
-                      final propertyImages = state.photos.map((photo) => photo.path).toList();
-                      
+                      final propertyImages = state.photos
+                          .map((photo) => photo.path)
+                          .toList();
+
                       // Check if we have multiple units
                       if (state.units.isNotEmpty) {
                         // Create multiple properties for each unit
-                        context.read<AddPropertyBloc>().add(CreateMultipleProperties(
-                          name: state.name,
-                          type: state.propertyType,
-                          address: state.address,
-                          propertyImages: propertyImages,
-                          units: state.units,
-                        ));
+                        context.read<AddPropertyBloc>().add(
+                          CreateMultipleProperties(
+                            name: state.name,
+                            type: state.propertyType,
+                            address: state.address,
+                            propertyImages: propertyImages,
+                            units: state.units,
+                          ),
+                        );
                       } else {
                         // Create single property
-                        context.read<AddPropertyBloc>().add(CreateProperty(
-                          name: state.name,
-                          type: state.propertyType,
-                          address: state.address,
-                          units: 1, // Single unit apartment
-                          propertyImages: propertyImages,
-                        ));
+                        context.read<AddPropertyBloc>().add(
+                          CreateProperty(
+                            name: state.name,
+                            type: state.propertyType,
+                            address: state.address,
+                            units: 1, // Single unit apartment
+                            propertyImages: propertyImages,
+                          ),
+                        );
                       }
                     },
             );
@@ -474,6 +500,7 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
       ],
     );
   }
+
   Widget addPropertyStepTwoMethForBuilding(
     BuildContext context,
     AddPropertyState state,
@@ -579,15 +606,8 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
             Padding(
               padding: const EdgeInsets.all(20),
               child: GestureDetector(
-                onTap: () {
-                
-                },
-                child: Row(
-                  children: [
-                    
-                    Text("Save & Add Another"),
-                  ],
-                ),
+                onTap: () {},
+                child: Row(children: [Text("Save & Add Another")]),
               ),
             ),
           ],
@@ -666,7 +686,11 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                     children: [
                       Icon(Icons.upload_file),
                       const SizedBox(width: 8),
-                      Text(documentPath != null ? 'Document uploaded' : 'Upload document (optional)'),
+                      Text(
+                        documentPath != null
+                            ? 'Document uploaded'
+                            : 'Upload document (optional)',
+                      ),
                     ],
                   ),
                 ),
@@ -694,7 +718,7 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                   // ScaffoldMessenger.of(context).showSnackBar(
                   //   SnackBar(content: Text('Please fill unit type and number')),
                   // );
-                } 
+                }
               },
               child: Text('Add Unit'),
             ),

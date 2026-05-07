@@ -15,6 +15,7 @@ class AddPropertyState {
   final String unitType;
   final String? description;
   final int? unitNumber;
+  final int? totalUnits;
   final List<PropertyPhoto> photos;
   final String document;
   final List<PropertyUnit> units;
@@ -28,6 +29,7 @@ class AddPropertyState {
     this.unitType = '',
     this.description,
     this.unitNumber,
+    this.totalUnits,
     this.photos = const [],
     this.document = '',
     this.units = const [],
@@ -42,6 +44,7 @@ class AddPropertyState {
     String? unitType,
     String? description,
     int? unitNumber,
+    int? totalUnits,
     List<PropertyPhoto>? photos,
     String? document,
     List<PropertyUnit>? units,
@@ -56,6 +59,7 @@ class AddPropertyState {
       unitType: unitType ?? this.unitType,
       description: description ?? this.description,
       unitNumber: unitNumber ?? this.unitNumber,
+      totalUnits: totalUnits ?? this.totalUnits,
       photos: photos ?? this.photos,
       document: document ?? this.document,
       units: units ?? this.units,

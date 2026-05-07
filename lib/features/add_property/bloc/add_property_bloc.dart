@@ -55,6 +55,10 @@ class AddPropertyBloc extends Bloc<AddPropertyEvent, AddPropertyState> {
       emit(state.copyWith(photos: updated));
     });
 
+    on<UpdateTotalUnits>((event, emit) {
+      emit(state.copyWith(totalUnits: event.totalUnits));
+    });
+
     on<AddUnit>((event, emit) {
       final updated = List<PropertyUnit>.from(state.units)..add(event.unit);
       emit(state.copyWith(units: updated));
@@ -93,6 +97,11 @@ class AddPropertyBloc extends Bloc<AddPropertyEvent, AddPropertyState> {
         address: event.address,
         units: event.units,
         propertyImages: event.propertyImages,
+        managementType: event.managementType,
+        unitType: event.unitType,
+        unitNumber: event.unitNumber,
+        totalUnits: event.totalUnits,
+        unitDescription: event.unitDescription,
       );
 
       emit(state.copyWith(
@@ -125,8 +134,12 @@ class AddPropertyBloc extends Bloc<AddPropertyEvent, AddPropertyState> {
           name: unitName,
           type: event.type,
           address: event.address,
-          units: 1, // Each unit is created as a separate property
+          units: 1,
           propertyImages: unit.photos,
+          managementType: 'entire_building',
+          unitType: unit.unitType,
+          unitNumber: unit.unitNumber.toString(),
+          unitDescription: unit.description ?? '',
         );
       }
 

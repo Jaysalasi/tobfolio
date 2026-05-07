@@ -47,12 +47,22 @@ class RemovePhoto extends AddPropertyEvent {
   RemovePhoto(this.index);
 }
 
+class UpdateTotalUnits extends AddPropertyEvent {
+  final int totalUnits;
+  UpdateTotalUnits(this.totalUnits);
+}
+
 class CreateProperty extends AddPropertyEvent {
   final String name;
   final String type;
   final String address;
   final int units;
   final List<String> propertyImages;
+  final String managementType;
+  final String unitType;
+  final String unitNumber;
+  final int totalUnits;
+  final String unitDescription;
 
   CreateProperty({
     required this.name,
@@ -60,6 +70,11 @@ class CreateProperty extends AddPropertyEvent {
     required this.address,
     required this.units,
     required this.propertyImages,
+    required this.managementType,
+    this.unitType = '',
+    this.unitNumber = '',
+    this.totalUnits = 0,
+    this.unitDescription = '',
   });
 }
 

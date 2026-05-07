@@ -263,7 +263,7 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
           hint: state.unitType != '' ? state.unitType : "Select Unit",
           value: state.unitType,
           type: AltFieldType.dropdown,
-          items: ["Flat", "Room", "Villa", "Office", "Plot"],
+          items: ["flat", "room", "villa", "office"],
           onChanged: (v) =>
               context.read<AddPropertyBloc>().add(UpdateUnitType(v)),
         ),
@@ -417,7 +417,7 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
         ),
 
         const Spacer(),
-        Row(
+         if (selectedUnit == "Single Unit Apartment") Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
@@ -425,11 +425,18 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
               child: GestureDetector(
                 onTap: () {
                   // _showAddUnitDialog(context, theme);
+                  final s = context.read<AddPropertyBloc>().state;
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                          SaveAndAddAnotherPropertyUnitScreen(),
+                      builder: (context) => SaveAndAddAnotherPropertyUnitScreen(
+                        propertyName: s.name,
+                        propertyType: s.propertyType,
+                        propertyAddress: s.address,
+                        unitType: s.unitType,
+                        propertyImages:
+                            s.photos.map((p) => p.path).toList(),
+                      ),
                     ),
                   );
                 },
@@ -469,30 +476,19 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                           .map((photo) => photo.path)
                           .toList();
 
-                      // Check if we have multiple units
-                      if (state.units.isNotEmpty) {
-                        // Create multiple properties for each unit
-                        context.read<AddPropertyBloc>().add(
-                          CreateMultipleProperties(
-                            name: state.name,
-                            type: state.propertyType,
-                            address: state.address,
-                            propertyImages: propertyImages,
-                            units: state.units,
-                          ),
-                        );
-                      } else {
-                        // Create single property
-                        context.read<AddPropertyBloc>().add(
-                          CreateProperty(
-                            name: state.name,
-                            type: state.propertyType,
-                            address: state.address,
-                            units: 1, // Single unit apartment
-                            propertyImages: propertyImages,
-                          ),
-                        );
-                      }
+                      context.read<AddPropertyBloc>().add(
+                        CreateProperty(
+                          name: state.name,
+                          type: state.propertyType,
+                          address: state.address,
+                          units: 1,
+                          propertyImages: propertyImages,
+                          managementType: 'single_unit',
+                          unitType: state.unitType,
+                          unitNumber: state.unitNumber?.toString() ?? '',
+                          unitDescription: state.description ?? '',
+                        ),
+                      );
                     },
             );
           },
@@ -517,16 +513,17 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
           hint: state.unitType != '' ? state.unitType : "Enter unit type",
           value: state.unitType,
           type: AltFieldType.dropdown,
-          items: ["Flat", "Room", "Villa", "Office", "Plot"],
+          items: ["flat", "room", "villa", "office"],
           onChanged: (v) =>
               context.read<AddPropertyBloc>().add(UpdateUnitType(v)),
         ),
 
-        // const SizedBox(height: 20),
         AltTextField(
           label: "Total Units",
           hint: "E.g 100 rooms",
-          onChanged: (v) => context.read<AddPropertyBloc>().add(UpdateName(v)),
+          onChanged: (v) => context.read<AddPropertyBloc>().add(
+            UpdateTotalUnits(int.tryParse(v) ?? 0),
+          ),
         ),
 
         AltTextField(
@@ -534,7 +531,8 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
           hint: "E.g Modern apartment with city view",
           maxLines: 5,
           type: AltFieldType.multiline,
-          onChanged: (v) => context.read<AddPropertyBloc>().add(UpdateName(v)),
+          onChanged: (v) =>
+              context.read<AddPropertyBloc>().add(UpdateDescription(v)),
         ),
 
         Text(
@@ -600,24 +598,63 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
         ),
         const SizedBox(height: 10),
         const Spacer(),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: GestureDetector(
-                onTap: () {},
-                child: Row(children: [Text("Save & Add Another")]),
-              ),
-            ),
-          ],
-        ),
-        AppButton(
-          title: "Save",
-          onPressed: () {
-            _pageController.nextPage(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
+        // if (selectedUnit == "Entire Building") Row(
+        //   mainAxisAlignment: MainAxisAlignment.center,
+        //   children: [
+        //     Padding(
+        //       padding: const EdgeInsets.all(20),
+        //       child: GestureDetector(
+        //         onTap: () {
+        //           // _showAddUnitDialog(context, theme);
+        //           Navigator.push(
+        //             context,
+        //             MaterialPageRoute(
+        //               builder: (context) =>
+        //                   SaveAndAddAnotherPropertyUnitScreen(),
+        //             ),
+        //           );
+        //         },
+        //         child: Row(
+        //           children: [Icon(Icons.add), Text("Add Another Unit")],
+        //         ),
+        //       ),
+        //     ),
+        //   ],
+        // ),
+        BlocConsumer<AddPropertyBloc, AddPropertyState>(
+          listener: (context, state) {
+            if (state.status == AddPropertyStatus.success) {
+              showSuccess('Property created successfully!');
+              Navigator.of(context).pushReplacementNamed('/dashboard');
+            } else if (state.status == AddPropertyStatus.error) {
+              showError(state.errorMessage ?? 'Failed to create property');
+            }
+          },
+          builder: (context, state) {
+            return AppButton(
+              title: state.status == AddPropertyStatus.loading
+                  ? "Creating..."
+                  : "Save",
+              onPressed: state.status == AddPropertyStatus.loading
+                  ? null
+                  : () {
+                      final propertyImages = state.photos
+                          .map((photo) => photo.path)
+                          .toList();
+                      context.read<AddPropertyBloc>().add(
+                        CreateProperty(
+                          name: state.name,
+                          type: state.propertyType,
+                          address: state.address,
+                          units: state.totalUnits ?? 0,
+                          propertyImages: propertyImages,
+                          managementType: 'entire_building',
+                          unitType: state.unitType,
+                          totalUnits: state.totalUnits ?? 0,
+                          unitDescription: state.description ?? '',
+                        ),
+                      );
+                    },
             );
           },
         ),
@@ -645,7 +682,7 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                   label: "Unit Type",
                   hint: unitType ?? "Select Unit Type",
                   type: AltFieldType.dropdown,
-                  items: ["Flat", "Room", "Villa", "Office", "Plot"],
+                  items: ["flat", "room", "villa", "office"],
                   onChanged: (value) {
                     setState(() {
                       unitType = value;

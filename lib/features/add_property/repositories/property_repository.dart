@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:tobfolio/core/network/api_service.dart';
 import 'package:tobfolio/core/services/media_upload_service.dart';
 
@@ -14,11 +15,16 @@ class PropertyRepository {
     required String address,
     required int units,
     required List<String> propertyImages,
+    required String managementType,
+    required String unitType,
+    String unitNumber = '',
+    int totalUnits = 0,
+    String unitDescription = '',
   }) async {
     try {
       // Upload all property images first
       final List<String> uploadedImageUrls = [];
-      
+
       for (final imagePath in propertyImages) {
         try {
           final fileName = imagePath.split('/').last;
@@ -38,7 +44,14 @@ class PropertyRepository {
         'address': address,
         'units': units,
         'propertyImages': uploadedImageUrls,
+        'managementType': managementType,
+        'unitType': unitType,
+        'unitNumber': unitNumber,
+        'totalUnits': totalUnits,
+        'unitDescription': unitDescription,
       };
+
+      debugPrint('Request Data: $requestData'); // Debugging log
 
       final response = await _apiService.post('/properties', data: requestData);
 

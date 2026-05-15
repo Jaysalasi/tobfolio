@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tobfolio/core/utils/toasts.dart';
 import '../../bloc/artisan_profile_bloc.dart';
 
 class WriteReviewDialog extends StatefulWidget {
@@ -106,19 +107,10 @@ class _WriteReviewDialogState extends State<WriteReviewDialog> {
               listener: (context, state) {
                 if (state.status == ArtisanProfileStatus.reviewCreated) {
                   Navigator.of(context).pop();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Review submitted successfully!'),
-                      backgroundColor: Colors.green,
-                    ),
-                  );
+                  showSuccess("Review submitted successfully");
+                  
                 } else if (state.status == ArtisanProfileStatus.error) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(state.errorMessage ?? 'Failed to submit review'),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
+                  showError(state.errorMessage ?? 'Failed to submit review');
                 }
               },
               builder: (context, state) {

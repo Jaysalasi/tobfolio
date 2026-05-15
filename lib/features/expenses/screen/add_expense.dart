@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:tobfolio/core/utils/components/app_button.dart';
 import 'package:tobfolio/core/utils/constants/assets/svg.dart';
+import 'package:tobfolio/core/utils/toasts.dart';
 import 'package:tobfolio/features/add_property/utils/alt_text_field.dart';
 import 'package:tobfolio/features/all_properties/bloc/all_properties_bloc.dart';
 import 'package:tobfolio/features/all_properties/bloc/all_properties_event.dart';
@@ -233,14 +234,10 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                 }
 
                 if (state is ExpensesLoaded) {
-                  // ScaffoldMessenger.of(context).showSnackBar(
-                  //   const SnackBar(content: Text('Expense added successfully')),
-                  // );
+                  showSuccess("Expense added successfully");
                   Navigator.pop(context);
                 } else if (state is ExpensesError) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Error: ${state.message}')),
-                  );
+                  showError('Error: ${state.message}');
                 }
               },
               child: AppButton(

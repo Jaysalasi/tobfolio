@@ -8,8 +8,9 @@ import 'package:tobfolio/features/all_properties/model/all_property_model.dart';
 class PropertyCard extends StatefulWidget {
   final PropertyModel property;
   final Function()? onDelete;
+  final Function()? onEdit;
 
-  const PropertyCard({super.key, required this.property, this.onDelete});
+  const PropertyCard({super.key, required this.property, this.onDelete, this.onEdit});
 
   @override
   State<PropertyCard> createState() => _PropertyCardState();
@@ -168,12 +169,21 @@ class _PropertyCardState extends State<PropertyCard> {
                   boxShadow: appShadow(context),
                 ),
                 child: Column(
+                  spacing: 10,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     GestureDetector(
                       onTap: widget.onDelete,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text("Delete property"),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: widget.onEdit,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text("Edit property"),
                       ),
                     )
                   ],

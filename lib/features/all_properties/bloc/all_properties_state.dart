@@ -25,6 +25,10 @@ class PropertyDeleting extends AllPropertyState {}
 
 class PropertyDeleteSuccess extends AllPropertyState {}
 
+class PropertyUpdating extends AllPropertyState {}
+
+class PropertyUpdateSuccess extends AllPropertyState {}
+
 class PropertyError extends AllPropertyState {
   final String message;
 

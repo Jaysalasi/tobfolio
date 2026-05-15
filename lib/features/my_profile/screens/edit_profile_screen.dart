@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:tobfolio/core/utils/components/app_button.dart';
 import 'package:tobfolio/core/utils/constants/assets/svg.dart';
+import 'package:tobfolio/core/utils/toasts.dart';
 import 'package:tobfolio/features/add_property/utils/alt_text_field.dart';
 import 'package:tobfolio/features/home/bloc/home_bloc.dart';
 import 'package:tobfolio/features/my_profile/bloc/profile_bloc.dart';
@@ -51,14 +52,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       listener: (context, state) {
         if (state.status == ProfileStatus.success) {
           context.read<HomeBloc>().add(LoadHomeData());
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Profile updated successfully')),
-          );
+          showSuccess("Profile updated successfully");
           Navigator.of(context).pop();
         } else if (state.status == ProfileStatus.error) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.errorMessage ?? 'Failed to update profile')),
-          );
+          showError(state.errorMessage ?? 'Failed to update profile');
+          SnackBar(content: Text(state.errorMessage ?? 'Failed to update profile'));
         }
       },
       child: Scaffold(

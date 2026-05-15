@@ -17,3 +17,13 @@ class DeleteProperty extends AllPropertyEvent {
   @override
   List<Object?> get props => [propertyId];
 }
+
+class UpdateProperty extends AllPropertyEvent {
+  final String propertyId;
+  final Map<String, dynamic> fields;
+
+  const UpdateProperty({required this.propertyId, required this.fields});
+
+  @override
+  List<Object?> get props => [propertyId, fields];
+}

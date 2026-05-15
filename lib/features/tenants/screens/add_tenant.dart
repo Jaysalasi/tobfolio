@@ -153,12 +153,7 @@ class _AddTenantScreenState extends State<AddTenantScreen> {
               
               if (state.error != null) {
                 showError("Error: ${state.error}");
-                // ScaffoldMessenger.of(context).showSnackBar(
-                //   SnackBar(
-                //     content: Text('Error: ${state.error}'),
-                //     backgroundColor: Colors.red,
-                //   ),
-                // );
+                
               } else {
                 // Success - navigate to successful screen
                 Navigator.push(

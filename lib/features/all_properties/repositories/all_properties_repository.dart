@@ -33,6 +33,18 @@ class AllPropertiesRepository {
     }
   }
 
+  Future<void> updateProperty(String propertyId, Map<String, dynamic> fields) async {
+    try {
+      final response = await _apiService.put('/properties/$propertyId', data: fields);
+
+      if (!response.success) {
+        throw Exception(response.message ?? 'Failed to update property');
+      }
+    } catch (e) {
+      throw Exception('Unexpected error: $e');
+    }
+  }
+
   Future<void> deleteProperty(String propertyId) async {
     try {
       final response = await _apiService.delete('/properties/$propertyId');

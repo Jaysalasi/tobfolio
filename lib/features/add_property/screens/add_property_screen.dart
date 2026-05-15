@@ -3,10 +3,8 @@ import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:go_router/go_router.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:tobfolio/core/router/app_router.dart';
+import 'package:flutter_svg/flutter_svg.dart'; 
+import 'package:image_picker/image_picker.dart'; 
 import 'package:tobfolio/core/theme/app_theme.dart';
 import 'package:tobfolio/core/utils/components/app_button.dart';
 import 'package:tobfolio/core/utils/components/widgets.dart';
@@ -19,10 +17,7 @@ import 'package:tobfolio/features/add_property/repositories/property_repository.
 import 'package:tobfolio/features/add_property/screens/save_and_add_another_property_unit_screen.dart';
 import 'package:tobfolio/features/add_property/utils/add_property_utils.dart';
 import 'package:tobfolio/features/add_property/utils/alt_text_field.dart';
-import 'package:tobfolio/features/add_property/models/unit_model.dart';
-import 'package:tobfolio/features/all_properties/bloc/all_properties_bloc.dart';
-import 'package:tobfolio/features/all_properties/bloc/all_properties_event.dart';
-import 'package:tobfolio/features/home/bloc/home_bloc.dart';
+import 'package:tobfolio/features/add_property/models/unit_model.dart'; 
 
 class AddPropertyScreen extends StatefulWidget {
   const AddPropertyScreen({super.key});
@@ -752,9 +747,7 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                   Navigator.pop(context);
                 } else {
                   showError('Please fill unit type and number');
-                  // ScaffoldMessenger.of(context).showSnackBar(
-                  //   SnackBar(content: Text('Please fill unit type and number')),
-                  // );
+                
                 }
               },
               child: Text('Add Unit'),

@@ -11,6 +11,7 @@ class AllPropertyBloc extends Bloc<AllPropertyEvent, AllPropertyState> {
         super(PropertyInitial()) {
     on<LoadProperties>(_load);
     on<DeleteProperty>(_delete);
+    on<UpdateProperty>(_update);
   }
 
   Future<void> _load(
@@ -33,11 +34,25 @@ class AllPropertyBloc extends Bloc<AllPropertyEvent, AllPropertyState> {
     Emitter<AllPropertyState> emit,
   ) async {
     emit(PropertyDeleting());
-    
+
     try {
       await _repository.deleteProperty(event.propertyId);
       emit(PropertyDeleteSuccess());
-      // After successful delete, reload properties
+      add(LoadProperties());
+    } catch (e) {
+      emit(PropertyError(e.toString()));
+    }
+  }
+
+  Future<void> _update(
+    UpdateProperty event,
+    Emitter<AllPropertyState> emit,
+  ) async {
+    emit(PropertyUpdating());
+
+    try {
+      await _repository.updateProperty(event.propertyId, event.fields);
+      emit(PropertyUpdateSuccess());
       add(LoadProperties());
     } catch (e) {
       emit(PropertyError(e.toString()));

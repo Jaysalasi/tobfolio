@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:tobfolio/core/theme/app_theme.dart';
 import 'package:tobfolio/core/utils/components/app_button.dart';
 import 'package:tobfolio/core/utils/components/constants.dart';
+import 'package:tobfolio/core/utils/toasts.dart';
 import 'package:tobfolio/features/add_property/utils/alt_text_field.dart';
 import 'package:tobfolio/features/home/bloc/home_bloc.dart';
 import 'package:tobfolio/features/tenants/bloc/tenant_bloc.dart';
@@ -83,9 +84,7 @@ class _ExpiredTenantCardState extends State<ExpiredTenantCard> {
           }
         }
         if (state.actionError != null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.actionError!), backgroundColor: Colors.red),
-          );
+          showError(state.actionError!);
         }
       },
       child: GestureDetector(

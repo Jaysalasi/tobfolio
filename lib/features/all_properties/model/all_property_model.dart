@@ -9,6 +9,11 @@ class PropertyModel {
   final double totalRenovationCost;
   final List<dynamic> renovations;
   final String createdAt;
+  final String? managementType;
+  final String? unitType;
+  final String? unitNumber;
+  final int? totalUnits;
+  final String? unitDescription;
 
   PropertyModel({
     required this.id,
@@ -21,6 +26,11 @@ class PropertyModel {
     required this.totalRenovationCost,
     required this.renovations,
     required this.createdAt,
+    this.managementType,
+    this.unitType,
+    this.unitNumber,
+    this.totalUnits,
+    this.unitDescription,
   });
 
   factory PropertyModel.fromJson(Map<String, dynamic> json) {
@@ -31,12 +41,17 @@ class PropertyModel {
       type: json['type'] as String? ?? '',
       landlordId: json['landlordId'] as String? ?? '',
       units: (json['units'] as num?)?.toInt() ?? 0,
-      propertyImages: json['propertyImages'] is List 
+      propertyImages: json['propertyImages'] is List
           ? (json['propertyImages'] as List).map((item) => item.toString()).toList()
           : [],
       totalRenovationCost: (json['totalRenovationCost'] as num?)?.toDouble() ?? 0.0,
       renovations: json['renovations'] as List? ?? [],
       createdAt: json['createdAt'] as String? ?? '',
+      managementType: json['managementType'] as String?,
+      unitType: json['unitType'] as String?,
+      unitNumber: json['unitNumber'] as String?,
+      totalUnits: (json['totalUnits'] as num?)?.toInt(),
+      unitDescription: json['unitDescription'] as String?,
     );
   }
 }

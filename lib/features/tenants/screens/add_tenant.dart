@@ -37,8 +37,40 @@ class _AddTenantScreenState extends State<AddTenantScreen> {
   int _currentPage = 0;
 
   CountryCode selectedCountry = countryCodes.first;
-  PropertyModel? selectedProperty;
+  String? selectedPropertyName;
   String? selectedUnit;
+
+  // Derived from loaded properties — keyed by property name
+  Map<String, List<PropertyModel>> _groupedProperties = {};
+
+  // The specific PropertyModel whose unitNumber matches selectedUnit
+  PropertyModel? get _selectedPropertyEntry {
+    final group = _groupedProperties[selectedPropertyName];
+    if (group == null) return null;
+    return group.firstWhere(
+      (p) {
+        final unit = (p.unitNumber?.isNotEmpty == true) ? p.unitNumber! : 'No unit number';
+        return unit == selectedUnit;
+      },
+      orElse: () => group.first,
+    );
+  }
+
+  List<String> get _unitsForSelectedProperty {
+    final group = _groupedProperties[selectedPropertyName];
+    if (group == null) return [];
+    return group
+        .map((p) => (p.unitNumber?.isNotEmpty == true) ? p.unitNumber! : 'No unit number')
+        .toList();
+  }
+
+  void _buildGroupedProperties(List<PropertyModel> properties) {
+    final map = <String, List<PropertyModel>>{};
+    for (final p in properties) {
+      map.putIfAbsent(p.name, () => []).add(p);
+    }
+    _groupedProperties = map;
+  }
   
   // Form data
   String tenantName = '';
@@ -217,10 +249,10 @@ class _AddTenantScreenState extends State<AddTenantScreen> {
                           title: "Save",
                           onPressed: () {
                             // Validate required fields
-                            if (tenantName.isEmpty || 
-                                tenantEmail.isEmpty || 
-                                tenantPhone.isEmpty || 
-                                selectedProperty == null || 
+                            if (tenantName.isEmpty ||
+                                tenantEmail.isEmpty ||
+                                tenantPhone.isEmpty ||
+                                selectedPropertyName == null ||
                                 selectedUnit == null ||
                                 rentAmount.isEmpty ||
                                 rentEntryDate.isEmpty ||
@@ -239,7 +271,7 @@ class _AddTenantScreenState extends State<AddTenantScreen> {
                               name: tenantName,
                               email: tenantEmail,
                               phone: tenantPhone,
-                              propertyId: selectedProperty!.id,
+                              propertyId: _selectedPropertyEntry!.id,
                               unitNumber: selectedUnit!,
                               rentAmount: double.tryParse(rentAmount) ?? 0.0,
                               rentStart: rentEntryDate,
@@ -351,21 +383,19 @@ class _AddTenantScreenState extends State<AddTenantScreen> {
               }
 
               if (state is PropertyLoaded) {
-                final propertyNames = state.properties.map((p) => p.name).toList();
-                
+                _buildGroupedProperties(state.properties);
+                final uniqueNames = _groupedProperties.keys.toList();
+
                 return AltTextField(
                   label: "Property",
-                  hint: selectedProperty?.name ?? "Select Property",
+                  hint: selectedPropertyName ?? "Select Property",
                   type: AltFieldType.dropdown,
-                  items: propertyNames,
-                  value: selectedProperty?.name,
+                  items: uniqueNames,
+                  value: selectedPropertyName,
                   onChanged: (value) {
                     setState(() {
-                      selectedProperty = state.properties.firstWhere(
-                        (p) => p.name == value,
-                        orElse: () => state.properties.first,
-                      );
-                      selectedUnit = null; // Reset unit when property changes
+                      selectedPropertyName = value;
+                      selectedUnit = null;
                     });
                   },
                 );
@@ -381,17 +411,19 @@ class _AddTenantScreenState extends State<AddTenantScreen> {
           ),
           AltTextField(
             label: "Select Unit",
-            hint: selectedUnit != null ? selectedUnit! : (selectedProperty != null ? "Select Unit" : "Select property first"),
+            hint: selectedUnit ?? (selectedPropertyName != null ? "Select Unit" : "Select property first"),
             type: AltFieldType.dropdown,
-            items: selectedProperty != null 
-                ? List.generate(selectedProperty!.units, (index) => "Unit ${index + 1}")
+            items: selectedPropertyName != null
+                ? _unitsForSelectedProperty
                 : ["No property selected"],
             value: selectedUnit,
-            onChanged: selectedProperty != null ? (value) {
-              setState(() {
-                selectedUnit = value;
-              });
-            } : null,
+            onChanged: selectedPropertyName != null
+                ? (value) {
+                    setState(() {
+                      selectedUnit = value;
+                    });
+                  }
+                : null,
           ),
         ],
       ),

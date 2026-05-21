@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'dart:io';
 
 import 'package:dotted_border/dotted_border.dart';
@@ -174,6 +176,19 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
         AppButton(
           title: "Continue",
           onPressed: () {
+            final s = context.read<AddPropertyBloc>().state;
+            if (s.name.trim().isEmpty) {
+              showError('Please enter property name');
+              return;
+            }
+            if (s.propertyType.isEmpty) {
+              showError('Please select property type');
+              return;
+            }
+            if (s.address.trim().isEmpty) {
+              showError('Please enter property address');
+              return;
+            }
             showModalBottomSheet(
               context: context,
               builder: (context) {
@@ -419,8 +434,15 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
               padding: const EdgeInsets.all(20),
               child: GestureDetector(
                 onTap: () {
-                  // _showAddUnitDialog(context, theme);
                   final s = context.read<AddPropertyBloc>().state;
+                  if (s.unitType.isEmpty) {
+                    showError('Please select unit type');
+                    return;
+                  }
+                  if (s.unitNumber == null || s.unitNumber == 0) {
+                    showError('Please enter a valid unit number');
+                    return;
+                  }
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -429,8 +451,11 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                         propertyType: s.propertyType,
                         propertyAddress: s.address,
                         unitType: s.unitType,
+                        unitNumber: s.unitNumber?.toString() ?? '',
+                        unitDescription: s.description ?? '',
                         propertyImages:
                             s.photos.map((p) => p.path).toList(),
+                            totalUnits: 1,
                       ),
                     ),
                   );
@@ -446,13 +471,7 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
           listener: (context, state) {
             if (state.status == AddPropertyStatus.success) {
               showSuccess('Property created successfully!');
-
-              // Refetch all properties and dashboard data before navigating
-              // WidgetsBinding.instance.addPostFrameCallback((_) {
-              //   context.watch<AllPropertyBloc>().add(LoadProperties());
-              //   context.watch<HomeBloc>().add(LoadHomeData());
-              //   // Navigate after refetching data
-              // });
+ 
               Navigator.of(context).pushReplacementNamed('/dashboard');
             } else if (state.status == AddPropertyStatus.error) {
               showError(state.errorMessage ?? 'Failed to create property');
@@ -466,7 +485,14 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
               onPressed: state.status == AddPropertyStatus.loading
                   ? null
                   : () {
-                      // Create property with current state data
+                      if (state.unitType.isEmpty) {
+                        showError('Please select unit type');
+                        return;
+                      }
+                      if (state.unitNumber == null || state.unitNumber == 0) {
+                        showError('Please enter a valid unit number');
+                        return;
+                      }
                       final propertyImages = state.photos
                           .map((photo) => photo.path)
                           .toList();
@@ -482,6 +508,7 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                           unitType: state.unitType,
                           unitNumber: state.unitNumber?.toString() ?? '',
                           unitDescription: state.description ?? '',
+                          totalUnits: 1,
                         ),
                       );
                     },
@@ -633,6 +660,14 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
               onPressed: state.status == AddPropertyStatus.loading
                   ? null
                   : () {
+                      if (state.unitType.isEmpty) {
+                        showError('Please select unit type');
+                        return;
+                      }
+                      if (state.totalUnits == null || state.totalUnits == 0) {
+                        showError('Please enter total units');
+                        return;
+                      }
                       final propertyImages = state.photos
                           .map((photo) => photo.path)
                           .toList();
@@ -657,7 +692,7 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
     );
   }
 
-  void _showAddUnitDialog(BuildContext context, ThemeData theme) {
+  void showAddUnitDialog(BuildContext context, ThemeData theme) {
     String unitType = '';
     String unitNumber = '';
     String description = '';
@@ -675,7 +710,7 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
               children: [
                 AltTextField(
                   label: "Unit Type",
-                  hint: unitType ?? "Select Unit Type",
+                  hint: unitType.isNotEmpty ? unitType : "Select Unit Type",
                   type: AltFieldType.dropdown,
                   items: ["flat", "room", "villa", "office"],
                   onChanged: (value) {

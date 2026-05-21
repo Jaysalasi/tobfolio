@@ -1,16 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:tobfolio/core/theme/app_theme.dart';
 import 'package:tobfolio/core/utils/components/constants.dart';
 import 'package:tobfolio/core/utils/constants/assets/svg.dart';
+import 'package:tobfolio/core/utils/currency_formatter.dart';
 import 'package:tobfolio/features/all_properties/model/all_property_model.dart';
+import 'package:tobfolio/features/home/bloc/home_bloc.dart';
 
 class PropertyCard extends StatefulWidget {
   final PropertyModel property;
   final Function()? onDelete;
   final Function()? onEdit;
 
-  const PropertyCard({super.key, required this.property, this.onDelete, this.onEdit});
+  const PropertyCard({
+    super.key,
+    required this.property,
+    this.onDelete,
+    this.onEdit,
+  });
 
   @override
   State<PropertyCard> createState() => _PropertyCardState();
@@ -25,7 +33,6 @@ class _PropertyCardState extends State<PropertyCard> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final property = widget.property;
-
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -65,9 +72,9 @@ class _PropertyCardState extends State<PropertyCard> {
                         },
                       ),
                     ),
-      
+
                     const SizedBox(height: 6),
-      
+
                     Row(
                       children: List.generate(
                         property.propertyImages.length,
@@ -86,9 +93,9 @@ class _PropertyCardState extends State<PropertyCard> {
                     ),
                   ],
                 ),
-      
+
                 const SizedBox(width: 16),
-      
+
                 /// DETAILS
                 Expanded(
                   child: Column(
@@ -116,9 +123,9 @@ class _PropertyCardState extends State<PropertyCard> {
                           ),
                         ],
                       ),
-      
+
                       const SizedBox(height: 4),
-      
+
                       Row(
                         children: [
                           SvgPicture.asset(
@@ -137,59 +144,60 @@ class _PropertyCardState extends State<PropertyCard> {
                           ),
                         ],
                       ),
-      
+
                       const Divider(height: 10, color: AppTheme.grayColor),
-      
+
                       _row("Property Type", property.type),
-      
+
                       // const SizedBox(height: 6),
                       const Divider(height: 10, color: AppTheme.grayColor),
-      
+
                       // _row("Total Income", "N${property.income.toStringAsFixed(0)}"),
                       const SizedBox(height: 6),
-      
-                      // _row(
-                      //   "Total Expenses",
-                      //   "N${property.expenses.toStringAsFixed(0)}",
-                      // ),
+
+                      _row(
+                        "Total Expenses",
+                        CurrencyFormatter.formatCurrency(property.totalRenovationCost.toStringAsFixed(0), currencyCode: context.watch<HomeBloc>().state.user?.currency),
+                      ),
                     ],
                   ),
                 ),
               ],
             ),
-            if(showDetails) Positioned(
-              left: size.width * 0.4,
-              right: 0,
-              child: Container(
-                margin: const EdgeInsets.only(bottom: 16),
-                padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(18),
-                  boxShadow: appShadow(context),
-                ),
-                child: Column(
-                  spacing: 10,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    GestureDetector(
-                      onTap: widget.onDelete,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text("Delete property"),
+            if (showDetails)
+              Positioned(
+                left: size.width * 0.4,
+                right: 0,
+                child: Container(
+                  margin: const EdgeInsets.only(bottom: 16),
+                  padding: const EdgeInsets.all(14),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(18),
+                    boxShadow: appShadow(context),
+                  ),
+                  child: Column(
+                    spacing: 10,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      GestureDetector(
+                        onTap: widget.onDelete,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text("Delete property"),
+                        ),
                       ),
-                    ),
-                    GestureDetector(
-                      onTap: widget.onEdit,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text("Edit property"),
+                      GestureDetector(
+                        onTap: widget.onEdit,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text("Edit property"),
+                        ),
                       ),
-                    )
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
           ],
         ),
       ),

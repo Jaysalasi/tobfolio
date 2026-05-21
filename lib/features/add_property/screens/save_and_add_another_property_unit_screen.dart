@@ -14,6 +14,9 @@ class SaveAndAddAnotherPropertyUnitScreen extends StatefulWidget {
   final String propertyAddress;
   final String unitType;
   final List<String> propertyImages;
+  final int totalUnits;
+  final String unitNumber;
+  final String unitDescription;
 
   const SaveAndAddAnotherPropertyUnitScreen({
     super.key,
@@ -22,6 +25,9 @@ class SaveAndAddAnotherPropertyUnitScreen extends StatefulWidget {
     required this.unitType,
     required this.propertyAddress,
     required this.propertyImages,
+    required this.totalUnits,
+    required this.unitNumber,
+    required this.unitDescription,
   });
 
   @override
@@ -31,17 +37,28 @@ class SaveAndAddAnotherPropertyUnitScreen extends StatefulWidget {
 
 class _SaveAndAddAnotherPropertyUnitScreenState
     extends State<SaveAndAddAnotherPropertyUnitScreen> {
-  final List<Map<String, String>> _savedUnits = [];
+  late final List<Map<String, String>> _savedUnits;
   String _currentUnitName = '';
   String _currentDescription = '';
   int _formResetKey = 0;
   bool _isLoading = false;
 
-  int get _totalUnits => _savedUnits.length + 1;
+  int get _totalUnits => widget.totalUnits + _savedUnits.length;
+
+  @override
+  void initState() {
+    super.initState();
+    _savedUnits = [
+      {
+        'unitNumber': widget.unitNumber.trim(),
+        'description': widget.unitDescription.trim(),
+      },
+    ];
+  }
 
   void _saveAndAddAnother() {
     if (_currentUnitName.trim().isEmpty) {
-      showError('Please enter a unit name');
+      showError('Please enter a unit number');
       return;
     }
     setState(() {
@@ -57,12 +74,17 @@ class _SaveAndAddAnotherPropertyUnitScreenState
 
   Future<void> _done() async {
     final allUnits = List<Map<String, String>>.from(_savedUnits);
+    if (_currentUnitName.trim().isEmpty) {
+      showError('Please enter a unit number');
+      return;
+    }
     if (_currentUnitName.trim().isNotEmpty) {
       allUnits.add({
         'unitNumber': _currentUnitName.trim(),
         'description': _currentDescription.trim(),
       });
     }
+    print(  'allUnits: ${allUnits}');
 
     if (allUnits.isEmpty) {
       Navigator.pop(context);
@@ -80,10 +102,10 @@ class _SaveAndAddAnotherPropertyUnitScreenState
           address: widget.propertyAddress,
           units: allUnits.length,
           propertyImages: widget.propertyImages,
-          managementType: 'entire_building',
+          managementType: 'single_unit',
           unitType: widget.unitType,
           unitNumber: unit['unitNumber'] ?? '',
-          totalUnits: allUnits.length,
+          totalUnits: _totalUnits,
           unitDescription: unit['description'] ?? '',
         );
       }
@@ -175,8 +197,8 @@ class _SaveAndAddAnotherPropertyUnitScreenState
               const SizedBox(height: 10),
               AltTextField(
                 key: ValueKey('unit_name_$_formResetKey'),
-                label: "Unit Name",
-                hint: "Unit Name",
+                label: "Unit Number",
+                hint: "Unit Number",
                 onChanged: (v) => _currentUnitName = v,
               ),
 

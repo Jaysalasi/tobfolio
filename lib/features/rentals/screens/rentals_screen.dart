@@ -165,18 +165,20 @@ class _RentalsScreenState extends State<RentalsScreen> {
                                     child: Text("No properties"),
                                   );
                                 }
-
-                                return ListView.builder(
-                                  padding: const EdgeInsets.all(0),
-                                  itemCount: state.properties.length,
-                                  itemBuilder: (context, index) {
-                                    return PropertyTile(
-                                      theme: theme,
-                                      propertyName:
-                                          state.properties[index].name,
-                                      unit: state.properties[index].units,
-                                    );
-                                  },
+                                return SingleChildScrollView(
+                                  child: Column(
+                                    children:[ ...state.properties
+                                        .map(
+                                          (property) => PropertyTile(
+                                            theme: theme,
+                                            propertyName: property.name,
+                                            unit: property.units,
+                                          ),
+                                        )
+                                        , 
+                                          SizedBox(height: 90),
+                                        ]
+                                  ),
                                 );
                               }
 

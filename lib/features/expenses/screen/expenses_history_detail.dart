@@ -19,8 +19,7 @@ class ExpensesHistoryDetail extends StatefulWidget {
 class _ExpensesHistoryDetailState extends State<ExpensesHistoryDetail> {
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    print((widget.expenseDetail));
+    final theme = Theme.of(context); 
     // final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: theme.colorScheme.tertiary,

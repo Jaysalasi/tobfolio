@@ -113,6 +113,7 @@ class _EditPropertyScreenState extends State<EditPropertyScreen> {
                           const SizedBox(height: 20),
                           AltTextField(
                             label: "Property Name",
+                            enabled: false,
                             hint: widget.property.name,
                             value: _name,
                             onChanged: (v) => _name = v,
@@ -120,6 +121,7 @@ class _EditPropertyScreenState extends State<EditPropertyScreen> {
                           AltTextField(
                             label: "Property Type",
                             hint: widget.property.type,
+                            enabled: false,
                             value: _type,
                             type: AltFieldType.dropdown,
                             items: ["Residential", "Commercial", "Shortlist", "Land"],
@@ -127,6 +129,7 @@ class _EditPropertyScreenState extends State<EditPropertyScreen> {
                           ),
                           AltTextField(
                             label: "Unit Type",
+                            enabled: false,
                             hint: widget.property.unitType ?? "Select Unit Type",
                             value: _unitType.isEmpty ? null : _unitType,
                             type: AltFieldType.dropdown,
@@ -134,24 +137,25 @@ class _EditPropertyScreenState extends State<EditPropertyScreen> {
                             onChanged: (v) => _unitType = v,
                           ),
                           AltTextField(
+                            enabled: false,
                             label: "Property Address",
                             hint: widget.property.address,
                             value: _address,
                             onChanged: (v) => _address = v,
                           ),
-                          AltTextField(
-                            label: "Units",
-                            hint: widget.property.units.toString(),
-                            value: _units,
-                            enabled: widget.property.managementType == "entire_building",
-                            onChanged: (v) => _units = v,
-                          ),
-                          AltTextField(
-                            label: "Total Units",
-                            hint: widget.property.totalUnits?.toString() ?? "",
-                            value: _totalUnits.isEmpty ? null : _totalUnits,
-                            onChanged: (v) => _totalUnits = v,
-                          ),
+                          // AltTextField(
+                          //   label: "Units",
+                          //   hint: widget.property.units.toString(),
+                          //   value: _units,
+                          //   enabled: widget.property.managementType == "entire_building",
+                          //   onChanged: (v) => _units = v,
+                          // ),
+                          // AltTextField(
+                          //   label: "Total Units",
+                          //   hint: widget.property.totalUnits?.toString() ?? "",
+                          //   value: _totalUnits.isEmpty ? null : _totalUnits,
+                          //   onChanged: (v) => _totalUnits = v,
+                          // ),
                           AltTextField(
                             label: "Unit Number",
                             hint: widget.property.unitNumber ?? "",
@@ -159,6 +163,8 @@ class _EditPropertyScreenState extends State<EditPropertyScreen> {
                             onChanged: (v) => _unitNumber = v,
                           ),
                           AltTextField(
+                            type: AltFieldType.multiline,
+                            maxLines: 4,
                             label: "Unit Description",
                             hint: widget.property.unitDescription ?? "",
                             value: _unitDescription.isEmpty ? null : _unitDescription,

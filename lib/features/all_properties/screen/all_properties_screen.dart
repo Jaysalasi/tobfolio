@@ -8,6 +8,7 @@ import 'package:tobfolio/core/utils/toasts.dart';
 import 'package:tobfolio/features/all_properties/bloc/all_properties_bloc.dart';
 import 'package:tobfolio/features/all_properties/bloc/all_properties_event.dart';
 import 'package:tobfolio/features/all_properties/bloc/all_properties_state.dart';
+import 'package:tobfolio/features/home/bloc/home_bloc.dart';
 import 'package:tobfolio/features/all_properties/model/all_property_model.dart';
 import 'package:tobfolio/features/all_properties/repositories/all_properties_repository.dart';
 import 'package:tobfolio/features/all_properties/screen/edit_property_screen.dart';
@@ -36,6 +37,12 @@ class _PropertyListView extends StatefulWidget {
 
 class _PropertyListViewState extends State<_PropertyListView> {
   bool _deletingDialogOpen = false;
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<HomeBloc>().add(LoadHomeData());
+  }
 
   void _closeDeletingDialog() {
     if (_deletingDialogOpen) {
